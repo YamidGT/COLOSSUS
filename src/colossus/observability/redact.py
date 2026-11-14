@@ -10,6 +10,12 @@ _PRIVATE = re.compile(
     re.DOTALL,
 )
 _SK = re.compile(r"\bsk-[A-Za-z0-9_\-]{8,}\b")
+# Prefixed credentials that can appear without a key name next to them.
+_PREFIXED = re.compile(
+    r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|gsk_[A-Za-z0-9]{20,}"
+    r"|AKIA[0-9A-Z]{16}|xox[abposr]-[A-Za-z0-9-]{10,})\b"
+)
+_BEARER = re.compile(r"(?i)\b(bearer)\s+[A-Za-z0-9._~+/=\-]{8,}")
 _ASSIGN = re.compile(
     r"(?i)\b(api[_-]?key|token|password|secret|authorization)\b(\s*[:=]\s*)([^\s,;]+)"
 )
@@ -24,6 +30,8 @@ def _sensitive(key: str) -> bool:
 def redact_text(value: str) -> str:
     value = _PRIVATE.sub("[redacted]", value)
     value = _SK.sub("[redacted]", value)
+    value = _PREFIXED.sub("[redacted]", value)
+    value = _BEARER.sub(r"\1 [redacted]", value)
     return _ASSIGN.sub(r"\1\2[redacted]", value)
 
 
@@ -31,7 +39,10 @@ def redact(value: Any) -> Any:
     if isinstance(value, str):
         return redact_text(value)
     if isinstance(value, dict):
-        return {key: "[redacted]" if _sensitive(str(key)) else redact(item) for key, item in value.items()}
+        return {
+            key: "[redacted]" if _sensitive(str(key)) else redact(item)
+            for key, item in value.items()
+        }
     if isinstance(value, list):
         return [redact(item) for item in value]
     return value
