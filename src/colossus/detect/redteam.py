@@ -101,6 +101,76 @@ async def triage(broker, project_id, case_id, files, groups, tier="T1"):
     return verdicts
 
 
+async def hypothesize(broker, project_id, case_id, files, raw, max_files=12, max_chars=14000):
+    """T2: ask the shared broker for issues the tools missed (authorization, logic, exposure).
+
+    Output is validated against the real file; invalid or out-of-range lines are dropped.
+    Hypotheses are never confirmed by the model: they stay needs_review until a probe or
+    reviewer confirms them.
+    """
+    skip = {".git", "tests", "test", "__pycache__", "_colossus_detector"}
+    paths = [
+        p
+        for p in sorted(files)
+        if p.endswith(".py") and not skip.intersection(p.split("/")[:-1])
+    ][:max_files]
+    found = []
+    for path in paths:
+        lines = files[path].decode(errors="replace").splitlines()
+        numbered = "\n".join(f"{n}: {line[:200]}" for n, line in enumerate(lines, 1))[:max_chars]
+        flagged = sorted({f.line for f in raw if f.file == path})
+        _, result = await broker.complete(
+            project_id,
+            case_id,
+            [
+                {"role": "system", "content": SYSTEM},
+                {
+                    "role": "user",
+                    "content": json.dumps(
+                        {
+                            "task": "List ADDITIONAL security flaws visible in this file only "
+                            "(broken authorization/BOLA/IDOR, mass assignment, excessive data "
+                            "exposure, user enumeration, weak crypto/secrets, ReDoS, XSS, "
+                            "redirects, injection, DoS). Return {issues:[{line,cwe,title,reason}]}."
+                            " Empty list if none. Do not invent issues.",
+                            "file": path,
+                            "lines_already_flagged": flagged,
+                            "untrusted_source": numbered,
+                        }
+                    ),
+                },
+            ],
+            max_tokens=2048,
+            reasoning="high",
+        )
+        if result.status != "succeeded":
+            continue
+        try:
+            issues = json.loads(result.content).get("issues", [])
+        except (ValueError, TypeError, AttributeError):
+            continue
+        for item in issues[:10] if isinstance(issues, list) else []:
+            try:
+                line, cwe = int(item["line"]), str(item.get("cwe", ""))
+            except (KeyError, ValueError, TypeError, AttributeError):
+                continue
+            if not 1 <= line <= len(lines) or not re.fullmatch(r"CWE-[0-9]+", cwe):
+                continue
+            found.append(
+                RawFinding(
+                    "model",
+                    "hypothesis",
+                    cwe,
+                    str(item.get("title", ""))[:300],
+                    path,
+                    line,
+                    lines[line - 1].strip()[:300],
+                    {"reason": str(item.get("reason", ""))[:300]},
+                )
+            )
+    return found
+
+
 async def investigate(
     *,
     project_id,
@@ -115,8 +185,10 @@ async def investigate(
 ):
     scan = await rule_scan(launcher, project_id, encoded_files)
     raw = [RawFinding(**value) for value in scan["findings"]]
-    groups = dedupe(raw)
     files = {p: base64.b64decode(v, validate=True) for p, v in encoded_files.items()}
+    if broker and tier == "T2":
+        raw += await hypothesize(broker, project_id, case_id, files, raw)
+    groups = dedupe(raw)
     verdicts = (
         await triage(broker, project_id, case_id, files, groups, tier)
         if broker and tier in {"T1", "T2"}
@@ -149,6 +221,9 @@ async def investigate(
                     )
                 except ProbeRefused as exc:
                     probe = {"refused": str(exc)}
+        confirmed = bool(probe and probe.get("confirmed"))
+        if first.tool == "model" and disposition == "retain" and not confirmed:
+            disposition, reason = "needs_review", "Model hypothesis, not independently confirmed"
         raw_id = evidence(
             {
                 "raw": [asdict(f) for f in group],
@@ -166,7 +241,7 @@ async def investigate(
                 title=first.title,
                 cwe=cwe,
                 location={"file": first.file, "line": first.line},
-                status="confirmed" if probe and probe.get("confirmed") else "suspected",
+                status="confirmed" if confirmed else "suspected",
                 source_tools=sorted({f.tool for f in group}),
                 evidence_ids=[raw_id],
                 disposition=disposition,

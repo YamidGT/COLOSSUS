@@ -182,3 +182,45 @@ async def test_osv_fixed_versions_are_scoped_to_the_matched_package():
     assert result["events"][0]["fixed_versions"] == ["2.0"]
     assert result["events"][0]["affected_status"] == "affected"
     assert all(feed["raw_base64"] for feed in result["feeds"])
+
+
+@pytest.mark.asyncio
+async def test_t2_hypotheses_are_validated_and_never_self_confirmed():
+    """Model-proposed issues outside the file, with bad CWE ids, or claiming confirmation
+    are dropped or held for review; none can become `confirmed` without a probe."""
+    import base64
+    from types import SimpleNamespace
+
+    src = "def a():\n    return 1\n\ndef b(user):\n    return db.get(user)\n"
+
+    class Launcher:
+        async def call(self, path, body):
+            return {
+                "exit_code": 0,
+                "truncated": False,
+                "stdout": json.dumps({"findings": [], "excluded_tools": []}),
+            }
+
+    class Broker:
+        async def complete(self, project_id, case_id, messages, **kwargs):
+            if "issues" in messages[1]["content"] and "lines_already_flagged" in messages[1]["content"]:
+                content = json.dumps({"issues": [
+                    {"line": 5, "cwe": "CWE-639", "title": "BOLA", "reason": "no owner check"},
+                    {"line": 999, "cwe": "CWE-79", "title": "out of range", "reason": "x"},
+                    {"line": 2, "cwe": "CWE-79; DROP", "title": "bad cwe", "reason": "x"},
+                    {"line": "x", "cwe": "CWE-1", "title": "bad line", "reason": "x"},
+                ]})
+            else:
+                content = json.dumps({"verdicts": [
+                    {"id": 0, "real": True, "cwe": "CWE-639", "reason": "ok", "probe": None}]})
+            return "call", SimpleNamespace(status="succeeded", content=content)
+
+    result = await investigate(
+        project_id="p", case_id="c", encoded_files={"app.py": base64.b64encode(src.encode()).decode()},
+        manifest_hash="a" * 64, launcher=Launcher(), evidence=lambda v: "b" * 64,
+        broker=Broker(), runner=None, tier="T2",
+    )
+    findings = result["findings"]
+    assert [f.location["line"] for f in findings] == [5]
+    assert findings[0].disposition == "needs_review" and findings[0].status != "confirmed"
+    assert "model" in findings[0].source_tools
