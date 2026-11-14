@@ -164,6 +164,13 @@ async def test_promotion_commits_exact_route_once_and_rollback_validates_previou
     await deployer.initialize(m)
     result = await deployer.promote(a, c, m, gates, "b" * 64)
     assert result["generation"] == 1 and result["candidate_digest"] == c.artifact_digest
+    assert result["deployment_id"] != a.authorization_id
+    from colossus.control.store import Store
+
+    records = Store(tmp_path / "controller.sqlite")
+    records.put("authorization", a.authorization_id, a.model_dump(), m.project_id)
+    records.put("deployment", result["deployment_id"], result, m.project_id)
+    records.close()
     assert await deployer.promote(a, c, m, gates, "b" * 64) == result
     assert len(launcher.created) == 2
     restored = await deployer.rollback(m.project_id, 1)
@@ -171,6 +178,13 @@ async def test_promotion_commits_exact_route_once_and_rollback_validates_previou
         restored["generation"] == 2 and restored["current"]["artifact_digest"] == m.artifact_digest
     )
     assert restored["current"]["known_vulnerable_baseline"] is True
+    retired = await deployer.retire(m.project_id)
+    assert retired["status"] == "RETIRED" and retired["current"] is None
+    assert retired["previous"] is None and retired["generation"] == 3
+    assert set(launcher.stopped) == {slot["environment_id"] for slot in launcher.created}
+    assert await deployer.retire(m.project_id) == retired
+    with pytest.raises(DomainError, match="No healthy lab route"):
+        await deployer.request(m.project_id)
     deployer.close()
 
 

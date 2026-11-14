@@ -78,7 +78,7 @@ class CycleEngine:
         active = []
 
         def evidence(value):
-            return self.onboarding.evidence(project_id, value)
+            return self.onboarding.evidence(project_id, value, visibility="operator")
 
         try:
             self.check_cancel(cycle_id)
@@ -245,7 +245,7 @@ class CycleEngine:
                 self.store.put(
                     "artifact",
                     content_hash({"project_id": project_id, "artifact_id": diff_id}),
-                    {"artifact_id": diff_id, "media_type": "text/plain"},
+                    {"artifact_id": diff_id, "media_type": "text/plain", "visibility": "operator"},
                     project_id,
                 )
                 candidate = Candidate(
@@ -356,14 +356,15 @@ class CycleEngine:
                     )
                     active.remove(target)
                     continue
-                source_candidate_id = evidence(
+                source_candidate_id = self.onboarding.evidence(
+                    project_id,
                     source
                     | {
                         "files": encoded,
                         "tree_sha256": candidate_hash,
                         "origin": "generated_patch",
                         "proposal_id": proposal.proposal_id,
-                    }
+                    },
                 )
                 proof_summary = [
                     {"outcome": "UNSUPPORTED", "scope": "Python SQL adapter", "required": False}

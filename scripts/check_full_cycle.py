@@ -125,7 +125,8 @@ async def main(replay_case=None):
     finally:
         if project_id and "launcher" in services.clients:
             if "deployer" in services.clients:
-                await services.clients["deployer"].call("/abort", {"project_id": project_id})
+                await services.clients["deployer"].call("/retire", {"project_id": project_id})
+                await coordinator.synchronize_destination(project_id)
             await services.clients["launcher"].call(
                 "/terminate-work", {"project_id": project_id, "keep": []}
             )

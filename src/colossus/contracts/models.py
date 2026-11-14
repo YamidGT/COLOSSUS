@@ -350,6 +350,12 @@ class ProjectSnapshot(Contract):
 
 
 class CaseReview(Contract):
+    title: str
+    status: str
+    cycle_id: Identifier
+    created_at: str
+    reason: str | None = None
+    generation_mode: str = "fresh_inference"
     case_id: Identifier
     project_id: Identifier
     revision: NonNegative

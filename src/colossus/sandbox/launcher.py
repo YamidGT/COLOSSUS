@@ -422,7 +422,7 @@ class SandboxLauncher:
         if not environment_id.startswith("colossus-"):
             raise DomainError("invalid_environment", "Unknown sandbox identity", 422)
         check = self.docker("inspect", environment_id)
-        if check.exit_code and "No such" in check.stderr:
+        if check.exit_code and "no such" in check.stderr.lower():
             return
         self.inspect(environment_id)
         self.checked("rm", "-f", environment_id)
@@ -436,14 +436,14 @@ class SandboxLauncher:
             if info["Config"]["Labels"].get("org.colossus.project") != project_id:
                 raise DomainError("target_scope", "Target belongs to another project", 403)
             self.destroy(environment_id)
-        elif "No such" not in result.stderr:
+        elif "no such" not in result.stderr.lower():
             raise DomainError(
                 "runtime_unavailable", "Cannot establish whether target is stopped", 503
             )
         result = self.docker("network", "inspect", network_id)
         if result.exit_code == 0:
             self.destroy_network(network_id, project_id)
-        elif "not found" not in result.stderr and "No such" not in result.stderr:
+        elif "not found" not in result.stderr.lower() and "no such" not in result.stderr.lower():
             raise DomainError(
                 "runtime_unavailable", "Cannot establish whether network is removed", 503
             )

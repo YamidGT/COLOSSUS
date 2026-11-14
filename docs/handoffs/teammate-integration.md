@@ -19,3 +19,7 @@ The original branch's generated contract foundation is already the common ancest
 Its M0 contracts, launcher and CLI overlap the active implementation and use different field layouts/modules/runtime labels. Do not replace working interfaces wholesale. The reported Docker tests used trusted fixtures under runc on another host; they are useful hardening evidence but not proof of this host's gVisor configuration. The current implementation has its own actual runsc evidence.
 
 The recipe-validator logic, additional hostile fixtures and doctor check vocabulary are useful candidates for selective porting. Their original defaults assume a Linux host and must be adapted to inspect the configured VM/runtime on this macOS machine. The doctor must not become a second reader of provider secrets. Integration is still pending for these pieces; no claim that all Kiro branches have been merged.
+
+## Kiro selective port completed
+
+Ported `sandbox/recipe_validator.py` from `kiro/integracion` (original A-M0-02 work) into the existing package. Hardened named-volume declarations against `driver_opts` host binds, rejected malformed mount/environment shapes, host-variable interpolation, nonpositive/nonfinite CPU and memory limits, and retained digest/privilege/network/credential guards. Added hostile-shape tests. This validator evaluates plan data only; it does not authorize executing an arbitrary repository Dockerfile. The alternative Kiro launcher and contract modules are not installed alongside the current authority.

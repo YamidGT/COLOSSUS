@@ -106,3 +106,13 @@ def test_paused_project_tasks_wait_for_resume(store):
     assert store.claim("worker") is None
     store.put("project", project_id, {"admission_state": "active"}, project_id)
     assert store.claim("worker")["project_id"] == project_id
+
+
+def test_pausing_admission_does_not_block_requested_rollback(store):
+    project_id = "paused-recovery-project"
+    store.put("project", project_id, {"admission_state": "paused"}, project_id)
+    with store.transaction() as db:
+        store.enqueue(db, project_id, "onboard", {}, time.time() + 100)
+        recovery = store.enqueue(db, project_id, "rollback", {}, time.time() + 100)
+    assert store.claim("recovery-worker")["id"] == recovery
+    assert store.claim("another-worker") is None

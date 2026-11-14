@@ -12,7 +12,14 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import Field
 
 from colossus.contracts.core import Contract, DomainError, content_hash
-from colossus.contracts.models import ApprovalRequest, Enrollment, RejectionRequest, RollbackRequest
+from colossus.contracts.models import (
+    ApprovalRequest,
+    CaseReview,
+    Enrollment,
+    ProjectSnapshot,
+    RejectionRequest,
+    RollbackRequest,
+)
 from colossus.control.artifacts import ArtifactStore
 from colossus.control.auth import COOKIE, OperatorAuth
 from colossus.control.config import Settings
@@ -249,7 +256,7 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
             "next_cursor": str(offset + limit) if len(rows) == limit else None,
         }
 
-    @app.get("/api/v1/projects/{project_id}/status")
+    @app.get("/api/v1/projects/{project_id}/status", response_model=ProjectSnapshot)
     def status(project_id: str, request: Request):
         value = controller.snapshot(project_id)
         etag = controller.snapshot_etag(value)
@@ -295,9 +302,9 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
     def cancel(cycle_id: str, request: Request):
         return controller.cancel(cycle_id, key(request), request.state.actor)
 
-    @app.get("/api/v1/cases/{case_id}")
+    @app.get("/api/v1/cases/{case_id}", response_model=CaseReview)
     def case(case_id: str):
-        return store.get("case", case_id)
+        return controller.case_review(case_id)
 
     @app.get("/api/v1/evidence/{manifest_hash}/review")
     def evidence_review(manifest_hash: str):

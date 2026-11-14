@@ -394,6 +394,12 @@ class Controller:
             p["setup_state"] == "READY"
             and p["admission_state"] == "active"
             and not p.get("active_cycle_id")
+            and not p.get("maintenance_operation_id")
+            and p.get("mirror", {}).get("state") == "READY"
+        )
+        deployment = p.get("deployment", {})
+        recovery_ready = bool(deployment.get("previous_digest")) and not (
+            p.get("active_cycle_id") or p.get("maintenance_operation_id")
         )
         return [
             dict(
@@ -403,8 +409,18 @@ class Controller:
                 eligible=ready,
                 disabled_reason=None
                 if ready
-                else "Project is paused, not ready or already running",
+                else "Project is paused, busy, or its mirror is not ready",
                 required_confirmation=False,
+            ),
+            dict(
+                action="rollback",
+                resource_id=deployment.get("deployment_id") or p["project_id"],
+                expected_revision=p["revision"],
+                eligible=recovery_ready,
+                disabled_reason=None
+                if recovery_ready
+                else "No retained artifact or project is busy",
+                required_confirmation=True,
             ),
             dict(
                 action="pause" if p["admission_state"] == "active" else "resume",
@@ -461,13 +477,38 @@ class Controller:
                         created_at=case["created_at"],
                         updated_at=case.get("updated_at", case["created_at"]),
                         evidence_refs=[],
-                        allowed_actions=[],
+                        allowed_actions=self.case_review(case["case_id"])["allowed_actions"],
                         disabled_reasons={},
                     )
                 )
         return sorted(
             result, key=lambda item: (item["priority"], item["created_at"], item["action_id"])
         )
+
+    def case_review(self, case_id):
+        from colossus.contracts.models import CaseReview
+
+        case = self.store.get("case", case_id)
+        project = self.store.get("project", case["project_id"])
+        fresh = (
+            project["admission_state"] == "active"
+            and project.get("mirror", {}).get("state") == "READY"
+        )
+        eligible = fresh and case["status"] == "REVIEW_READY"
+        case["allowed_actions"] = [
+            dict(
+                action=action,
+                resource_id=case_id,
+                expected_revision=case["revision"],
+                eligible=eligible,
+                disabled_reason=None if eligible else "Case is not ready for a fresh decision",
+                required_confirmation=action == "approve",
+            )
+            for action in ("approve", "reject")
+        ]
+        return CaseReview.model_validate(
+            {k: v for k, v in case.items() if k in CaseReview.model_fields}
+        ).model_dump()
 
     def report(self, run_id):
         cycle = self.store.get("cycle", run_id)

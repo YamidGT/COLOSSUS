@@ -158,7 +158,12 @@ class LabDeployer:
     async def request(self, project_id, path="/", method="GET", body=None):
         state = self.state(project_id)
         slot = state["current"]
-        if not slot or state["status"] == "RECOVERY_FAILED":
+        if not slot or state["status"] in {
+            "RECOVERY_FAILED",
+            "RETIRING",
+            "RETIRE_FAILED",
+            "RETIRED",
+        }:
             raise DomainError("destination_unavailable", "No healthy lab route is active", 503)
         response = await self.launcher.call(
             "/targets/request",
@@ -325,7 +330,7 @@ class LabDeployer:
                     "previous": original["current"],
                     "intent": None,
                     "status": "PROMOTED",
-                    "deployment_id": authorization.authorization_id,
+                    "deployment_id": new_id(),
                     "authorization_id": authorization.authorization_id,
                     "observations": observations,
                     "promoted_at": utcnow(),
@@ -334,6 +339,7 @@ class LabDeployer:
                     "status": "PROMOTED",
                     "project_id": project_id,
                     "generation": promoted["generation"],
+                    "deployment_id": promoted["deployment_id"],
                     "candidate_digest": certificate.artifact_digest,
                     "previous_digest": original["current"]["artifact_digest"]
                     if original["current"]
@@ -421,6 +427,33 @@ class LabDeployer:
                 await asyncio.sleep(0.2)
         return self.state(project_id)
 
+    async def retire(self, project_id):
+        """Withdraw routing before removing the owned lab instances."""
+        await self.abort(project_id)
+        async with self.locks.setdefault(project_id, asyncio.Lock()):
+            state = self.state(project_id)
+            if state["status"] == "RETIRED":
+                return state
+            state["status"] = "RETIRING"
+            self.save(state, state["generation"])
+            try:
+                await self.stop(state["current"])
+                await self.stop(state["previous"])
+            except BaseException:
+                state["status"] = "RETIRE_FAILED"
+                self.save(state, state["generation"])
+                raise
+            retired = state | {
+                "current": None,
+                "previous": None,
+                "intent": None,
+                "status": "RETIRED",
+                "generation": state["generation"] + 1,
+                "retired_at": utcnow(),
+            }
+            self.save(retired, state["generation"])
+            return retired
+
     async def rollback(self, project_id, expected_generation):
         async with self.locks.setdefault(project_id, asyncio.Lock()):
             state = self.state(project_id)
@@ -454,6 +487,9 @@ class LabDeployer:
 
     async def reconcile(self):
         for state in self.all_states():
+            if state["status"] in {"RETIRING", "RETIRE_FAILED"}:
+                await self.retire(state["project_id"])
+                continue
             if state["intent"]:
                 target = state["intent"].get("target")
                 await self.stop(target)

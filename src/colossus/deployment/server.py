@@ -100,6 +100,10 @@ def create_deployer(
     async def abort(body: ProjectAction):
         return await deployer.abort(body.project_id)
 
+    @app.post("/retire")
+    async def retire(body: ProjectAction):
+        return await deployer.retire(body.project_id)
+
     @app.post("/rollback")
     async def rollback(body: Rollback):
         return await deployer.rollback(body.project_id, body.expected_generation)

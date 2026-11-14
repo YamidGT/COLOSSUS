@@ -95,3 +95,24 @@ def test_validation_does_not_echo_credential_shaped_input(api):
     )
     assert response.status_code == 422
     assert secret not in response.text
+
+
+def test_evidence_download_requires_project_binding_and_explicit_visibility(api):
+    from colossus.onboarding.service import Onboarding
+
+    app, client, headers = api
+    artifacts = app.state.evidence
+    writer = Onboarding(app.state.store, artifacts, None, None)
+    public = writer.evidence("project-a", {"check": "passed"}, visibility="operator")
+    private = writer.evidence("project-a", {"files": {"source.py": "private"}})
+    endpoint = f"/api/v1/artifacts/{public}/download"
+    assert client.get(endpoint + "?project_id=project-a", headers=headers).json() == {
+        "check": "passed"
+    }
+    assert client.get(endpoint + "?project_id=project-b", headers=headers).status_code == 404
+    assert (
+        client.get(
+            f"/api/v1/artifacts/{private}/download?project_id=project-a", headers=headers
+        ).status_code
+        == 403
+    )
