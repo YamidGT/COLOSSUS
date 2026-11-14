@@ -94,8 +94,6 @@ def test_bad_token_exits_3(server, monkeypatch):
     "args",
     [
         ["case", "c1", "--diff"],
-        ["approve", "a" * 64, "--destination", "local-web-v1", "--yes"],
-        ["approve", "a" * 64, "--destination", "local-web-v1"],
         ["reject", "c1", "--candidate", "x", "--reason", "unsafe"],
         ["rollback", "d1", "--yes"],
     ],
@@ -108,15 +106,27 @@ def test_commands_without_server_routes_exit_3(server, args):
     assert "not available on this server" in body["message"]
 
 
-def test_configure_and_evaluate_without_server_routes_exit_3(server, tmp_path):
+def test_approve_unknown_manifest_reaches_server_and_fails(server):
+    res = invoke("--json", "approve", "a" * 64, "--destination", "local-web-v1", "--yes")
+    assert res.exit_code == 2, res.output
+    assert json.loads(res.stdout)["reason_code"] == "not_found"
+
+
+def test_approve_without_yes_in_non_tty_needs_confirmation(server):
+    res = invoke("--json", "approve", "a" * 64, "--destination", "local-web-v1")
+    assert res.exit_code == 2, res.output
+    assert json.loads(res.stdout)["reason_code"] == "confirmation_required"
+
+
+def test_configure_and_evaluate_reach_server_validation(server, tmp_path):
     config = tmp_path / "config.json"
     config.write_text(json.dumps({"expected_revision": 1, "subdir": "app"}))
     manifest = tmp_path / "manifest.json"
     manifest.write_text(json.dumps({"campaign_id": "x"}))
     for args in (["configure", "p1", "--file", str(config)], ["evaluate", str(manifest)]):
         res = invoke("--json", *args)
-        assert res.exit_code == 3, res.output
-        assert "not available on this server" in json.loads(res.stdout)["message"]
+        assert res.exit_code == 2, res.output  # incomplete body -> 422 from the real route
+        assert json.loads(res.stdout)["reason_code"] != "not_available"
 
 
 def test_case_read_and_missing_case(server):
