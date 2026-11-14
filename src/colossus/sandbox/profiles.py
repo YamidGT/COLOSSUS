@@ -104,6 +104,8 @@ def build_run_argv(
         f"{LABEL_PREFIX}.job": job_id,
         f"{LABEL_PREFIX}.profile": job.job_profile_id,
     }
+    uid, gid = isolation.user.split(":")
+    owner = f"uid={uid},gid={gid},mode=0700"
     argv = [
         "docker", "create",
         "--name", container_name(case_id, job_id),
@@ -120,8 +122,8 @@ def build_run_argv(
         "--memory", f"{isolation.memory_mib}m",
         "--memory-swap", f"{isolation.memory_mib}m",
         "--cpus", f"{isolation.cpus_milli / 1000:.3f}",
-        "--tmpfs", f"/scratch:rw,noexec,nosuid,nodev,size={isolation.scratch_mib}m",
-        "--tmpfs", f"/tmp:rw,noexec,nosuid,nodev,size={isolation.scratch_mib}m",
+        "--tmpfs", f"/scratch:rw,noexec,nosuid,nodev,size={isolation.scratch_mib}m,{owner}",
+        "--tmpfs", f"/tmp:rw,noexec,nosuid,nodev,size={isolation.scratch_mib}m,{owner}",
         "--mount", f"type=bind,source={output_dir},target=/out,readonly=false",
         "--workdir", "/scratch",
         "--stop-timeout", "10",

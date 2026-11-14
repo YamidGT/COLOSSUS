@@ -54,3 +54,39 @@ Observed: `uv run --python 3.12 pytest` -> 77 passed (47 contracts + 30 sandbox 
 Behavior: untrusted repository jobs must use `runsc`; a `runc` profile is only valid for trusted fixture images and there is no automatic fallback. Every job gets `--network none` (or a `colossus-case-*` internal network), `--cap-drop ALL`, `no-new-privileges`, read-only root, nonroot user, private IPC, PID/memory/CPU limits, noexec tmpfs scratch, read-only `/in`, writable `/out` only, `--pull never`, digest-pinned image and a fixed entrypoint. Shell entrypoints and credential-looking env names are refused. The recipe validator refuses privileged/host modes, capabilities, devices, published ports, host or socket mounts, mutable tags, root users, provider credential env names, top-level networks/secrets and resource totals above 1 CPU / 6 GiB.
 
 Not proven here: these tests check argv and plan shape only. Real isolation needs the launcher run in A-M0-03 and gVisor on the host.
+
+## A-M0-03 Docker launcher with real denial tests
+
+Branch `kiro/a-m0-03-launcher`.
+
+| Item | Path |
+|---|---|
+| Launcher: stage, create, attach with deadline, stop/kill, remove, import, wipe | `src/colossus/sandbox/launcher.py` |
+| Trusted probe run inside the sandbox | `tests/security/probe.py` |
+| Real Docker tests (marker `docker`) | `tests/security/test_launcher_docker.py` |
+
+Command: `uv run --python 3.12 pytest --basetemp="$KIROCREW_SCRATCH/pt3"` -> 83 passed (6 of them real Docker runs, about 18 s). After the run: 0 labelled containers, 0 labelled networks, 0 leftover job files.
+
+Observed inside the sandbox (Docker 29.9.2, runtime `runc`, trusted image `python:3.12-bookworm` by digest):
+
+| Check | Result |
+|---|---|
+| uid/gid | 65534/65534 |
+| Effective capabilities | 0 |
+| TCP to 1.1.1.1, IPv6, DNS, 169.254.169.254 | denied |
+| Write to `/` and `/in` | denied |
+| Write to `/scratch` | allowed (noexec tmpfs) |
+| Docker socket present | no |
+| cgroup `memory.max` / `pids.max` | 268435456 / 64 |
+| Host env leak (sentinel, `MISTRAL_API_KEY`) | none |
+| Per-case `--internal` network egress | denied |
+| `/out` symlink and over-cap file | rejected, not imported |
+| Timeout job | killed, no results imported, container removed |
+| Untrusted profile without `runsc` | refused with `isolation_unavailable` |
+
+Important limits:
+
+- gVisor (`runsc`) is **not installed** on this host. Every real run above used `runc` with a trusted fixture image. Untrusted repository code is refused on this host, as designed. These runs show the hardening flags work; they do not show gVisor isolation.
+- Docker here is not rootless (`dockerd` runs as user `nobody` inside a user namespace). Rootless Docker is still a preflight item.
+- Job outputs are created by uid 65534, which the host process cannot delete. The launcher wipes `/out` in a second sandbox run as the job user; paths it cannot remove go to `launcher.orphans`.
+- Builds, dependency proxy, image packaging and the reaper loop are not implemented.
