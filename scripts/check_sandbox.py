@@ -1,13 +1,14 @@
 """Run actual isolation checks against the dedicated, pinned gVisor worker."""
 
 import json
+import os
 from dataclasses import asdict
 from pathlib import Path
 
 from colossus.contracts.core import new_id
 from colossus.sandbox.launcher import SandboxLauncher
 
-launcher = SandboxLauncher()
+launcher = SandboxLauncher(os.environ.get("COLOSSUS_DOCKER_CONTEXT", "colima-colossus"))
 preflight = launcher.preflight()
 assert preflight["ready"], preflight
 program = """import json, os, socket

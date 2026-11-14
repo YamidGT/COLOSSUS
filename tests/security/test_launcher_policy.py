@@ -167,6 +167,14 @@ def test_reaper_removes_only_expired_managed(fake):
     assert not any(c[:2] in (["system", "prune"], ["container", "prune"]) for c in fake.calls)
 
 
+def test_destroy_is_idempotent_for_any_docker_wording(monkeypatch):
+    ln = SandboxLauncher("ctx")
+    for wording in ("Error: No such object: colossus-x", "error: no such object: colossus-x"):
+        gone = ProcessResult(1, "", wording, False, 0.0)
+        monkeypatch.setattr(launcher_mod, "bounded_process", lambda *a, g=gone, **k: g)
+        ln.destroy("colossus-x")  # must not raise once the container is gone
+
+
 def test_bounded_process_kills_on_timeout_and_strips_env(monkeypatch):
     monkeypatch.setenv("MISTRAL_API_KEY", "must-not-leak")
     res = launcher_mod.bounded_process(["python3", "-c", "import os,time;print(os.environ.get('MISTRAL_API_KEY'));time.sleep(30)"], 2)
