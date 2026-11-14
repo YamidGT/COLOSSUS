@@ -387,6 +387,23 @@ class ProjectConfigAmendment(Contract):
     requirement_ids: list[str] = Field(default_factory=list, max_length=5)
 
 
+class ApprovalRequest(Contract):
+    candidate_id: Identifier
+    evidence_manifest_hash: Hash
+    expected_revision: NonNegative
+    expected_deployment_generation: NonNegative
+
+
+class RollbackRequest(Contract):
+    expected_generation: NonNegative
+
+
+class RejectionRequest(Contract):
+    candidate_id: Identifier
+    expected_revision: NonNegative
+    reason: str = Field(min_length=1, max_length=2000)
+
+
 class ReviewDecision(Contract):
     case_id: Identifier
     candidate_id: Identifier

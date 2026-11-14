@@ -262,3 +262,72 @@ def report(ctx: typer.Context, run_id: str, output: Path, force: bool = False):
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(data, indent=2) + "\n")
     emit(ctx, {"status": "exported", "path": str(output)})
+
+
+@app.command()
+def approve(ctx: typer.Context, manifest_hash: str, destination: str, yes: bool = False):
+    review = request(ctx, "GET", f"/evidence/{manifest_hash}/review")
+    if review["destination_id"] != destination:
+        raise typer.BadParameter("Destination differs from the verified candidate")
+    emit(
+        ctx,
+        {
+            "candidate_id": review["candidate_id"],
+            "evidence_manifest_hash": manifest_hash,
+            "destination_id": destination,
+            "generation": review["expected_deployment_generation"],
+        },
+    )
+    if not yes:
+        if not os.isatty(0):
+            raise typer.BadParameter("Use --yes for noninteractive approval")
+        typer.confirm("Approve this exact artifact for the displayed lab destination?", abort=True)
+    body = {
+        k: review[k]
+        for k in ("candidate_id", "evidence_manifest_hash", "expected_deployment_generation")
+    }
+    body["expected_revision"] = review["revision"]
+    emit(ctx, request(ctx, "POST", f"/cases/{review['case_id']}/approve", body))
+
+
+@app.command()
+def reject(ctx: typer.Context, case_id: str, candidate: str, reason: str):
+    review = request(ctx, "GET", f"/cases/{case_id}")
+    emit(
+        ctx,
+        request(
+            ctx,
+            "POST",
+            f"/cases/{case_id}/reject",
+            {"candidate_id": candidate, "expected_revision": review["revision"], "reason": reason},
+        ),
+    )
+
+
+@app.command()
+def rollback(ctx: typer.Context, deployment_id: str, yes: bool = False):
+    value = request(ctx, "GET", f"/deployments/{deployment_id}")
+    if not value.get("previous_digest"):
+        raise typer.BadParameter("No retained previous artifact is available")
+    emit(
+        ctx,
+        {
+            "deployment_id": deployment_id,
+            "current_digest": value["artifact_digest"],
+            "restore_digest": value["previous_digest"],
+            "generation": value["generation"],
+        },
+    )
+    if not yes:
+        if not os.isatty(0):
+            raise typer.BadParameter("Use --yes for noninteractive rollback")
+        typer.confirm("Restore this retained artifact and verify its lab workflows?", abort=True)
+    emit(
+        ctx,
+        request(
+            ctx,
+            "POST",
+            f"/deployments/{deployment_id}/rollback",
+            {"expected_generation": value["generation"]},
+        ),
+    )

@@ -38,9 +38,40 @@ class ServiceSupervisor:
             for key in ("PATH", "HOME", "DOCKER_CONFIG", "VIRTUAL_ENV")
             if key in os.environ
         }
+        deploy_token_file = self.directory / "launcher-deploy.token"
+        fd = os.open(
+            deploy_token_file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600
+        )
+        with os.fdopen(fd, "w") as stream:
+            stream.write(secrets.token_urlsafe(32))
         for name, module, extra in [
             ("gateway", "colossus.gateway.server", ["--env-file", str(self.env_file)]),
-            ("launcher", "colossus.sandbox.server", ["--context", self.settings.docker_context]),
+            (
+                "launcher",
+                "colossus.sandbox.server",
+                [
+                    "--context",
+                    self.settings.docker_context,
+                    "--deploy-token-file",
+                    str(deploy_token_file),
+                ],
+            ),
+            (
+                "deployer",
+                "colossus.deployment.server",
+                [
+                    "--launcher-socket",
+                    str(self.directory / "launcher.sock"),
+                    "--launcher-token-file",
+                    str(deploy_token_file),
+                    "--state-path",
+                    str(self.settings.data_dir / "deployment.sqlite3"),
+                    "--observation-seconds",
+                    str(self.settings.runtime.observation_seconds),
+                    "--interval-seconds",
+                    str(self.settings.runtime.health_interval_seconds),
+                ],
+            ),
         ]:
             socket = self.directory / (name + ".sock")
             # A held supervisor lock excludes another compliant starter. Only remove

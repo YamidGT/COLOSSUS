@@ -427,6 +427,28 @@ class SandboxLauncher:
         self.inspect(environment_id)
         self.checked("rm", "-f", environment_id)
 
+    def stop_target(self, project_id: str, environment_id: str, network_id: str):
+        if not environment_id.startswith("colossus-") or not network_id.startswith("colossus-net-"):
+            raise DomainError("invalid_environment", "Invalid managed target identity", 422)
+        result = self.docker("inspect", environment_id)
+        if result.exit_code == 0:
+            info = self.inspect(environment_id)
+            if info["Config"]["Labels"].get("org.colossus.project") != project_id:
+                raise DomainError("target_scope", "Target belongs to another project", 403)
+            self.destroy(environment_id)
+        elif "No such" not in result.stderr:
+            raise DomainError(
+                "runtime_unavailable", "Cannot establish whether target is stopped", 503
+            )
+        result = self.docker("network", "inspect", network_id)
+        if result.exit_code == 0:
+            self.destroy_network(network_id, project_id)
+        elif "not found" not in result.stderr and "No such" not in result.stderr:
+            raise DomainError(
+                "runtime_unavailable", "Cannot establish whether network is removed", 503
+            )
+        return {"stopped": True}
+
     def destroy_network(self, network_id: str, project_id: str):
         self._validate_network(network_id, project_id)
         if network_id != "none":

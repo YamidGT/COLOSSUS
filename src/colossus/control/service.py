@@ -78,7 +78,14 @@ class Controller:
             project = self._project(db, project_id)
             if project["admission_state"] != "active":
                 raise DomainError("project_paused", "Resume the project before starting work")
-            if project["setup_state"] != "READY":
+            if project.get("maintenance_operation_id"):
+                raise DomainError(
+                    "project_maintenance", "Wait for the destination operation to finish"
+                )
+            if (
+                project["setup_state"] != "READY"
+                or project.get("mirror", {}).get("state") != "READY"
+            ):
                 raise DomainError("project_not_ready", "Repository setup has not completed")
             if project.get("active_cycle_id"):
                 return {"project_id": project_id, "cycle_id": project["active_cycle_id"]}
@@ -187,6 +194,169 @@ class Controller:
             return {"project_id": project_id, "task_id": task_id}
 
         return self.store.mutate(actor, key, "retry_setup", {"project_id": project_id}, action)
+
+    def approve(self, case_id, decision, key, actor):
+        def action(db, operation_id):
+            row = db.execute(
+                "SELECT data FROM records WHERE kind='case' AND id=?", (case_id,)
+            ).fetchone()
+            if not row:
+                raise DomainError("not_found", "Case not found", 404)
+            case = json.loads(row[0])
+            if (
+                case["status"] != "REVIEW_READY"
+                or case["revision"] != decision["expected_revision"]
+            ):
+                raise DomainError(
+                    "stale_review", "Case changed; refresh its evidence before approving"
+                )
+            for field in (
+                "candidate_id",
+                "evidence_manifest_hash",
+                "expected_deployment_generation",
+            ):
+                if case[field] != decision[field]:
+                    raise DomainError(
+                        "approval_binding",
+                        "Approval does not match the current candidate or destination",
+                    )
+            project = self._project(db, case["project_id"])
+            if project["admission_state"] != "active" or project["mirror"].get("state") != "READY":
+                raise DomainError(
+                    "project_not_ready", "Resume/reconcile the project before approving"
+                )
+            self.store._put(
+                db,
+                "case",
+                case_id,
+                case | {"status": "PROMOTION_QUEUED"},
+                case["project_id"],
+                case["revision"],
+            )
+            task_id = self.store.enqueue(
+                db,
+                case["project_id"],
+                "promote",
+                {
+                    "case_id": case_id,
+                    "cycle_id": case["cycle_id"],
+                    "operation_id": operation_id,
+                    "actor": actor,
+                },
+                time.time()
+                + self.runtime.observation_seconds
+                + self.runtime.refresh_seconds
+                + self.runtime.recovery_seconds
+                + 60,
+            )
+            cycle = json.loads(
+                db.execute(
+                    "SELECT data FROM records WHERE kind='cycle' AND id=?", (case["cycle_id"],)
+                ).fetchone()[0]
+            )
+            self.store._put(
+                db,
+                "cycle",
+                cycle["cycle_id"],
+                cycle
+                | {
+                    "status": "PROMOTION_QUEUED",
+                    "deadline": time.time()
+                    + self.runtime.observation_seconds
+                    + self.runtime.refresh_seconds
+                    + self.runtime.recovery_seconds
+                    + 60,
+                },
+                case["project_id"],
+                cycle["revision"],
+            )
+            return {"project_id": case["project_id"], "case_id": case_id, "task_id": task_id}
+
+        return self.store.mutate(actor, key, "approve", {"case_id": case_id, **decision}, action)
+
+    def reject(self, case_id, expected_revision, reason, key, actor):
+        def action(db, operation_id):
+            row = db.execute(
+                "SELECT data FROM records WHERE kind='case' AND id=?", (case_id,)
+            ).fetchone()
+            if not row:
+                raise DomainError("not_found", "Case not found", 404)
+            case = json.loads(row[0])
+            if case["status"] != "REVIEW_READY" or case["revision"] != expected_revision:
+                raise DomainError("stale_review", "Case changed or is not waiting for review")
+            project = self._project(db, case["project_id"])
+            self.store._put(
+                db,
+                "case",
+                case_id,
+                case | {"status": "REJECTED", "reason": reason},
+                case["project_id"],
+                expected_revision,
+            )
+            cycle = json.loads(
+                db.execute(
+                    "SELECT data FROM records WHERE kind='cycle' AND id=?", (case["cycle_id"],)
+                ).fetchone()[0]
+            )
+            self.store._put(
+                db,
+                "cycle",
+                cycle["cycle_id"],
+                cycle | {"status": "REJECTED", "reason": reason, "finished_at": utcnow()},
+                case["project_id"],
+            )
+            self.store._put(
+                db,
+                "project",
+                project["project_id"],
+                project | {"active_cycle_id": None},
+                project["project_id"],
+            )
+            return {"project_id": project["project_id"], "case_id": case_id}
+
+        receipt = self.store.mutate(
+            actor,
+            key,
+            "reject",
+            {"case_id": case_id, "expected_revision": expected_revision, "reason": reason},
+            action,
+        )
+        self.store.finish_operation(receipt["operation_id"], "succeeded")
+        return self.store.operation(receipt["operation_id"])
+
+    def rollback(self, project_id, expected_generation, key, actor):
+        def action(db, operation_id):
+            project = self._project(db, project_id)
+            if project.get("active_cycle_id") or project.get("maintenance_operation_id"):
+                raise DomainError("project_busy", "Finish active work before requesting rollback")
+            if project.get("deployment", {}).get("generation") != expected_generation:
+                raise DomainError(
+                    "stale_generation", "Refresh the destination before requesting rollback"
+                )
+            self.store._put(
+                db,
+                "project",
+                project_id,
+                project | {"maintenance_operation_id": operation_id},
+                project_id,
+                project["revision"],
+            )
+            task_id = self.store.enqueue(
+                db,
+                project_id,
+                "rollback",
+                {"operation_id": operation_id, "expected_generation": expected_generation},
+                time.time() + self.runtime.recovery_seconds + self.runtime.refresh_seconds,
+            )
+            return {"project_id": project_id, "task_id": task_id}
+
+        return self.store.mutate(
+            actor,
+            key,
+            "rollback",
+            {"project_id": project_id, "expected_generation": expected_generation},
+            action,
+        )
 
     def snapshot(self, project_id: str) -> dict:
         p = self.store.get("project", project_id)
