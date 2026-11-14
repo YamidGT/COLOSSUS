@@ -1,0 +1,2 @@
+#!/bin/sh
+exec dotnet /opt/dafny/DafnyDriver.dll "$@"

@@ -18,6 +18,7 @@ Version 1.2 is the implementer handoff. All implementation and duration statemen
 | onboarding-sandbox.md | URL intake, recipes, target environments and isolation | B with A runtime support |
 | agents-intelligence.md | Intelligence, investigation and patch-generation behavior | B and C |
 | verification.md | Specifications, proof adapters and acceptance rules | D |
+| formal-toolchain.md | Isolated Dafny bootstrap, calibrated policy profile and linkage limits | D with A runtime |
 | deployment-observability.md | Promotion, rollback, events, reports and health | C; A telemetry |
 | runtime.md | Units, stage deadlines, recurrence, concurrency and budgets | A |
 | implementation.md | Ordered construction steps and acceptance criteria | All |
@@ -45,4 +46,4 @@ Three persistent trusted processes: controller, gateway and sandbox launcher. De
 
 The documentation handoff is ready for implementation. Give each session [project context](project-context.md), [model strategy](model-strategy.md), [contracts](contracts.md) and its [lane brief](sessions/README.md). Daniel/session A starts M0 shared scaffolding/contracts; B and D can prepare environment and evaluator fixtures within their ownership. All four branches then start from the same M0 commit. Use [integration gates](integration.md) to combine the modules.
 
-Runtime readiness is earned by M0-M5: the original documentation did not validate runtime behavior. Implementation has since exercised host isolation, actual model/account behavior and one DSVW repair; compiled proofs and deployment recovery remain pending. See implementation-status.md for measured evidence. Proposed VAmPI business requirements need owner acceptance before formal-required promotion; that does not block constructing the verifier or standard tested flow.
+Runtime readiness is earned by M0-M5: the original documentation did not validate runtime behavior. Implementation has since exercised DSVW repair and replayed deployment/recovery, plus an owned compiled-policy fixture. These are limited observations, not full acceptance. See implementation-status.md for measured evidence and remaining gates. Proposed VAmPI business requirements need owner acceptance before formal-required promotion; that does not block constructing the verifier or standard tested flow.
