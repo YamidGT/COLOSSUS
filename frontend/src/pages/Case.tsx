@@ -19,7 +19,7 @@ export default function Case() {
   useEffect(() => { setDiff(null); setDiffError(null) }, [caseId, c?.candidate_id])
   async function loadDiff() {
     if (!c?.diff_ref) return
-    try { setDiff(await artifact(c.diff_ref, projectId)) } catch (failure) { setDiffError(failure instanceof Error ? failure.message : 'Could not load the diff.') }
+    try { setDiff(await artifact(c.diff_ref, projectId)); setDiffError(null) } catch (failure) { setDiffError(failure instanceof Error ? failure.message : 'Could not load the diff.') }
   }
   async function submit() {
     if (!c) return

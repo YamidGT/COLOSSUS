@@ -385,12 +385,21 @@ class OperationReceipt(Contract):
 
 class ProjectConfigAmendment(Contract):
     expected_revision: NonNegative
-    requested_ref: str | None = None
+    requested_ref: str | None = Field(default=None, max_length=200)
     subdir: str | None = None
     owner_policy_id: Literal["lab-auto-v1", "review-v1"]
     deployment_profile_id: Literal["local-web-v1", "local-consumer-v1"]
     assurance_profile: Assurance
     requirement_ids: list[str] = Field(default_factory=list, max_length=5)
+
+    @model_validator(mode="after")
+    def validate_setup_fields(self):
+        # Apply exactly the same revision, path and assurance rules as enrollment.
+        Enrollment(
+            repo_url="https://github.com/colossus/validation",
+            **self.model_dump(exclude={"expected_revision"}),
+        )
+        return self
 
 
 class ApprovalRequest(Contract):

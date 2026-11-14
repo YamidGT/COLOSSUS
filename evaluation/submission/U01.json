@@ -1,0 +1,392 @@
+{
+  "repo_id": "U01",
+  "repository": "erev0s/VAmPI",
+  "repo_url": "https://github.com/erev0s/VAmPI",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:25.428632Z",
+  "source": {
+    "status": "accepted",
+    "commit": "f16052dce83f05847133ec98f01c5193a41de7d8",
+    "archive_sha256": "5380f830794433c3d1b84b0289521334309ee2c295f8b602c236e4b46e3556ec",
+    "tree_sha256": "299619054ff42328d09e81f753f49764894b52ac775b4940f61c3b9150c57eac",
+    "file_count": 22,
+    "total_bytes": 69582
+  },
+  "setup": {
+    "status": "ready",
+    "artifact_digest": "sha256:6a7fad2dde3a0613718724d3203ae58024944854dec7000334a9161135890502",
+    "recipe_id": "declared-python-v1",
+    "project_id": "0c00821b-29a3-4047-b90c-03ba8e596314"
+  },
+  "tests": {
+    "status": "bounded_http_checks",
+    "checks": [
+      {
+        "path": "/",
+        "status": 200,
+        "body_sha256": "609b2d0577029d5a06f95949b79e3bbdc75ab8ff7b2bbb88a318f34441a9ca53",
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "path": "/createdb",
+        "status": 200,
+        "body_sha256": "b44ec92025e00638b52b5ab6bce1f4933718b53fdcbb2df4815a3cbe5821a845",
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "path": "/users/v1",
+        "status": 200,
+        "body_sha256": "437f528cc68e43fb5fa41cbd78962305807081099f973fed1d0945681610f6a1",
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "path": "/books/v1",
+        "status": 200,
+        "body_sha256": "d5c435a22bb643dd90f19144fe68d5cb43833d0f5854f462abf5802c09512662",
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "path": "/books/v1/submission-missing",
+        "status": 401,
+        "body_sha256": "7b40c796674ea828be23cd0eb561afb7089865ee63729e7cf8070c3e68d5e206",
+        "expected_status": 401,
+        "passed": true
+      },
+      {
+        "path": "/missing-submission-route",
+        "status": 404,
+        "body_sha256": "013a8b307d5569d1d3bccea5f823d38266f9d7db8b6088cc9a6fb6f8eba4a99c",
+        "expected_status": 404,
+        "passed": true
+      }
+    ],
+    "outcome": "pass",
+    "passed": 6,
+    "total": 6,
+    "functional_suite": "Home, synthetic database initialization, user list, book list and unknown-route checks",
+    "security_suite": "Book detail rejects unauthenticated access (401); no authenticated BOLA or SQLi repair claim",
+    "command": "launcher /targets/request for six fixed local GET paths; /createdb resets only disposable lab data"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "unsupported",
+    "reason": "No approved repair/security oracle for generic runtime profile; no patch or promotion attempted"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 11,
+    "finding_count": 2,
+    "findings": [
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "app.py",
+        "line": 17,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "models/user_model.py",
+        "line": 87,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "unsupported_stack",
+    "reason": "Python dependencies found but no supported application entrypoint was identified"
+  },
+  "intake_seconds": 0.787,
+  "finished_at": "2026-11-14T21:44:18.437522Z",
+  "assisted_attempt": {
+    "changes": [
+      "Applied the source-bound GLM proposal MarkupSafe 2.1.2 -> 2.1.5; see evidence/U01-compatibility-input.json",
+      "Evaluator supplied a bounded Connexion startup recipe; application source logic preserved; separately recorded compatibility pin retained"
+    ],
+    "source_tree_sha256": "df9cc4a04da07c70baea2cd8d0cefc842d8f028bade413bcdf5cb8588915d2fa"
+  },
+  "automatic_discovery": {
+    "status": "unsupported_stack",
+    "reason": "Python dependencies found but no supported application entrypoint was identified"
+  },
+  "runtime_seconds": 42.994,
+  "cleanup": "completed",
+  "audit_evidence": "evidence/U01-attempt-2-audit.json",
+  "runtime_attempts": [
+    {
+      "attempt": 1,
+      "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+      "finished_at": "2026-11-14T21:40:49.986323Z",
+      "seconds": 6.043,
+      "setup": {
+        "status": "failed",
+        "reason_code": "dependency_build_failed",
+        "reason": "Isolated wheel install failed: ERROR: Could not find a version that satisfies the requirement markupsafe==2.1.2 (from versions: 2.1.3, 2.1.4, 2.1.5, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 3.0.4)\nERROR: No matching distribution found for markupsafe==2.1.2\n\n-py3-none-any.whl.metadata (3.4 kB)\nCollecting flask==2.2.2 (from -r requirements.txt (line 4))\n  Downloading http://172.19.0.2:8080/files/packages/0f/43/15f4f9ab225b0b25352412e8daa3d0e3d135fcf5e127070c74c3632c8b4c/Flask-2.2.2-py3-none-any.whl.metadata (3.9 kB)\nCollecting jsonschema==4.17.3 (from -r requirements.txt (line 5))\n  Downloading http://172.19.0.2:8080/files/packages/c1/97/c698bd9350f307daad79dd740806e1a59becd693bd11443a0f531e3229b3/jsonschema-4.17.3-py3-none-any.whl.metadata (7.9 kB)\n"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "Application setup did not become ready"
+      },
+      "cleanup": "completed",
+      "assistance": [
+        "Evaluator supplied a bounded Connexion startup recipe; source logic and dependency pins unchanged"
+      ],
+      "source_tree_sha256": "b4a5deddbc0cdc6029781de7e5e8880c3dd20cef48312dcf08ec84fe999ada9f",
+      "manifest_evidence": null
+    },
+    {
+      "attempt": 2,
+      "runner_sha256": "aff4ed34e2c11fd521bbddc99d176257e4e39bf587e504da3ae6c773c278b94a",
+      "finished_at": "2026-11-14T21:44:18.437522Z",
+      "seconds": 42.994,
+      "setup": {
+        "status": "ready",
+        "artifact_digest": "sha256:6a7fad2dde3a0613718724d3203ae58024944854dec7000334a9161135890502",
+        "recipe_id": "declared-python-v1",
+        "project_id": "0c00821b-29a3-4047-b90c-03ba8e596314"
+      },
+      "tests": {
+        "status": "bounded_http_checks",
+        "checks": [
+          {
+            "path": "/",
+            "status": 200,
+            "body_sha256": "609b2d0577029d5a06f95949b79e3bbdc75ab8ff7b2bbb88a318f34441a9ca53",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/createdb",
+            "status": 200,
+            "body_sha256": "b44ec92025e00638b52b5ab6bce1f4933718b53fdcbb2df4815a3cbe5821a845",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/users/v1",
+            "status": 200,
+            "body_sha256": "437f528cc68e43fb5fa41cbd78962305807081099f973fed1d0945681610f6a1",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/books/v1",
+            "status": 200,
+            "body_sha256": "d5c435a22bb643dd90f19144fe68d5cb43833d0f5854f462abf5802c09512662",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/books/v1/submission-missing",
+            "status": 401,
+            "body_sha256": "7b40c796674ea828be23cd0eb561afb7089865ee63729e7cf8070c3e68d5e206",
+            "expected_status": 401,
+            "passed": true
+          },
+          {
+            "path": "/missing-submission-route",
+            "status": 404,
+            "body_sha256": "013a8b307d5569d1d3bccea5f823d38266f9d7db8b6088cc9a6fb6f8eba4a99c",
+            "expected_status": 404,
+            "passed": true
+          }
+        ],
+        "outcome": "pass",
+        "passed": 6,
+        "total": 6,
+        "functional_suite": "Home, synthetic database initialization, user list, book list and unknown-route checks",
+        "security_suite": "Book detail rejects unauthenticated access (401); no authenticated BOLA or SQLi repair claim",
+        "command": "launcher /targets/request for six fixed local GET paths; /createdb resets only disposable lab data"
+      },
+      "cleanup": "completed",
+      "assistance": [
+        "Applied the source-bound GLM proposal MarkupSafe 2.1.2 -> 2.1.5; see evidence/U01-compatibility-input.json",
+        "Evaluator supplied a bounded Connexion startup recipe; application source logic preserved; separately recorded compatibility pin retained"
+      ],
+      "source_tree_sha256": "df9cc4a04da07c70baea2cd8d0cefc842d8f028bade413bcdf5cb8588915d2fa",
+      "manifest_evidence": "evidence/U01-attempt-2-manifest.json"
+    }
+  ],
+  "manifest_evidence": "evidence/U01-attempt-2-manifest.json",
+  "dependency_evidence": "evidence/U01-attempt-2-dependencies.json",
+  "dependency_inventory": {
+    "machine": "aarch64",
+    "packages": [
+      {
+        "ecosystem": "PyPI",
+        "name": "attrs",
+        "version": "26.1.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "certifi",
+        "version": "2026.10.23"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "charset-normalizer",
+        "version": "3.5.2"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "click",
+        "version": "8.5.1"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "clickclick",
+        "version": "20.10.2"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "connexion",
+        "version": "2.14.2"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "Flask",
+        "version": "2.2.2"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "Flask-SQLAlchemy",
+        "version": "3.0.3"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "greenlet",
+        "version": "3.5.6"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "idna",
+        "version": "3.20"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "inflection",
+        "version": "0.5.1"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "itsdangerous",
+        "version": "2.2.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "jsonschema",
+        "version": "4.17.3"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "MarkupSafe",
+        "version": "2.1.5"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "packaging",
+        "version": "26.3"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "PyJWT",
+        "version": "2.6.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "pyrsistent",
+        "version": "0.20.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "PyYAML",
+        "version": "6.0.3"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "requests",
+        "version": "2.34.2"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "SQLAlchemy",
+        "version": "2.0.2"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "swagger-ui-bundle",
+        "version": "0.0.9"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.8.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "Werkzeug",
+        "version": "2.2.3"
+      }
+    ],
+    "python": "3.12.16 (main, Nov  5 2026, 08:06:14) [GCC 14.2.0]",
+    "scope": "installed wheel inventory"
+  },
+  "investigation_cycle": {
+    "status": "NO_CHANGE",
+    "coverage": {
+      "recipe_id": "declared-python-v1",
+      "discovery": "completed",
+      "repair": "UNSUPPORTED",
+      "formal": "UNSUPPORTED",
+      "mandatory_tests": [
+        "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
+        "Reproduce the reported defect on the baseline; require the exploit attempt to fail on the patched candidate and the protected security regression test to pass.",
+        "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
+        "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
+        "Under tested policy, report the formal limitation; formal_required still blocks without linked proof."
+      ],
+      "reason": "No approved protected repair oracle is registered for this application",
+      "raw_count": 2,
+      "findings": 2,
+      "requests_sent": 0,
+      "model_diagnostics": [],
+      "excluded_tools": [
+        "Bandit: not installed in worker"
+      ]
+    },
+    "evidence_id": "6ffcbbc2579a8d303245db7f04ea0837a9eac0ad71ee8a5ce205ffd818aa4d6f"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "repo_id": "U04",
+  "repository": "we45/Vulnerable-Flask-App",
+  "repo_url": "https://github.com/we45/Vulnerable-Flask-App",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:25.441176Z",
+  "source": {
+    "status": "accepted",
+    "commit": "b6a4f97afd466e83e1f60781494252dec1c37039",
+    "archive_sha256": "78a0c42b5fc3a9631df16ccfbdb56d2dc2e9f8ace75572b2a18f01f1ab84b735",
+    "tree_sha256": "7fe42aef707bd5209cab8b72592e260d7c3c9b40ba84edc2c412d82576be182f",
+    "file_count": 19,
+    "total_bytes": 150833
+  },
+  "setup": {
+    "status": "failed",
+    "reason_code": "readiness_failed",
+    "reason": "Application did not pass its positive readiness probe"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "Application setup did not become ready"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Run the discovered recipe in the existing isolated runtime.",
+    "Run bounded HTTP readiness; preserve HTTP status and body hash.",
+    "Run applicable protected functional/security tests when installed.",
+    "If no protected oracle exists, report test coverage unsupported; do not promote."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 2,
+    "finding_count": 8,
+    "findings": [
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "app/app.py",
+        "line": 28,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "app/app.py",
+        "line": 63,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "app/app.py",
+        "line": 97,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "ssti",
+        "cwe": "CWE-1336",
+        "title": "Template rendered from string",
+        "file": "app/app.py",
+        "line": 114,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "app/app.py",
+        "line": 141,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "app/app.py",
+        "line": 261,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "ssti",
+        "cwe": "CWE-1336",
+        "title": "Template rendered from string",
+        "file": "app/app.py",
+        "line": 281,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "yaml-load",
+        "cwe": "CWE-502",
+        "title": "yaml.load without safe loader",
+        "file": "app/app.py",
+        "line": 329,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "supported_recipe",
+    "recipe": {
+      "recipe_id": "python-flask-v1",
+      "command": [
+        "python",
+        "-I",
+        "/app/_colossus_runtime/start.py",
+        "wsgi",
+        "app/app.py",
+        "app"
+      ],
+      "port": 5000,
+      "health_path": "/",
+      "expected_status": 200,
+      "required_body": null,
+      "test_profile_ids": [
+        "http-readiness-v1"
+      ],
+      "limitations": [
+        "Generic readiness is not a protected security or functional oracle",
+        "Synthetic data lives in a disposable scratch copy of the source"
+      ],
+      "requirements": [
+        "flask"
+      ],
+      "dependency_inputs": [],
+      "runtime_mode": "wsgi"
+    }
+  },
+  "intake_seconds": 0.888,
+  "finished_at": "2026-11-14T21:42:06.991666Z",
+  "runtime_seconds": 72.33,
+  "cleanup": "completed",
+  "audit_evidence": "evidence/U04-attempt-1-audit.json",
+  "runtime_attempts": [
+    {
+      "attempt": 1,
+      "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+      "finished_at": "2026-11-14T21:42:06.991666Z",
+      "seconds": 72.33,
+      "setup": {
+        "status": "failed",
+        "reason_code": "readiness_failed",
+        "reason": "Application did not pass its positive readiness probe"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "Application setup did not become ready"
+      },
+      "cleanup": "completed",
+      "assistance": [],
+      "source_tree_sha256": "7fe42aef707bd5209cab8b72592e260d7c3c9b40ba84edc2c412d82576be182f",
+      "manifest_evidence": null
+    }
+  ]
+}

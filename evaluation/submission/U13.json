@@ -1,0 +1,56 @@
+{
+  "repo_id": "U13",
+  "repository": "appsecco/dvna",
+  "repo_url": "https://github.com/appsecco/dvna",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:29.403623Z",
+  "source": {
+    "status": "accepted",
+    "commit": "9ba473add536f66ac9007966acb2a775dd31277a",
+    "archive_sha256": "34936c8f3fbff44f60c691e7600e7fb109d11c49be308b04ad5b823e10e48944",
+    "tree_sha256": "0afb92453de26b461f46209acbd937b771e99296595d58f4c8477fa410e11f4c",
+    "file_count": 151,
+    "total_bytes": 3990018
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "intake_seconds": 2.611,
+  "finished_at": "2026-11-14T21:34:32.014253Z"
+}

@@ -1,56 +1,67 @@
 # COLOSSUS
 
-## Recurring automated cyberdefence from a GitHub repository
+Recurring cyberdefence from a GitHub repository
 
-Track 3 | Daniel and three collaborators | Design specification v1.2 | 14 November 2026
+Hackathon DefAcc 2026 | Track 3: Automated cyberdefence | 14 November 2026
 
-Status: implementation handoff prepared. Product execution, repository preflight and empirical results are pending. The system described below is the intended implementation, not a claim of measured performance.
+Team: four contributors; lead Daniel. [Repository and run instructions](https://github.com/YamidGT/COLOSSUS).
 
-## Objective and risk
+## Abstract
 
-COLOSSUS is designed to reduce the interval between a software exposure and a healthy remediated deployment. It combines recurring threat intelligence and security investigation with patch generation, explicit verification, controlled promotion and recovery. It also constrains the risk that a defensive agent follows hostile repository content, changes its own acceptance criteria or deploys a faulty repair.
+AI can accelerate vulnerability discovery, but an autonomous defender can also ship a broken patch or follow hostile instructions. COLOSSUS accepts a GitHub URL, investigates an isolated copy, generates repairs with GLM, and gates lab deployment on recorded tests and applicable proofs. A fresh DSVW run completed repair, lab promotion and mirror refresh in 330.7 seconds, including five minutes of health observation.
 
-## Plug and play onboarding
+## 1. The threat
 
-A public GitHub URL starts source inspection and immutable snapshot creation. The system identifies the stack, validates an existing container recipe or proposes one, builds in an isolated worker, provisions synthetic dependencies and checks readiness. A versioned TargetManifest binds source, images, dependencies, configuration, tests, security policy and proof obligations. Unsupported stacks and missing configuration are explicit outcomes. Libraries use a consumer/test harness; services use isolated application stacks.
+Faster vulnerability discovery is useful only if defenders can safely remediate what they find. An automated patch may break legitimate behavior; a repository comment or tool response may redirect the agent. Developers need an auditable path from evidence to a running repair, with independent checks and recovery. COLOSSUS treats repository content and model proposals as untrusted inputs, consistent with agent-security research [1].
 
-## Complete recurring lifecycle
+## 2. What we built
 
-Source changes, scheduled reviews and relevant advisories trigger a deterministic orchestrator. The investigation agent combines static tools, dependency matching, scoped probes and bounded fuzzing. Confirmed findings lead to an official upstream update or an agent-generated source repair. Each candidate is built from pristine inputs and checked against security, functional and formal obligations. Accepted artifacts pass an autonomy policy, staging and observation. Success refreshes the mirror; failure triggers recovery and reopens investigation.
+An operator enrolls a repository through a Typer CLI or React/Tailwind action center. The controller pins source, builds a supported Python application in gVisor, and records readiness and dependencies. Scheduled reviews and OSV/CISA intelligence feed bounded investigations. GLM, accessed through Mistral, proposes patches; deterministic code controls edits, budgets and deployment. Every repair requires protected security and legitimate-behavior tests. For the registered policy fixture, GLM proposes implementations inside a frozen Dafny template, receives verifier diagnostics and retries within a fixed budget [2]. Unknown or unsupported proof falls back to mandatory testing under the tested policy; required proofs still block deployment. Compiled components require artifact and wrapper checks. Accepted artifacts undergo lab observation, promotion and mirror refresh. A retained previous image supports recovery. Credentials remain outside target containers.
 
-## Architecture and authority
+```text
+CLI / action center --> Controller <--> GLM gateway + feeds
+                             |
+Isolated copy --> Mandatory tests + applicable proof --> Lab deployment
+      ^                                                    |
+      +---------------- Mirror refresh --------------------+
+```
 
-Operators use a Typer CLI or a minimal React/Tailwind repository action center for setup, patch review, proof scope, approvals and recovery. Both share the Python API, SQLite durable tasks/events and content-addressed evidence. A gateway alone holds the Mistral key; a sandbox launcher alone controls runtime actions; a deployment service alone holds destination credentials. Target workers cannot reach management networks or other projects. Code, build hooks and proof tools execute only in isolated environments. Resource quotas, deadlines, capability checks and protected test/specification paths constrain effects independently of model compliance.
+Figure 1. Models propose; deterministic gates control effects.
 
-## Formal methods and assurance
+## 3. How we evaluated
 
-The initial formal integration compiles verified Dafny policy functions into VAmPI: password ownership, book-secret access, registration privileges and public user fields. Flask/JWT/database wrappers remain tested assumptions. CrossHair explores Python counterexamples; CBMC is a later C/C++ adapter. A detached model does not prove the running application. Outcomes distinguish proof, bounded pass, counterexample, unknown and unsupported. Required proofs block on failure or missing evidence; patchers cannot weaken specifications.
+We evaluated one DSVW SQL-query repair through protected tests, deployment, recurrence and rollback. An owned four-method policy fixture exercises proof, compilation and wrong implementations. A 24-repository compatibility pilot accepted 20 archives; five additional runtime attempts yielded two assisted starts and three failures. GLM triaged Python snippets in 11 repositories; judgments remain unconfirmed. Metrics are scope, completion, latency and cost, not security accuracy. CTIBench, CyberSecEval and DafnyBench remain unrun [3-5].
+
+## 4. Results
+
+| Measurement | Scope / baseline | Observed result |
+|---|---|---|
+| DSVW repair checks | One original vs patched query | 7 required gates passed; formal unsupported |
+| Fresh full cycle | 1 new call; 300 s observation | 330.7 s; $0.001287 |
+| Repeat / recovery | Second cycle; retained training image | NO_CHANGE; rollback 8.2 s |
+| GLM formal component | Owned: 4 methods; 39 wrapper checks | 5.50 s; 1 call; $0.000078 |
+| Incorrect controls | 4 policy mutants + wrapper bypass | All rejected; substituted files rejected |
+| GLM signal triage | 11 repos; unconfirmed judgments | 57 / 59 returned; $0.004014 |
+| Application smoke tests | VAmPI modified pin; PyGoat sub-lab | 6/6 + 7/7 HTTP checks; no repair |
+| Repository campaign | 24 requested; mixed coverage | 20 / 24 archives admitted |
+
+The fresh DSVW cycle demonstrates repair through healthy lab deployment and mirror refresh. Component proofs remain separate evidence. Earlier attempts stopped on invalid model output and HTTP 429; one successful run does not establish reliability across repositories.
+
+## 5. Limits and dual-use risk
+
+This is a constrained lab prototype, not a production security guarantee. Generic repair coverage and stack compatibility remain limited. Proofs cover named components under fixed contracts and toolchain assumptions; they do not prove an entire Python application secure. Public training repositories and small calibration samples limit generalization. Detection and patch generation are dual-use: execution is confined to enrolled local copies with quotas, restricted networking and no model-held deployment credentials. No live public target or cloud attack scenario was exercised.
+
+## References
+
+- [1] Debenedetti et al. (2024). AgentDojo. NeurIPS. [Source](https://arxiv.org/abs/2406.13352)
+
+- [2] Dafny contributors. Dafny Reference Manual. [Source](https://dafny.org/dafny/DafnyRef/DafnyRef)
+
+- [3] Alam et al. (2024). CTIBench. NeurIPS. [Source](https://arxiv.org/abs/2406.07599)
+
+- [4] Bhatt et al. (2023). Purple Llama CyberSecEval. [Source](https://arxiv.org/abs/2312.04724)
+
+- [5] Loughridge et al. (2024). DafnyBench. [Source](https://arxiv.org/abs/2406.08467)
 
 
-<!-- Page 2 in the PDF -->
-
-# Evaluation and delivery
-
-## Repository campaign
-
-Use DSVW for smoke testing and VAmPI for development; reserve Vulpy for heldout scoring, with Tiredful-API as a predeclared setup fallback. DVGA is optional static-only. Five further Python/API candidates remain deferred in a ten-repository roster; all 24 user suggestions are cataloged. VAmPI safe mode and Vulpy good/ are not globally secure references. Freeze commits, images, scoped oracles and positive workflows; disclose manual setup and known-reference access.
-
-Calibrate on development targets before the holdout. Two scoped variants and three repetitions across three full-cycle targets yield up to 18 primary runs, with development and heldout results separate. A second cycle checks mirror freshness and continued operation. Compare tools-only discovery and baseline repair; rescore identical candidates with gates removed offline. Add rollout failures, prompt injections and good/bad candidate controls.
-
-## Three public benchmark families
-
-CTIBench: 50 root-cause mapping and 50 severity-prediction examples, measuring CWE accuracy and CVSS error/validity. CyberSecEval Instruct: up to 30 eligible examples, measuring generated insecure code with the upstream analyzer. DafnyBench: 20 compatible programs, up to three attempts, measuring verifier acceptance and improvement over a no-hint baseline. These are fixed-subset pilots, not full-suite certification. Local patch checks inspired by AutoPatchBench are labelled separately from official benchmark results.
-
-## Metrics and observable evidence
-
-Report onboarding completion, labelled precision/recall, correct repair and healthy deployment rates, regressions, per-property proof outcomes, incorrect and correct candidate acceptance, rollback correctness/time, unauthorized effects and useful task completion under attack. Include latency, all model costs, operator interventions, exclusions and failed runs. OpenTelemetry traces/metrics/logs provide operational visibility; unsampled audit decisions retain policy and artifact provenance. No empirical values are claimed yet.
-
-## Resources timing and implementation
-
-Resources: 4 CPU, 24 GB Oracle host, local workers and USD 150 Mistral credit. Default model: zai-glm-5-3-flash; published input/output rates USD 0.15/0.50 per million tokens. Account throughput is user-reported, not measured here. One heavy worker; USD 120 automated ceiling plus USD 30 reserve. Planning estimates: 15-40 minutes for a small warm cycle; 25-60 minutes for first URL setup and cycle. Standard active case cap: 90 minutes. These estimates require calibration. A repeated ten-repository campaign with second cycles may require 32-76 serial host-hours before additional baselines/benchmarks.
-
-Four lanes implement shared contracts first: A/Daniel owns control, gateway, sandbox and integration; B owns onboarding, intelligence and investigation; C owns repairs, deployment and recovery; D owns verification and evaluation. Integration proceeds through a real URL-to-target path, candidate checks, promotion/rollback and a second cycle. The merging runbook requires ownership boundaries, versioned interfaces, CLI/UI parity, restart tests and evidence. Product/design briefs define Impeccable-guided visual and accessibility review.
-
-## Limits and research basis
-
-Formal guarantees remain conditional on properties, assumptions and trusted tools. Small samples, historical public data and synthetic mutations limit generalization. An image rollback does not automatically reverse data changes. Model alignment and absolute sandbox security are not proved. Production deployment needs separately configured owner authorization. The research basis includes DARPA AIxCC, CodeMender, CTIBench, CyberSecEval, DafnyBench and AgentDojo; full source links and protocols are in the repository documentation.
+Evidence: [committed summary](submission-evidence.json), [submission runbook](submission.md).

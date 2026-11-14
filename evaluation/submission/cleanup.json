@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-11-14T21:45:44.142527+00:00",
+  "context": "colima-colossus",
+  "scope": "all managed containers after catalog runtime attempts",
+  "remaining": [
+    {
+      "name": "colossus-461358b6-9dad-4f63-83d5-0a439e37710c",
+      "status": "Up About an hour",
+      "image": "a25cf8fe1d08"
+    }
+  ],
+  "interpretation": "Only pre-existing DSVW mirror retained; catalog project cleanup returned completed for each actual attempt"
+}

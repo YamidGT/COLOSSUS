@@ -1,0 +1,59 @@
+{
+  "allowed_patch_paths": [
+    "app.py"
+  ],
+  "artifact_digest": "sha256:6dd3f60d05d2fe054404b68faad5d98f3612e9340e59c986a78001c6d7e63fb8",
+  "commit": "2aa4cc14f251e4a780e94e200aed6b36a5b15c21",
+  "data_seed_id": "repository-default-v1",
+  "dependency_inventory_hash": "70eea50dd949502abbfcebaf8b50ebdaffdbbbde5ccb433b61004fa5517f3612",
+  "dependency_inventory_id": "70eea50dd949502abbfcebaf8b50ebdaffdbbbde5ccb433b61004fa5517f3612",
+  "deployment_profile_id": "local-web-v1",
+  "manifest_id": "6e1da6e1-5a09-447d-af9e-b6026c77597c",
+  "network_profile_id": "isolated-case-v1",
+  "obligation_ids": [],
+  "platform": "linux/arm64",
+  "policy_hash": "63ba2ec063bb64a32f4365c2af75d20c3fc2213aa327d2f6775845c92e39f2b6",
+  "project_id": "9518d844-5e15-4187-b8d8-3faf835e6e6f",
+  "protected_paths": [
+    "colossus-app.json",
+    "requirements.txt"
+  ],
+  "readiness_profile_id": "python-flask-v1:health",
+  "recipe_hash": "f8f4cd1cc8588051b3b81db9ae12f7e96fb494a165529d6a0cafadb7dc860ecf",
+  "recipe_id": "python-flask-v1",
+  "repo_url": "https://github.com/adeyosemanputra/pygoat",
+  "revision": 1,
+  "services": [
+    {
+      "artifact_digest": "sha256:6dd3f60d05d2fe054404b68faad5d98f3612e9340e59c986a78001c6d7e63fb8",
+      "command_profile_id": "python-flask-v1",
+      "dependency_service_ids": [],
+      "health_check_id": "python-flask-v1:health",
+      "internal_ports": [
+        5000
+      ],
+      "resource_profile_id": "standard",
+      "service_id": "app",
+      "writable_paths": []
+    }
+  ],
+  "setup_provenance": [
+    {
+      "dependency_evidence_id": "34c3684ae99856945ae8ea55200b47a08a4d0fb94fee26b28034ae5bf0681d76",
+      "intake_source_id": "35fc30c76c2ef2337d958c9e6f43550a488ca192b974093795c5c9c78126346a",
+      "limitations": [
+        "Generic readiness is not a protected security or functional oracle",
+        "Synthetic data lives in a disposable scratch copy of the source"
+      ],
+      "readiness_evidence_id": "c25aa5afc69346bdfb1bab21bd38662baa294b1564d189e0fe539e720323720b",
+      "runtime_tree_sha256": "913fd8fc6f2558df806d43bfc6c684dca59e874de319b9535abaccd761540fd9",
+      "source_id": "e31daad972fc406370fc4da569a08fa5847cf3144a94eb2c5cc146b7daef95cf"
+    }
+  ],
+  "target_kind": "web",
+  "test_profile_ids": [
+    "http-readiness-v1"
+  ],
+  "toolchain_manifest_id": "78d720782810c3e21dc4d5447e4450fd7d5189dd64b205920773b75146fb5e54",
+  "tree_sha256": "306d16742151bd8b35f4691dd7d8856919e9b52b08e515b39e0f895581f24b40"
+}

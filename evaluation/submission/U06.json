@@ -1,0 +1,125 @@
+{
+  "repo_id": "U06",
+  "repository": "payatu/Tiredful-API",
+  "repo_url": "https://github.com/payatu/Tiredful-API",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:26.299026Z",
+  "source": {
+    "status": "accepted",
+    "commit": "0134124496b3c4f1b969e51a24fd8a059104fb98",
+    "archive_sha256": "2d19b1af73b7386bfa32c098d11efb78d30e6501db80fd56f42ee3cae9842601",
+    "tree_sha256": "512ec61283330334184d02ec72de1b7fc7977fd9aa10c43c47989eb3ec4bcffa",
+    "file_count": 130,
+    "total_bytes": 3892768
+  },
+  "setup": {
+    "status": "failed",
+    "reason_code": "dependency_build_failed",
+    "reason": "Isolated wheel install failed: ERROR: Could not find a version that satisfies the requirement oauth==1.0.1 (from versions: none)\nERROR: No matching distribution found for oauth==1.0.1\n\noauth-toolkit==1.0.0 (from -r requirements.txt (line 2))\n  Downloading http://172.19.0.2:8080/files/packages/e2/f0/3bd6fb9f17c375ac0f3f4f8a4879d240a5a5508557b77e696a665fceeb23/django_oauth_toolkit-1.0.0-py2.py3-none-any.whl.metadata (1.1 kB)\nCollecting djangorestframework==3.7.3 (from -r requirements.txt (line 3))\n  Downloading http://172.19.0.2:8080/files/packages/f5/2c/3c3c81b8ecd60952c20ccd5fc1d19c0b22731c80c75649dd2e3fef361aaf/djangorestframework-3.7.3-py2.py3-none-any.whl.metadata (9.0 kB)\n"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "Application setup did not become ready"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 48,
+    "finding_count": 4,
+    "findings": [
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "Tiredful-API/Tiredful_API/settings.py",
+        "line": 33,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "Tiredful-API/health/views.py",
+        "line": 47,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-format",
+        "cwe": "CWE-89",
+        "title": "SQL built with string formatting",
+        "file": "Tiredful-API/health/views.py",
+        "line": 57,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "Tiredful-API/health/views.py",
+        "line": 57,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "unsupported_stack",
+    "reason": "Python dependencies found but no supported application entrypoint was identified"
+  },
+  "intake_seconds": 1.527,
+  "finished_at": "2026-11-14T21:40:54.527812Z",
+  "assisted_attempt": {
+    "changes": [
+      "Evaluator selected Tiredful-API/ and carried root requirements into that view; dependency pins unchanged"
+    ],
+    "source_tree_sha256": "4704633064fa38addb787a6c867f6bdb2ad16f8ef7eb42f5088e4f8796fe8bc2"
+  },
+  "automatic_discovery": {
+    "status": "unsupported_stack",
+    "reason": "Python dependencies found but no supported application entrypoint was identified"
+  },
+  "runtime_seconds": 4.44,
+  "cleanup": "completed",
+  "audit_evidence": "evidence/U06-attempt-1-audit.json",
+  "runtime_attempts": [
+    {
+      "attempt": 1,
+      "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+      "finished_at": "2026-11-14T21:40:54.527812Z",
+      "seconds": 4.44,
+      "setup": {
+        "status": "failed",
+        "reason_code": "dependency_build_failed",
+        "reason": "Isolated wheel install failed: ERROR: Could not find a version that satisfies the requirement oauth==1.0.1 (from versions: none)\nERROR: No matching distribution found for oauth==1.0.1\n\noauth-toolkit==1.0.0 (from -r requirements.txt (line 2))\n  Downloading http://172.19.0.2:8080/files/packages/e2/f0/3bd6fb9f17c375ac0f3f4f8a4879d240a5a5508557b77e696a665fceeb23/django_oauth_toolkit-1.0.0-py2.py3-none-any.whl.metadata (1.1 kB)\nCollecting djangorestframework==3.7.3 (from -r requirements.txt (line 3))\n  Downloading http://172.19.0.2:8080/files/packages/f5/2c/3c3c81b8ecd60952c20ccd5fc1d19c0b22731c80c75649dd2e3fef361aaf/djangorestframework-3.7.3-py2.py3-none-any.whl.metadata (9.0 kB)\n"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "Application setup did not become ready"
+      },
+      "cleanup": "completed",
+      "assistance": [
+        "Evaluator selected Tiredful-API/ and carried root requirements into that view; dependency pins unchanged"
+      ],
+      "source_tree_sha256": "4704633064fa38addb787a6c867f6bdb2ad16f8ef7eb42f5088e4f8796fe8bc2",
+      "manifest_evidence": null
+    }
+  ]
+}

@@ -2,7 +2,13 @@
 
 COLOSSUS is a recurring automated cyberdefence system. A public GitHub URL starts isolated setup, investigation, remediation, verification, policy-controlled deployment, recovery and mirror refresh. The next cycle uses the resulting deployed version.
 
-**Status:** implementation in progress, 14 November 2026. The controller, API/CLI foundation, credential gateway, gVisor execution, immutable packaging and one DSVW repair path are implemented. A real DSVW candidate passed the tested-profile gates; deployment/recovery, formal adapters, intelligence feeds, frontend and benchmark execution remain incomplete. See the [implementation evidence and completion ledger](docs/implementation-status.md).
+**Status:** hackathon implementation, 14 November 2026. The controller, CLI and
+React/Tailwind action center, credential gateway, recurring OSV/KEV intelligence,
+gVisor execution, immutable packaging, DSVW repair/deployment/recovery and bounded
+GLM-assisted Dafny workflow are implemented. Public-target proof coverage and
+supported setup/repair profiles remain limited. See the [submission report](docs/submission.md)
+for measured results and the [completion ledger](docs/implementation-status.md)
+for remaining broader capabilities.
 
 ## Implementation handoff
 
@@ -39,4 +45,54 @@ Use `uv sync --python 3.12`, `uv run pytest -q` and `uv run ruff check src tests
 
 The local worker requires a **dedicated** Docker context with gVisor, selected through `COLOSSUS_DOCKER_CONTEXT` (default `colima-colossus`). Do not point it at a production Docker daemon. Runtime preflight fails closed if gVisor is missing. The validated local profile is a separate Colima Linux VM with no host directory mounts or port forwarding, a rootful daemon inside that disposable VM, and nonroot gVisor containers. Rootless Docker is not yet validated here.
 
-Daniel has limited runtime validation to **DSVW only** for this implementation phase. `scripts/check_sandbox.py`, `scripts/check_services.py`, `scripts/check_onboarding.py` and `scripts/check_repair.py` record bounded calibration evidence locally. The last script uses the real paid model and stops at a verified candidate; it does not deploy. Do not launch the multi-repository campaign yet.
+Daniel expanded the submission campaign to the full 24-repository catalog. Results
+retain source-intake errors, unsupported stacks and failed setup; they are not 24
+successful full-cycle repairs. The first complete lifecycle target is
+[DSVW](https://github.com/stamparm/DSVW), pinned to
+`9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908`. Only isolated local copies are exercised;
+no public deployment or paid cloud laboratory is targeted.
+
+## Start the action center
+
+With the dedicated gVisor runtime configured and gateway credentials in `.env`:
+
+```bash
+uv sync --python 3.12
+npm --prefix frontend ci
+npm --prefix frontend run build
+uv run colossus serve
+```
+
+In another terminal:
+
+```bash
+uv run colossus ui
+uv run colossus --json enroll https://github.com/stamparm/DSVW \
+  --ref 9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908 --run
+uv run colossus projects
+uv run colossus status PROJECT_ID --watch
+uv run colossus report CYCLE_ID --output report.json
+```
+
+`ui` displays a one-use login code. Enter it in the browser; no provider key belongs
+in the frontend. Enrollment with `--run` queues one cycle after readiness. Local
+lab policy can promote a candidate only after its required checks pass. `doctor`
+prints runtime diagnostics and currently exits 3 while full-product acceptance
+remains incomplete; inspect the individual checks rather than interpreting that
+exit as proof that every implemented path is unavailable.
+
+## Verification and reproduction
+
+```bash
+uv run pytest -q
+uv run ruff check src tests
+uv run python scripts/check_design_docs.py
+uv run python scripts/check_formal_agent.py
+uv run python scripts/check_full_cycle.py --output evaluation/submission/dsvw-reproduction.json
+```
+
+The last two commands use the paid model gateway and existing isolated runtime.
+Run one supervisor at a time against the same state directory. A fresh lifecycle
+includes the real five-minute observation window. See [formal workflow](docs/formal-agent.md)
+for the exact proof scope and plain mandatory-test fallback instructions. The
+owned compiled-policy fixture is not a proof of DSVW's Python SQL implementation.

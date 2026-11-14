@@ -1,0 +1,824 @@
+{
+  "repo_id": "U21",
+  "repository": "RhinoSecurityLabs/cloudgoat",
+  "repo_url": "https://github.com/RhinoSecurityLabs/cloudgoat",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:34.070614Z",
+  "source": {
+    "status": "accepted",
+    "commit": "63c65bd26edc6919499adfa20b176c450e35c33c",
+    "archive_sha256": "747a80fea6de64f402070a0274ce7137485a2e7424ccdbad6851b11ae0ea25dd",
+    "tree_sha256": "484172ddb7f73d5fd8946f05b64fa0b8c0cf85c9a7d9a42b2723070d41b59a53",
+    "file_count": 1954,
+    "total_bytes": 9721659
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Use a dedicated IaC/cluster adapter and static policy checks.",
+    "Do not deploy cloud resources or grant cloud credentials for this submission.",
+    "No application functional or security suite was executed."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 137,
+    "finding_count": 96,
+    "findings": [
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/cloudgoat.py",
+        "line": 89,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+        "line": 116,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+        "line": 147,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/db.py",
+        "line": 8,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+        "line": 30,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+        "line": 45,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+        "line": 50,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+        "line": 66,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+        "line": 112,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/db.py",
+        "line": 8,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+        "line": 366,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+        "line": 438,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+        "line": 476,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+        "line": 491,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+        "line": 570,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click_default_group.py",
+        "line": 135,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/dateutil/zoneinfo/rebuild.py",
+        "line": 33,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/dateutils/dateadd.py",
+        "line": 42,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/dateutils/datediff.py",
+        "line": 39,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/pytz/__init__.py",
+        "line": 283,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/pytz/__init__.py",
+        "line": 486,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/pytz/__init__.py",
+        "line": 488,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+        "line": 1043,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+        "line": 1102,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+        "line": 1306,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+        "line": 1495,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+        "line": 1900,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+        "line": 2192,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 471,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 559,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-format",
+        "cwe": "CWE-89",
+        "title": "SQL built with string formatting",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 887,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 924,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 966,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 994,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 1400,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 1469,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 1482,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 1794,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 1899,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2051,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2064,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2107,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2184,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2291,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2300,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2562,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2834,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2837,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2840,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2846,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2853,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2866,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+        "line": 2926,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+        "line": 366,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+        "line": 438,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+        "line": 476,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+        "line": 491,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+        "line": 570,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click_default_group.py",
+        "line": 135,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/dateutil/zoneinfo/rebuild.py",
+        "line": 33,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/dateutils/dateadd.py",
+        "line": 42,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/dateutils/datediff.py",
+        "line": 39,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/pytz/__init__.py",
+        "line": 283,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/pytz/__init__.py",
+        "line": 486,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/pytz/__init__.py",
+        "line": 488,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+        "line": 1043,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+        "line": 1102,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+        "line": 1306,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+        "line": 1495,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+        "line": 1900,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+        "line": 2192,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 471,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 559,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-format",
+        "cwe": "CWE-89",
+        "title": "SQL built with string formatting",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 887,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 924,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 966,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 994,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 1400,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 1469,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 1482,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 1794,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 1899,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2051,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2064,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2107,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2184,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2291,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2300,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2562,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2834,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2837,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2840,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2846,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2853,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2866,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+        "line": 2926,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+  },
+  "intake_seconds": 2.519,
+  "finished_at": "2026-11-14T21:34:36.589672Z"
+}

@@ -6,7 +6,7 @@ import json
 import time
 
 from colossus.contracts.core import DomainError, content_hash, new_id, utcnow
-from colossus.contracts.models import Enrollment
+from colossus.contracts.models import Enrollment, ProjectConfigAmendment
 from colossus.contracts.runtime import RuntimeConfig
 
 from .store import Store
@@ -199,6 +199,113 @@ class Controller:
             return {"project_id": project_id, "task_id": task_id}
 
         return self.store.mutate(actor, key, "retry_setup", {"project_id": project_id}, action)
+
+    def configure(self, project_id: str, amendment: ProjectConfigAmendment, key: str, actor: str):
+        """Replace a failed setup's configuration without rewriting its attempt history."""
+        body = amendment.model_dump()
+
+        def action(db, operation_id):
+            project = self._project(db, project_id)
+            if project["revision"] != amendment.expected_revision:
+                raise DomainError(
+                    "stale_revision", "Project changed; refresh configuration before submitting"
+                )
+            if amendment.requirement_ids:
+                raise DomainError(
+                    "unapproved_requirement",
+                    "No approved requirement profile is installed yet",
+                    422,
+                )
+            if project["admission_state"] != "active":
+                raise DomainError("project_paused", "Resume the project before amending setup")
+            pending = db.execute(
+                "SELECT 1 FROM tasks WHERE project_id=? AND state IN ('queued','running') LIMIT 1",
+                (project_id,),
+            ).fetchone()
+            if project.get("active_cycle_id") or project.get("maintenance_operation_id") or pending:
+                raise DomainError(
+                    "project_busy", "Wait for active work to finish before amending setup"
+                )
+            if project["setup_state"] not in {"SETUP_FAILED", "UNSUPPORTED", "NEEDS_CONFIGURATION"}:
+                raise DomainError(
+                    "configuration_not_eligible",
+                    "Configuration amendments currently apply to failed or unsupported setup",
+                )
+            if project.get("deployment") or project.get("mirror", {}).get("state") in {
+                "READY",
+                "STARTING",
+            }:
+                raise DomainError(
+                    "configuration_not_eligible",
+                    "A running mirror or deployment must be reconciled before replacing setup",
+                )
+            change_id = new_id()
+            self.store._put(
+                db,
+                "configuration_change",
+                change_id,
+                {
+                    "change_id": change_id,
+                    "project_id": project_id,
+                    "operation_id": operation_id,
+                    "expected_revision": amendment.expected_revision,
+                    "previous_configuration": {
+                        k: project[k] for k in body if k != "expected_revision"
+                    },
+                    "previous_source": project.get("source", {}),
+                    "previous_setup_state": project["setup_state"],
+                    "configuration": amendment.model_dump(exclude={"expected_revision"}),
+                    "actor": actor,
+                },
+                project_id,
+            )
+            self.store._put(
+                db,
+                "project",
+                project_id,
+                project
+                | {
+                    **amendment.model_dump(exclude={"expected_revision"}),
+                    "setup_state": "NEW",
+                    "source": {},
+                    "mirror": {},
+                    "reason": None,
+                    "reason_code": None,
+                    "operation_id": operation_id,
+                },
+                project_id,
+                project["revision"],
+            )
+            task_id = self.store.enqueue(
+                db,
+                project_id,
+                "onboard",
+                {
+                    "operation_id": operation_id,
+                    "configuration_change_id": change_id,
+                },
+                time.time() + self.runtime.onboarding_seconds,
+            )
+            return {
+                "project_id": project_id,
+                "task_id": task_id,
+                "configuration_change_id": change_id,
+            }
+
+        return self.store.mutate(
+            actor, key, "configure", {"project_id": project_id, **body}, action
+        )
+
+    def configuration(self, project_id: str):
+        project = self.store.get("project", project_id)
+        return ProjectConfigAmendment(
+            expected_revision=project["revision"],
+            **{
+                k: project[k]
+                for k in ProjectConfigAmendment.model_fields
+                if k != "expected_revision"
+            },
+        ).model_dump()
 
     def approve(self, case_id, decision, key, actor):
         def action(db, operation_id):

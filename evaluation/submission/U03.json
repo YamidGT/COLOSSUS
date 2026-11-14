@@ -1,0 +1,199 @@
+{
+  "repo_id": "U03",
+  "repository": "stamparm/DSVW",
+  "repo_url": "https://github.com/stamparm/DSVW",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:25.441054Z",
+  "source": {
+    "status": "accepted",
+    "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+    "archive_sha256": "96690f62ac0fba8a4f0aeac22f2370853bc02b96fb3efd1b8fc3a39398bf302b",
+    "tree_sha256": "da51a22aea8a66c3edafe11a0411fc8e119089104f618ee971cf4d7e8b0426f3",
+    "file_count": 12,
+    "total_bytes": 80009
+  },
+  "setup": {
+    "status": "ready",
+    "evidence_origin": "separate_integration_run",
+    "project_id": "20803760-3020-4143-9b94-641698f17417"
+  },
+  "tests": {
+    "status": "protected_repair_gates_passed",
+    "evidence": "dsvw-full-cycle.json",
+    "scope": "Registered DSVW functionality/security/static and artifact gates; formal unsupported"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "COMPLETE",
+    "generation_mode": "fresh_inference",
+    "evidence": "dsvw-full-cycle.json",
+    "seconds": 330.69011249998584,
+    "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+    "performed_by": "integration_lane",
+    "cost_micro_usd": 1287,
+    "model_calls": 1
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Run the discovered recipe in the existing isolated runtime.",
+    "Run bounded HTTP readiness; preserve HTTP status and body hash.",
+    "Run applicable protected functional/security tests when installed.",
+    "If no protected oracle exists, report test coverage unsupported; do not promote."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 1,
+    "finding_count": 14,
+    "findings": [
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "dsvw.py",
+        "line": 7,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-format",
+        "cwe": "CWE-89",
+        "title": "SQL built with string formatting",
+        "file": "dsvw.py",
+        "line": 10,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "dsvw.py",
+        "line": 10,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-format",
+        "cwe": "CWE-89",
+        "title": "SQL built with string formatting",
+        "file": "dsvw.py",
+        "line": 22,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "dsvw.py",
+        "line": 22,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "dsvw.py",
+        "line": 27,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "dsvw.py",
+        "line": 29,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "cmd-injection",
+        "cwe": "CWE-78",
+        "title": "OS command built from input",
+        "file": "dsvw.py",
+        "line": 31,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "xxe",
+        "cwe": "CWE-611",
+        "title": "XML parsed with external entities possible",
+        "file": "dsvw.py",
+        "line": 33,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "xxe",
+        "cwe": "CWE-611",
+        "title": "XML parsed with external entities possible",
+        "file": "dsvw.py",
+        "line": 35,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "dsvw.py",
+        "line": 42,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "dsvw.py",
+        "line": 48,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-format",
+        "cwe": "CWE-89",
+        "title": "SQL built with string formatting",
+        "file": "dsvw.py",
+        "line": 61,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "dsvw.py",
+        "line": 61,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "supported_recipe",
+    "recipe": {
+      "recipe_id": "dsvw-python-v1",
+      "command": [
+        "python",
+        "dsvw.py",
+        "--host=0.0.0.0",
+        "--port=65412"
+      ],
+      "port": 65412,
+      "health_path": "/",
+      "expected_status": 200,
+      "required_body": "Damn Small Vulnerable Web",
+      "test_profile_ids": [
+        "dsvw-functional-v1",
+        "dsvw-security-v1"
+      ],
+      "limitations": [
+        "Optional lxml is absent: XML/XPath routes are excluded from this runtime profile"
+      ],
+      "requirements": [],
+      "dependency_inputs": [],
+      "runtime_mode": "direct"
+    }
+  },
+  "intake_seconds": 0.857,
+  "finished_at": "2026-11-14T21:34:26.298490Z"
+}

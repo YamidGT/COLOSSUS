@@ -78,3 +78,39 @@ async def test_gateway_accepts_text_chunks_without_retaining_thinking():
     assert result.status == "succeeded" and result.content == '{"status":"ready"}'
     assert result.actual_cost_micro_usd is not None
     assert "private chain" not in str(result)
+
+
+@pytest.mark.asyncio
+async def test_cancelled_model_request_preserves_uncertain_budget(tmp_path):
+    import asyncio
+
+    from colossus.contracts.core import new_id
+    from colossus.contracts.runtime import RuntimeConfig
+    from colossus.control.artifacts import ArtifactStore
+    from colossus.control.broker import Broker
+    from colossus.control.store import Store
+
+    entered = asyncio.Event()
+
+    class Gateway:
+        async def call(self, path, body):
+            entered.set()
+            await asyncio.Event().wait()
+
+    store = Store(tmp_path / "state.sqlite3")
+    broker = Broker(store, ArtifactStore(tmp_path / "artifacts"), Gateway(), RuntimeConfig())
+    project_id, case_id = new_id(), new_id()
+    task = asyncio.create_task(
+        broker.complete(project_id, case_id, [{"role": "user", "content": "test"}])
+    )
+    await entered.wait()
+    before = store.budget(case_id)
+    task.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await task
+    record = store.list("model_call", project_id)[0]
+    assert record["status"] == "uncertain" and record["reason_code"] == "cancelled_in_flight"
+    assert record["actual_cost_micro_usd"] is None
+    assert store.budget(case_id)["committed_micro_usd"] == before["committed_micro_usd"] > 0
+    assert store.verify_audit()
+    store.close()

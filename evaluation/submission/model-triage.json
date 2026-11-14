@@ -1,0 +1,1801 @@
+{
+  "kind": "fresh_model_catalog_signal_triage",
+  "model": "zai-glm-5-3-flash",
+  "generated_at": "2026-11-14T21:39:19.066872Z",
+  "elapsed_seconds": 31.366,
+  "catalog_count": 24,
+  "status_counts": {
+    "reviewed": 10,
+    "unsupported": 4,
+    "partial_or_invalid_output": 1,
+    "no_eligible_signals": 9
+  },
+  "model_calls": 11,
+  "committed_micro_usd": 4014,
+  "settled_micro_usd": 4014,
+  "uncertain_micro_usd": 0,
+  "rows": [
+    {
+      "repo_id": "U01",
+      "repository": "erev0s/VAmPI",
+      "commit": "f16052dce83f05847133ec98f01c5193a41de7d8",
+      "tree_sha256": "299619054ff42328d09e81f753f49764894b52ac775b4940f61c3b9150c57eac",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "app.py",
+          "line": 17,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "Flask debug=True in production binds Werkzeug debugger to 0.0.0.0, exposing interactive RCE-capable debugger.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "models/user_model.py",
+          "line": 87,
+          "model_suspects_real": false,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "No hardcoded credentials present; randrange(100) is used for test data seeding, not a secret. No exploitable issue.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "bb6f2182-8b27-454a-84b0-0eb5c19fe410",
+      "case_id": "37cf44ab-f1af-4b09-b7af-9882f30a94d4",
+      "available_groups": 2,
+      "selected_groups": 2,
+      "input_coverage": [
+        {
+          "file": "app.py",
+          "line": 17,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "d8f4c8f2e3ede9060634c8757537b875ea9836b1f8f3b9477939395a2900c247",
+          "snippet_characters": 211
+        },
+        {
+          "file": "models/user_model.py",
+          "line": 87,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "5a18777f17c1607f3aacb0635c327cd7be3cb38b5f18423b4bbd8c6eff366036",
+          "snippet_characters": 528
+        }
+      ],
+      "model_call_ids": [
+        "11f2ecb7-50d0-4528-8b82-84de76df80d7"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "11f2ecb7-50d0-4528-8b82-84de76df80d7",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 392,
+          "output_tokens": 108,
+          "actual_cost_micro_usd": 113
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "11f2ecb7-50d0-4528-8b82-84de76df80d7",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 113,
+        "settled_micro_usd": 113,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U02",
+      "repository": "fportantier/vulpy",
+      "commit": "5249cc8b05a1c37f6b2f757b1cf16a509c327122",
+      "tree_sha256": null,
+      "subdir": "bad",
+      "status": "unsupported",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "Source intake did not accept this snapshot"
+    },
+    {
+      "repo_id": "U03",
+      "repository": "stamparm/DSVW",
+      "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+      "tree_sha256": "da51a22aea8a66c3edafe11a0411fc8e119089104f618ee971cf4d7e8b0426f3",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "dsvw.py",
+          "line": 7,
+          "model_suspects_real": false,
+          "status": "unconfirmed",
+          "cwe": null,
+          "reason": "Line 7 is the import/RESOLVER setup; no user-controlled file path handling here. CWE-22 hint misattributed.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "dsvw.py",
+          "line": 10,
+          "model_suspects_real": false,
+          "status": "unconfirmed",
+          "cwe": null,
+          "reason": "Line 10 is static constant definitions (CASES metadata strings); no SQL executed against user input at this location.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 2,
+          "file": "dsvw.py",
+          "line": 22,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "params[\"id\"] is directly concatenated into cursor.execute(\"SELECT ... WHERE id=\" + ...), exploitable boolean-based SQL injection.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/",
+            "param": "id"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 3,
+          "file": "dsvw.py",
+          "line": 27,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-502",
+          "reason": "pickle.loads on attacker-supplied 'object' query parameter enables arbitrary code execution via deserialization. No matching probe profile exists for this flaw.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 4,
+          "file": "dsvw.py",
+          "line": 29,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-22",
+          "reason": "params[\"path\"] is opened directly (os.path.abspath doesn't restrict to a base dir), allowing arbitrary file read; '://' values also trigger SSRF via FETCH.",
+          "suggested_probe": {
+            "profile": "path_traversal",
+            "path": "/",
+            "param": "path"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 5,
+          "file": "dsvw.py",
+          "line": 31,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-78",
+          "reason": "subprocess.run(\"nslookup \" + params[\"domain\"], shell=True) allows OS command injection via the domain parameter (e.g. '; id'). No matching probe profile available.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 6,
+          "file": "dsvw.py",
+          "line": 33,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-611",
+          "reason": "lxml parser configured with load_dtd=True, resolve_entities=True, no_network=False plus custom HTTP resolver enables XXE/file disclosure. No matching probe profile available.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 7,
+          "file": "dsvw.py",
+          "line": 42,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "params[\"comment\"] is formatted directly into INSERT statement, allowing SQL injection into stored comments (rendered unescaped elsewhere, also stored XSS).",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/",
+            "param": "comment"
+          },
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "b5b45dc6-daf7-4a26-88f2-80c27e3c410a",
+      "case_id": "e1e325c6-5421-4fce-892a-cbda8a7917d6",
+      "available_groups": 10,
+      "selected_groups": 8,
+      "input_coverage": [
+        {
+          "file": "dsvw.py",
+          "line": 7,
+          "cwe_hint": "CWE-22",
+          "snippet_sha256": "d7f4f2b23d65e499aa65c590faf6c4e3b1b7c2e23d626a82eb85a06a9f691081",
+          "snippet_characters": 4000
+        },
+        {
+          "file": "dsvw.py",
+          "line": 10,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "9fb404cf73844b9444ecfcb64ea93fdd4f5ad1512bfcc7563517438bdd90cd18",
+          "snippet_characters": 4000
+        },
+        {
+          "file": "dsvw.py",
+          "line": 22,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "73e87353bd917e55084ee16355960bfcbc8862f8385daaf2fba2a1d39efe99ac",
+          "snippet_characters": 1325
+        },
+        {
+          "file": "dsvw.py",
+          "line": 27,
+          "cwe_hint": "CWE-502",
+          "snippet_sha256": "65b491be1d67c69d719e753bdb26e8d0e3d94ba1d95a2b3b2d35a05b68036ad5",
+          "snippet_characters": 1610
+        },
+        {
+          "file": "dsvw.py",
+          "line": 29,
+          "cwe_hint": "CWE-22",
+          "snippet_sha256": "d212fade486efd4144fe6370c45fc82a065488a8af520499a1ff80a8978daf76",
+          "snippet_characters": 1634
+        },
+        {
+          "file": "dsvw.py",
+          "line": 31,
+          "cwe_hint": "CWE-78",
+          "snippet_sha256": "dc23e856374f09810422cc808229e6944245f3e40de34e6d5799f517f68a5b59",
+          "snippet_characters": 1454
+        },
+        {
+          "file": "dsvw.py",
+          "line": 33,
+          "cwe_hint": "CWE-611",
+          "snippet_sha256": "b1542940bf3ee0c8c710724b3c1809d2ed57f799fad77fc504154655ea05bdd9",
+          "snippet_characters": 1565
+        },
+        {
+          "file": "dsvw.py",
+          "line": 42,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "a0acecad1213da94c3bba658dae0f15b52dabe8c083fd47dcd979063958759d7",
+          "snippet_characters": 1832
+        }
+      ],
+      "model_call_ids": [
+        "c4a146ad-afb4-4207-a617-cf90d959fd81"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "c4a146ad-afb4-4207-a617-cf90d959fd81",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 5768,
+          "output_tokens": 594,
+          "actual_cost_micro_usd": 1163
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "c4a146ad-afb4-4207-a617-cf90d959fd81",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 1163,
+        "settled_micro_usd": 1163,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U04",
+      "repository": "we45/Vulnerable-Flask-App",
+      "commit": "b6a4f97afd466e83e1f60781494252dec1c37039",
+      "tree_sha256": "7fe42aef707bd5209cab8b72592e260d7c3c9b40ba84edc2c412d82576be182f",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "app/app.py",
+          "line": 28,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Hardcoded secret keys in source code (app.secret_key, SECRET_KEY_HMAC values).",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "app/app.py",
+          "line": 63,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Default admin/admin123 credentials seeded at startup.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 2,
+          "file": "app/app.py",
+          "line": 97,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-347",
+          "reason": "jwt.decode with verify=False skips signature verification, allowing token forgery.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 3,
+          "file": "app/app.py",
+          "line": 114,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-1336",
+          "reason": "request.url is interpolated into a template string passed to render_template_string; attacker-controlled URL path enables SSTI/XSS.",
+          "suggested_probe": {
+            "profile": "xss_reflect",
+            "path": "/<nonexistent-path>",
+            "param": "path"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 4,
+          "file": "app/app.py",
+          "line": 141,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-327",
+          "reason": "MD5 used for password hashing; broken cryptographic primitive.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 5,
+          "file": "app/app.py",
+          "line": 261,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "search_term from JSON body is string-formatted directly into SQL and executed; classic injectable query.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/search",
+            "param": "search"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 6,
+          "file": "app/app.py",
+          "line": 281,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-1336",
+          "reason": "Exception message (attacker-influenced input) interpolated into template rendered via render_template_string; SSTI.",
+          "suggested_probe": {
+            "profile": "xss_reflect",
+            "path": "/search",
+            "param": "search"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 7,
+          "file": "app/app.py",
+          "line": 329,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-502",
+          "reason": "yaml.load without SafeLoader on user-uploaded file allows arbitrary object deserialization/RCE.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "f7410cd0-bf4b-44c1-9871-3b1f01ee7240",
+      "case_id": "7b96413d-e223-43b8-bd54-416de4dc4f7f",
+      "available_groups": 8,
+      "selected_groups": 8,
+      "input_coverage": [
+        {
+          "file": "app/app.py",
+          "line": 28,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "650e92617975b3cefef38cc97a5f0b1bf44aec7463156dfc1a5b5920cdc1ba37",
+          "snippet_characters": 387
+        },
+        {
+          "file": "app/app.py",
+          "line": 63,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "a3e660b3b8b026c1139bf621bf57c65d23a0414d263d6e0995dae4a700aa5420",
+          "snippet_characters": 319
+        },
+        {
+          "file": "app/app.py",
+          "line": 97,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "fb1bafd57599e3e0bd4faf514899c0b440230e3ce6b4f6d49f4fac8868a605d8",
+          "snippet_characters": 315
+        },
+        {
+          "file": "app/app.py",
+          "line": 114,
+          "cwe_hint": "CWE-1336",
+          "snippet_sha256": "ee4d584bbebecdbe0a54e5e0bebcc89862de735b5cd854d1fd443fb5aace9c70",
+          "snippet_characters": 404
+        },
+        {
+          "file": "app/app.py",
+          "line": 141,
+          "cwe_hint": "CWE-327",
+          "snippet_sha256": "a043e682b15e4d94fec84d7db4d01eb9d4ed2771906f2d5b14ec7210341d1f7c",
+          "snippet_characters": 499
+        },
+        {
+          "file": "app/app.py",
+          "line": 261,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "3a187994a6f165e7f7d881f9b22c5f8c9fd276a547b3f5eeeb9a1383d3a500f0",
+          "snippet_characters": 678
+        },
+        {
+          "file": "app/app.py",
+          "line": 281,
+          "cwe_hint": "CWE-1336",
+          "snippet_sha256": "a5520ae01af6a02c185ea7183b3b6da07a75f691620b31e1142f4b428f19144f",
+          "snippet_characters": 403
+        },
+        {
+          "file": "app/app.py",
+          "line": 329,
+          "cwe_hint": "CWE-502",
+          "snippet_sha256": "a4e99c2d1b86c44701add3ef0d57f8e6c08093d5587c8d19fb7b89937a8b2103",
+          "snippet_characters": 291
+        }
+      ],
+      "model_call_ids": [
+        "a306c963-09ca-4ddf-a72b-5d28f83d720e"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "a306c963-09ca-4ddf-a72b-5d28f83d720e",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 1264,
+          "output_tokens": 528,
+          "actual_cost_micro_usd": 454
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "a306c963-09ca-4ddf-a72b-5d28f83d720e",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 454,
+        "settled_micro_usd": 454,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U05",
+      "repository": "anxolerd/dvpwa",
+      "commit": "4a8f4a43fafcc1b304f1b97d0f0a8dea755a7756",
+      "tree_sha256": "88ccb77c41c237d1e4b7b91befbcf77ed56bf8ef73603a93c244a8cf4cc53a04",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "sqli/app.py",
+          "line": 24,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "debug=True hardcoded in production app initialization; commented-out CSRF middleware also weakens defenses.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "sqli/dao/student.py",
+          "line": 18,
+          "model_suspects_real": false,
+          "status": "unconfirmed",
+          "cwe": null,
+          "reason": "SQL query uses parameterized placeholder (%s) with tuple-bound value; not injectable.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "160bf07c-e01f-4cee-b5d3-9faf2cf316fb",
+      "case_id": "e4a9dce4-a78e-45c2-a087-9da1ff5bed91",
+      "available_groups": 2,
+      "selected_groups": 2,
+      "input_coverage": [
+        {
+          "file": "sqli/app.py",
+          "line": 24,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "2d0534d7397db4fc5d75f64815ffac49dcfdeab8bbcd5c2a244f207852dea2e6",
+          "snippet_characters": 360
+        },
+        {
+          "file": "sqli/dao/student.py",
+          "line": 18,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "4a15520309da930e776689704f47a41ac088ea326e100920b3de9d5084a9cbfd",
+          "snippet_characters": 375
+        }
+      ],
+      "model_call_ids": [
+        "cfade5b6-e688-4d41-bdf3-a108d51d64ab"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "cfade5b6-e688-4d41-bdf3-a108d51d64ab",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 374,
+          "output_tokens": 85,
+          "actual_cost_micro_usd": 99
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "cfade5b6-e688-4d41-bdf3-a108d51d64ab",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 99,
+        "settled_micro_usd": 99,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U06",
+      "repository": "payatu/Tiredful-API",
+      "commit": "0134124496b3c4f1b969e51a24fd8a059104fb98",
+      "tree_sha256": "512ec61283330334184d02ec72de1b7fc7977fd9aa10c43c47989eb3ec4bcffa",
+      "subdir": null,
+      "status": "partial_or_invalid_output",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "Tiredful-API/Tiredful_API/settings.py",
+          "line": 33,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": ":",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "5e8f95d5-5a56-4665-9048-8634cbde1a35",
+      "case_id": "3f6a4d1e-edd5-498f-94fe-10f2dc09c287",
+      "available_groups": 3,
+      "selected_groups": 3,
+      "input_coverage": [
+        {
+          "file": "Tiredful-API/Tiredful_API/settings.py",
+          "line": 33,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "cb042da15e823adc2bb7d32ef320c50f8ecfcc5ef69e617f5c5961ed71e0ede7",
+          "snippet_characters": 445
+        },
+        {
+          "file": "Tiredful-API/health/views.py",
+          "line": 47,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "7eb1dae8a01005f2dd7fcd4f1551350714e5686fb971b9489a69f229a99c12bf",
+          "snippet_characters": 669
+        },
+        {
+          "file": "Tiredful-API/health/views.py",
+          "line": 57,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "9be6ea11a07c7ee5b041014848e80f4faafc8a5ece16cf460a9734ca238e6aaf",
+          "snippet_characters": 716
+        }
+      ],
+      "model_call_ids": [
+        "204e5b86-c5f8-45e9-9fce-06b8e401f9e9"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "204e5b86-c5f8-45e9-9fce-06b8e401f9e9",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 619,
+          "output_tokens": 56,
+          "actual_cost_micro_usd": 121
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "204e5b86-c5f8-45e9-9fce-06b8e401f9e9",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 121,
+        "settled_micro_usd": 121,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U07",
+      "repository": "mattvaldes/vulnerable-api",
+      "commit": "4b050235e20bc272e646fa62e14cb8f015ec2592",
+      "tree_sha256": "10813c32705ef1c806505b785fd42f40ef538451bc081ecbf3b6c38f57de87e7",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 56,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-611",
+          "reason": "XMLParser with load_dtd=True and resolve_entities=True parses untrusted request body, enabling XXE (file disclosure/SSRF).",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 57,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-611",
+          "reason": "Same unsafe entity-resolving parser on attacker-controlled XML; XXE injection possible.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 2,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 68,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "username/password from request are interpolated directly into SQL SELECT via % formatting; authentication bypass/injection.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/vAPI.py auth endpoint",
+            "param": "username"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 3,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 78,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "user[0] originates from attacker-controlled username via unsanitized query; injection reaches token_query. Secondary instance of same flow.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/vAPI.py auth endpoint",
+            "param": "username"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 4,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 78,
+          "model_suspects_real": false,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "No hardcoded credentials or secrets present; token_query is a parameterization issue (CWE-89), not hardcoded crypto material.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 5,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 88,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-327",
+          "reason": "Tokens generated as MD5 of a time.ctime() timestamp \u2014 predictable/guessable values, no CSPRNG, enabling token forgery.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 6,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 108,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-327",
+          "reason": "Same predictable MD5-of-timestamp token generation in the no-token branch; tokens are guessable by an attacker.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 7,
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 121,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "username interpolated into second SQL lookup and reflected in error message; injectable via auth request.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/vAPI.py auth endpoint",
+            "param": "username"
+          },
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "e3c98cbf-8b90-4c46-b680-042ea071246f",
+      "case_id": "b088741e-eefc-474e-9a88-2d27c40b0eee",
+      "available_groups": 14,
+      "selected_groups": 8,
+      "input_coverage": [
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 56,
+          "cwe_hint": "CWE-611",
+          "snippet_sha256": "558ec02a3ed4885e69374be3d93a8308d195c44a071f83772a9597170611bd4f",
+          "snippet_characters": 639
+        },
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 57,
+          "cwe_hint": "CWE-611",
+          "snippet_sha256": "b4ae7417d61e6df3b6aca3e4bac4a4ac919aa98874f7735756b33cf74d4b6eec",
+          "snippet_characters": 636
+        },
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 68,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "bdbed4024f36161b04588e89fd3142681de5441e28b28cf5e92bde8ef3a58c78",
+          "snippet_characters": 474
+        },
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 78,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "423f9be253ab40b722f8ad5a98d3a5f54440ffe1bde5ac8085d754dfcf65f259",
+          "snippet_characters": 661
+        },
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 78,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "423f9be253ab40b722f8ad5a98d3a5f54440ffe1bde5ac8085d754dfcf65f259",
+          "snippet_characters": 661
+        },
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 88,
+          "cwe_hint": "CWE-327",
+          "snippet_sha256": "e2c03a4d7909c177daa78ea24647bcd382f949d0dc49edd1af8e386c93b704c2",
+          "snippet_characters": 653
+        },
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 108,
+          "cwe_hint": "CWE-327",
+          "snippet_sha256": "3657304208cc6896e883d68ede1e3986575921739cb5c41e46f3b8dd52fdf799",
+          "snippet_characters": 611
+        },
+        {
+          "file": "ansible/roles/api/files/vAPI.py",
+          "line": 121,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "80be65dd1dd9a618bb8a490506bf92bcadde63417169a31ba49c2ff7a2456d2d",
+          "snippet_characters": 547
+        }
+      ],
+      "model_call_ids": [
+        "1bed42a5-cab0-4b98-b3f7-40b32768dbc0"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "1bed42a5-cab0-4b98-b3f7-40b32768dbc0",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 1542,
+          "output_tokens": 502,
+          "actual_cost_micro_usd": 483
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "1bed42a5-cab0-4b98-b3f7-40b32768dbc0",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 483,
+        "settled_micro_usd": 483,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U08",
+      "repository": "dolevf/Damn-Vulnerable-GraphQL-Application",
+      "commit": "a961308c02d1fb462b192681c336b0739e432da7",
+      "tree_sha256": "aabaa88b9fb918cc396daa711fcc221824c468db32cee56bb3cf6907ff09b291",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "core/helpers.py",
+          "line": 21,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-347",
+          "reason": "JWT decoded with verify_signature and verify_exp disabled, allowing forged tokens to yield arbitrary identity.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "core/helpers.py",
+          "line": 25,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-22",
+          "reason": "save_file concatenates caller-controlled filename into open() without sanitization, permitting traversal to write arbitrary files.",
+          "suggested_probe": {
+            "profile": "path_traversal",
+            "path": "upload",
+            "param": "filename"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 2,
+          "file": "setup.py",
+          "line": 64,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Hardcoded credential 'password123' for operator account in seed data; predictable default password.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "bbdc4f32-2e60-4271-8473-912b19e41a5c",
+      "case_id": "a5443c5b-982c-4136-9585-74214a2905a8",
+      "available_groups": 3,
+      "selected_groups": 3,
+      "input_coverage": [
+        {
+          "file": "core/helpers.py",
+          "line": 21,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "d73f3d6ca99ce362b56ee13d3fa8a32b340031c77b8804a3c3d65a3eb6e853ee",
+          "snippet_characters": 341
+        },
+        {
+          "file": "core/helpers.py",
+          "line": 25,
+          "cwe_hint": "CWE-22",
+          "snippet_sha256": "097201d85967dc63aa0d2102f1541de56031cb08e9e49b387d7d40fe025fbcc3",
+          "snippet_characters": 293
+        },
+        {
+          "file": "setup.py",
+          "line": 64,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "af690370386bfbe294935169d4ad45cb997be44f49a3a9780cc22c94929a32c6",
+          "snippet_characters": 426
+        }
+      ],
+      "model_call_ids": [
+        "ae6591c3-3e53-4a51-ab1a-a4312040947b"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "ae6591c3-3e53-4a51-ab1a-a4312040947b",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 538,
+          "output_tokens": 191,
+          "actual_cost_micro_usd": 177
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "ae6591c3-3e53-4a51-ab1a-a4312040947b",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 177,
+        "settled_micro_usd": 177,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U09",
+      "repository": "adeyosemanputra/pygoat",
+      "commit": "2aa4cc14f251e4a780e94e200aed6b36a5b15c21",
+      "tree_sha256": "d25257beaca3aa6e3dcc3b7e835a54f03946647ad461726885619cb8a1998ea4",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "challenge/labs/bopla_lab/app.py",
+          "line": 152,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "Flask debug=True exposed on host 0.0.0.0 enables the Werkzeug debugger (potential RCE via debugger PIN) in production.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "challenge/labs/business_logic_lab/app.py",
+          "line": 5,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Hardcoded Flask secret_key in source; allows session cookie forgery.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 2,
+          "file": "challenge/labs/business_logic_lab/app.py",
+          "line": 200,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "debug=True on 0.0.0.0 exposes interactive debugger.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 3,
+          "file": "challenge/labs/security_headers_lab/app.py",
+          "line": 15,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Hardcoded secret_key and plaintext default credentials in source.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 4,
+          "file": "challenge/labs/security_headers_lab/app.py",
+          "line": 233,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "debug=True on 0.0.0.0 exposes interactive debugger.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 5,
+          "file": "dockerized_labs/a9_uckv_lab/app.py",
+          "line": 62,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-502",
+          "reason": "yaml.load with unsafe Loader=yaml.Loader deserializes attacker-controlled file content, enabling arbitrary object construction/RCE.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 6,
+          "file": "dockerized_labs/a9_uckv_lab/app.py",
+          "line": 124,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "debug=True with use_reloader on 0.0.0.0 exposes interactive debugger.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 7,
+          "file": "dockerized_labs/auth_failure_lab/app.py",
+          "line": 44,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Hardcoded admin credentials in source code.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "5e421cd8-585c-47cb-8bde-3551b4ec2644",
+      "case_id": "1fe9576f-1adc-45cd-b7d4-17b944907ee5",
+      "available_groups": 40,
+      "selected_groups": 8,
+      "input_coverage": [
+        {
+          "file": "challenge/labs/bopla_lab/app.py",
+          "line": 152,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "c20a46f9ad8d3abd73637ef29066bd191165e46d86cff960c6b32cdedba0d46f",
+          "snippet_characters": 142
+        },
+        {
+          "file": "challenge/labs/business_logic_lab/app.py",
+          "line": 5,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "c76f9a517ed1a1709bd718b504ddc859411e02322c92e779d77ab39aad3fcf0d",
+          "snippet_characters": 378
+        },
+        {
+          "file": "challenge/labs/business_logic_lab/app.py",
+          "line": 200,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "674fbb29c71784cbc7b5e230a815b8f0b5185374ed8f7c477ea5525416ec54fb",
+          "snippet_characters": 142
+        },
+        {
+          "file": "challenge/labs/security_headers_lab/app.py",
+          "line": 15,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "306f1bc5301f697863813e62be8b22007e41e132239e9f55a7971533192e2065",
+          "snippet_characters": 266
+        },
+        {
+          "file": "challenge/labs/security_headers_lab/app.py",
+          "line": 233,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "f2b8fc18b7b004e8607d9bcb43d515eccad0533f11f495908577f5bc5049d7ee",
+          "snippet_characters": 142
+        },
+        {
+          "file": "dockerized_labs/a9_uckv_lab/app.py",
+          "line": 62,
+          "cwe_hint": "CWE-502",
+          "snippet_sha256": "353a42ba5b14c36d85ba1f2c3f2befe32024255dbd90c6bfbd3e2a971f637177",
+          "snippet_characters": 548
+        },
+        {
+          "file": "dockerized_labs/a9_uckv_lab/app.py",
+          "line": 124,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "391f83987b0066e9ed271e3dd87e33ac310c020e9be927dc4cda7b65f719a541",
+          "snippet_characters": 220
+        },
+        {
+          "file": "dockerized_labs/auth_failure_lab/app.py",
+          "line": 44,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "d58a0069c0b87528e4ab427c16081687a9f19e5a44f1f45cac9b36ae9f024d1b",
+          "snippet_characters": 435
+        }
+      ],
+      "model_call_ids": [
+        "ba2b6727-b768-4398-886a-b945ac2a51ae"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "ba2b6727-b768-4398-886a-b945ac2a51ae",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 1217,
+          "output_tokens": 390,
+          "actual_cost_micro_usd": 378
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "ba2b6727-b768-4398-886a-b945ac2a51ae",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 378,
+        "settled_micro_usd": 378,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U10",
+      "repository": "digininja/DVWA",
+      "commit": "a1978a2fed195acd093010af6395f86a281537ca",
+      "tree_sha256": "7fca8a9288a2c9350e08c9924fdae599405352939bdf7bfc87e9ecafff7f3d5b",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U11",
+      "repository": "webpwnized/mutillidae-docker",
+      "commit": "b5920113ad30dd92c893b2f44230fb5bf99f3601",
+      "tree_sha256": "0da42b2c09807b6dec71a459d9088a752259982e676dc1d8f5d587545ac37228",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U12",
+      "repository": "juice-shop/juice-shop",
+      "commit": "266448aba68cd8ba5915f526a128da4fa7bc3f9f",
+      "tree_sha256": "b8df424562afc0d872a4e6488fff93af4c24281221edb78fd9b7a25457eeff36",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U13",
+      "repository": "appsecco/dvna",
+      "commit": "9ba473add536f66ac9007966acb2a775dd31277a",
+      "tree_sha256": "0afb92453de26b461f46209acbd937b771e99296595d58f4c8477fa410e11f4c",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U14",
+      "repository": "OWASP/NodeGoat",
+      "commit": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+      "tree_sha256": "60c89a0f94b16a70558da0a8834900b51bbfcf0741a50c4095c331f264a06b47",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U15",
+      "repository": "OWASP/railsgoat",
+      "commit": "f5951f13089d85c979de09e7da3c8c0fb982f94a",
+      "tree_sha256": "453cd6cb54e640817e7009225e12d02f3180c5aaba68cd7275823e6ddb86ee89",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U16",
+      "repository": "snyk-labs/nodejs-goof",
+      "commit": "add14ba59e98240d9e00a235dd7d42cd61ae9912",
+      "tree_sha256": "35c72cefe413bad4b719a8230b7d971e6173607eb24d3f854073e10852a429d4",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U17",
+      "repository": "globocom/secDevLabs",
+      "commit": "10be438496e928c66567749f0aaf0bb976052bc9",
+      "tree_sha256": null,
+      "subdir": null,
+      "status": "unsupported",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "Source intake did not accept this snapshot"
+    },
+    {
+      "repo_id": "U18",
+      "repository": "OWASP/crAPI",
+      "commit": "b5fc307f3e5f875809b095b771108ef342a33724",
+      "tree_sha256": "0aa34c34be693b2dc7c5a00f3956155675faa55f776396f6374b727289dedc69",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "services/chatbot/src/chatbot/app.py",
+          "line": 39,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "debug=True in production entrypoint exposes debugger/tracebacks; real but no probe profile applies.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+          "line": 74,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-295",
+          "reason": "httpx.AsyncClient(verify=False) disables TLS certificate validation for token verification; real code-review issue, no probe profile applies (CWE-347 hint is a mislabel).",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 2,
+          "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+          "line": 107,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-295",
+          "reason": "TLS verification disabled while sending Basic Auth credentials to identity service; real, no applicable probe profile.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 3,
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 48,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-295",
+          "reason": "httpx.Client(verify=False) during API key retrieval disables TLS validation; real, no probe profile applies.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 4,
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 91,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-295",
+          "reason": "AsyncClient created with verify=False for all authenticated API calls; real, no probe profile applies.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 5,
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 113,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-295",
+          "reason": "verify=False on AsyncClient used with API key header; real, no probe profile applies.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 6,
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 153,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-295",
+          "reason": "verify=False plus user-controlled path concatenated into internal /debug/{path} request, enabling path traversal to internal endpoints; path_traversal probe applies.",
+          "suggested_probe": {
+            "profile": "path_traversal",
+            "path": "services/chatbot/src/mcpserver/server.py",
+            "param": "path"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 7,
+          "file": "services/workshop/core/management/commands/seed_database.py",
+          "line": 220,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-295",
+          "reason": "requests.get(..., verify=False) disables TLS validation for identity health check; real, no probe profile applies.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "f284b9cd-577c-467d-b339-1f082859101c",
+      "case_id": "dc69f163-ce47-4aa2-896b-4a0adaf5334d",
+      "available_groups": 15,
+      "selected_groups": 8,
+      "input_coverage": [
+        {
+          "file": "services/chatbot/src/chatbot/app.py",
+          "line": 39,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "805885891cb7b5fd66e25454c196c1778ec5c11fd924d84f4304c5b00b6bd84a",
+          "snippet_characters": 129
+        },
+        {
+          "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+          "line": 74,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "3a035cfe2c1adfbd6b78a1a66f7c38ff68f759141a4bd1b8d6e41f699b9f7bc1",
+          "snippet_characters": 534
+        },
+        {
+          "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+          "line": 107,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "f0c8882bbe06e865970b15724c2b12e89cb179753b2d18ee93d491de1af85142",
+          "snippet_characters": 547
+        },
+        {
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 48,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "b9fbdcf71deaedde00962da25c0dc2b5cb435f4f89f0384447833142e4fc1d35",
+          "snippet_characters": 531
+        },
+        {
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 91,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "0c8d4361bd7469b0c1c39461e2712bb7f1136c232ed2e1eaad313ee8a592ba39",
+          "snippet_characters": 284
+        },
+        {
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 113,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "ccd42af114bbb392278d1fba49a60d09853b604a9cc6ab5bcb15c55f040242bc",
+          "snippet_characters": 539
+        },
+        {
+          "file": "services/chatbot/src/mcpserver/server.py",
+          "line": 153,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "93eb08b02c2313bc09ca4975324a758517e74eb09a4a76e49791bca6f287238e",
+          "snippet_characters": 532
+        },
+        {
+          "file": "services/workshop/core/management/commands/seed_database.py",
+          "line": 220,
+          "cwe_hint": "CWE-347",
+          "snippet_sha256": "a089ca718093b706a71f2ddc696b645dbeee9a0ab03022fd1a75d6ac0817111e",
+          "snippet_characters": 420
+        }
+      ],
+      "model_call_ids": [
+        "7777a30c-fe64-484d-a13f-a4861b0f56d0"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "7777a30c-fe64-484d-a13f-a4861b0f56d0",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 1336,
+          "output_tokens": 581,
+          "actual_cost_micro_usd": 491
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "7777a30c-fe64-484d-a13f-a4861b0f56d0",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 491,
+        "settled_micro_usd": 491,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U19",
+      "repository": "bridgecrewio/terragoat",
+      "commit": "729f8da62c6a85ce4af5ad3d123de97776d954c4",
+      "tree_sha256": "e8bc53180c0bae9e272c7487b66564404b46f403618461f9e83fd002b84ead0e",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    },
+    {
+      "repo_id": "U20",
+      "repository": "madhuakula/kubernetes-goat",
+      "commit": "723a0db478f050d173d23b4ce5044b65bce0bdd0",
+      "tree_sha256": null,
+      "subdir": null,
+      "status": "unsupported",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "Source intake did not accept this snapshot"
+    },
+    {
+      "repo_id": "U21",
+      "repository": "RhinoSecurityLabs/cloudgoat",
+      "commit": "63c65bd26edc6919499adfa20b176c450e35c33c",
+      "tree_sha256": "484172ddb7f73d5fd8946f05b64fa0b8c0cf85c9a7d9a42b2723070d41b59a53",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "cloudgoat/cloudgoat.py",
+          "line": 89,
+          "model_suspects_real": false,
+          "status": "unconfirmed",
+          "cwe": null,
+          "reason": "Subprocess invoked with fixed list arguments; no untrusted input reaches the command. Not CWE-22.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 1,
+          "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+          "line": 116,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "User-controlled selected_date from request.form is interpolated directly into SQL string, allowing SQL injection.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/",
+            "param": "selected_date"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 2,
+          "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+          "line": 147,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-489",
+          "reason": "Flask app runs with debug=True on 0.0.0.0, exposing the Werkzeug debugger to the network. No probe profile applies; real but not exploitable via sqli_boolean/xss_reflect/path_traversal probes.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 3,
+          "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/db.py",
+          "line": 8,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Hardcoded database credentials (user postgres, password bob12cgv) in source. Real, but no probe profile matches.",
+          "suggested_probe": null,
+          "probe_executed": false
+        },
+        {
+          "index": 4,
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 30,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "sqs_request value from message data is interpolated into the UPDATE statement, allowing SQL injection if attacker controls SQS message content.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/sqs",
+            "param": "sqs_request"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 5,
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 45,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "URL path parameter item is formatted directly into the SELECT query, enabling SQL injection.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/purchase/<item>",
+            "param": "item"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 6,
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 50,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-89",
+          "reason": "Same item path parameter is formatted into both UPDATE and INSERT statements; SQL injection confirmed.",
+          "suggested_probe": {
+            "profile": "sqli_boolean",
+            "path": "/purchase/<item>",
+            "param": "item"
+          },
+          "probe_executed": false
+        },
+        {
+          "index": 7,
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 66,
+          "model_suspects_real": false,
+          "status": "unconfirmed",
+          "cwe": null,
+          "reason": "The formatted value is a constant integer (3000) with no external input; no injection path exists.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "c42d44a1-8711-42cb-8b5f-7d5b18aee694",
+      "case_id": "525b8157-10f8-45b1-8af7-8282bcf1fdb3",
+      "available_groups": 94,
+      "selected_groups": 8,
+      "input_coverage": [
+        {
+          "file": "cloudgoat/cloudgoat.py",
+          "line": 89,
+          "cwe_hint": "CWE-22",
+          "snippet_sha256": "a44966e756a8c0dbbc7c0c4dbe6ee079034476ec9963c9f53ee6886c9a55aeca",
+          "snippet_characters": 476
+        },
+        {
+          "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+          "line": 116,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "5f54c5d2c169a1ed2e171be53317c585773736d36402b6504fa802afb81c2706",
+          "snippet_characters": 488
+        },
+        {
+          "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+          "line": 147,
+          "cwe_hint": "CWE-489",
+          "snippet_sha256": "7f820e122fd26bc69d0d55a59713a1752fd8605547e21ca9d25cc96fc2cc9e3d",
+          "snippet_characters": 206
+        },
+        {
+          "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/db.py",
+          "line": 8,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "3ffb5f7c5e9ea5199655c29766ceecdbdca9974717f4d530421c2891246e1d82",
+          "snippet_characters": 195
+        },
+        {
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 30,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "9b52a23606f7249a7e975cb512bcb02662d8fac48d1344ba3e18586e4ae7b55b",
+          "snippet_characters": 488
+        },
+        {
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 45,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "fba3e8e6ff805342916b8b269b4823f52f18079cdc6baecc1fe3ea3eba4dd825",
+          "snippet_characters": 377
+        },
+        {
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 50,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "90143aff1042c5c6cb9b99ee060d4ab99fd34c72eb53563a2cf49be506f6434f",
+          "snippet_characters": 511
+        },
+        {
+          "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+          "line": 66,
+          "cwe_hint": "CWE-89",
+          "snippet_sha256": "5c6fbf7dd9a6b1e358868aecee3e9a1515d0cb1cfb4e7b9433166dc84600eff4",
+          "snippet_characters": 306
+        }
+      ],
+      "model_call_ids": [
+        "007738f9-8ad0-4c31-9678-647c15784467"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "007738f9-8ad0-4c31-9678-647c15784467",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 1359,
+          "output_tokens": 472,
+          "actual_cost_micro_usd": 440
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "007738f9-8ad0-4c31-9678-647c15784467",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 440,
+        "settled_micro_usd": 440,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U22",
+      "repository": "vulhub/vulhub",
+      "commit": "9b90d4276f84feed6333286afeb7e1250379a1da",
+      "tree_sha256": null,
+      "subdir": null,
+      "status": "unsupported",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "Source intake did not accept this snapshot"
+    },
+    {
+      "repo_id": "U23",
+      "repository": "sudo-project/sudo",
+      "commit": "284836c012052dfa204c4f8bc449f0d05e33f271",
+      "tree_sha256": "36ad593b4448e1a141e2c6339456dc49b470c37cd1328eca05869cded90864fd",
+      "subdir": null,
+      "status": "reviewed",
+      "model_calls": 1,
+      "verdicts": [
+        {
+          "index": 0,
+          "file": "plugins/python/example_policy_plugin.py",
+          "line": 44,
+          "model_suspects_real": true,
+          "status": "unconfirmed",
+          "cwe": "CWE-798",
+          "reason": "Hardcoded credential `_safe_password = \"12345\"` used for password comparison; any password check against a static value is forgeable via source inspection. Even in example code it models insecure practice, so flagged as real.",
+          "suggested_probe": null,
+          "probe_executed": false
+        }
+      ],
+      "precision": null,
+      "recall": null,
+      "project_id": "cfb3b4e6-2f69-4bcd-88b1-cfe5ddab3988",
+      "case_id": "120b2e8e-8484-4742-a0b7-77650efa6a20",
+      "available_groups": 1,
+      "selected_groups": 1,
+      "input_coverage": [
+        {
+          "file": "plugins/python/example_policy_plugin.py",
+          "line": 44,
+          "cwe_hint": "CWE-798",
+          "snippet_sha256": "f8b509679dc62c2a267587a4588a18c16cb5dd2993e718aea59ee4cfd817fc91",
+          "snippet_characters": 498
+        }
+      ],
+      "model_call_ids": [
+        "0e19279c-2b58-43e8-a4cb-4f72e57e2b8b"
+      ],
+      "call_outcomes": [
+        {
+          "call_id": "0e19279c-2b58-43e8-a4cb-4f72e57e2b8b",
+          "model_returned": "zai-glm-5-3-flash",
+          "status": "succeeded",
+          "reason_code": null,
+          "input_tokens": 295,
+          "output_tokens": 101,
+          "actual_cost_micro_usd": 95
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "triage",
+          "call_id": "0e19279c-2b58-43e8-a4cb-4f72e57e2b8b",
+          "status": "succeeded"
+        }
+      ],
+      "cost": {
+        "committed_micro_usd": 95,
+        "settled_micro_usd": 95,
+        "calls": 1,
+        "uncertain_micro_usd": 0
+      }
+    },
+    {
+      "repo_id": "U24",
+      "repository": "tukaani-project/xz",
+      "commit": "f54febc540607b3bdee0a0e6793355df2a7e9f61",
+      "tree_sha256": "fb2f5128e9b3b7460f54c875d064c6bb00d50df3a537da0c2af4dabe2a1608fa",
+      "subdir": null,
+      "status": "no_eligible_signals",
+      "model_calls": 0,
+      "verdicts": [],
+      "precision": null,
+      "recall": null,
+      "reason": "No static Python signal available; not a claim of security"
+    }
+  ],
+  "limitations": [
+    "One serial T1 request per eligible repository, at most eight deduplicated static signals.",
+    "Only Python snippets were reviewed; helper scripts do not establish coverage of the repository's main language.",
+    "Model judgments are unconfirmed; suggested probes are recorded but never executed.",
+    "No gold adjudication, precision, recall, repair, formal proof or deployment score is claimed.",
+    "No second provider or refusal bypass; incomplete outcomes stay in the denominator."
+  ]
+}

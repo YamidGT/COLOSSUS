@@ -1,0 +1,39 @@
+{
+  "repo_id": "U02",
+  "repository": "fportantier/vulpy",
+  "repo_url": "https://github.com/fportantier/vulpy",
+  "subdir": "bad",
+  "started_at": "2026-11-14T21:34:25.440878Z",
+  "source": {
+    "status": "rejected",
+    "commit": "5249cc8b05a1c37f6b2f757b1cf16a509c327122",
+    "archive_sha256": "a0087359a38d52e977cbc6493bb949629add4038413b52af4372c7ad88f3a091",
+    "reason_code": "invalid_archive",
+    "reason": "Source links and special files are not supported"
+  },
+  "setup": {
+    "status": "not_run",
+    "reason": "Source intake rejected; execution boundary not bypassed"
+  },
+  "tests": {
+    "status": "not_run"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "intake_seconds": 1.554,
+  "finished_at": "2026-11-14T21:34:26.995367Z"
+}

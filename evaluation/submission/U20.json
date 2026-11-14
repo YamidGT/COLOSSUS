@@ -1,0 +1,37 @@
+{
+  "repo_id": "U20",
+  "repository": "madhuakula/kubernetes-goat",
+  "repo_url": "https://github.com/madhuakula/kubernetes-goat",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:33.841914Z",
+  "source": {
+    "status": "rejected",
+    "commit": "723a0db478f050d173d23b4ce5044b65bce0bdd0",
+    "reason_code": "source_limit",
+    "reason": "Source response exceeds size limit"
+  },
+  "setup": {
+    "status": "not_run",
+    "reason": "Source intake rejected; execution boundary not bypassed"
+  },
+  "tests": {
+    "status": "not_run"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Use a dedicated IaC/cluster adapter and static policy checks.",
+    "Do not deploy cloud resources or grant cloud credentials for this submission.",
+    "No application functional or security suite was executed."
+  ],
+  "intake_seconds": 9.791,
+  "finished_at": "2026-11-14T21:34:43.633229Z"
+}

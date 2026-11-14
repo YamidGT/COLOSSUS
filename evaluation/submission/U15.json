@@ -1,0 +1,56 @@
+{
+  "repo_id": "U15",
+  "repository": "OWASP/railsgoat",
+  "repo_url": "https://github.com/OWASP/railsgoat",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:29.496444Z",
+  "source": {
+    "status": "accepted",
+    "commit": "f5951f13089d85c979de09e7da3c8c0fb982f94a",
+    "archive_sha256": "6246634d11415e2178cbef40cbe8432bdff12c02011cbe7ba561fc586e1becb7",
+    "tree_sha256": "453cd6cb54e640817e7009225e12d02f3180c5aaba68cd7275823e6ddb86ee89",
+    "file_count": 276,
+    "total_bytes": 8524058
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 3.435,
+  "finished_at": "2026-11-14T21:34:32.931081Z"
+}

@@ -1,5 +1,15 @@
 # Implementation evidence and remaining work
 
+**Current submission scope (supersedes historical restrictions below):** Daniel
+expanded evaluation to all 24 catalog repositories on 14 November. Results must
+retain unsupported/setup-failed cases; source inspection is not a full-cycle
+software test. The bounded GLM formal workflow and test fallback are implemented.
+The fresh DSVW lifecycle completed in 330.690 seconds, with a second cycle and
+8.166-second rollback. Current submission evidence and remaining limitations are
+in [the submission guide](submission.md) and [campaign results](../evaluation/submission/README.md).
+Earlier DSVW-only instructions below describe previous authorization and no longer
+limit the explicitly requested submission campaign.
+
 Active implementation branch: `implementation/full-system`. This file records observed progress, not a reduced definition of the product.
 
 ## Evidence recorded
@@ -130,3 +140,30 @@ Live `check_registry_boundary.py` passed allowed registry reads, rejection of ar
 The real DSVW operator/API/worker setup was repeated after the source/runtime bundle change and reached READY; pause rejected another cycle. Evidence: `artifacts/bootstrap/operator-api.json`, `python-setup.json`, `registry-boundary.json` and `dependencies.json`. Installed vendor files and the startup helper have an immutable bundle hash distinct from editable source; candidate packaging and refresh validate that boundary. Source-only distributions, ambiguous apps, missing services and unregistered repair profiles remain explicit limitations. Bottle/Django runtime calibration and automatic generic repairs are not claimed.
 
 Combined platform suite: **157 passed**; Ruff and documentation-link checks pass. Runtime inventory confirms only the pre-existing DSVW mirror remains; no temporary registry/builder network remains. A final remote fetch found `kiro/colossus` at `c1c3674` (CLI, intelligence and isolation additions) and `lane-b/redteam-on-full-system` at `524a460` (a second gateway-based T2/evaluator port). Their diffs are queued for reconciliation with the already integrated implementations; do not import a duplicate promotion/budget path or treat reported measurements as local reruns.
+
+## Submission integration checkpoint
+
+- Fresh GLM-assisted formal fixture: four policy methods proved and compiled;
+  39 packaged-wrapper checks passed; a bypass mutation and substituted generated
+  file were rejected. One call cost $0.000078. This is component calibration, not
+  proof of the DSVW patch or an official DafnyBench score.
+- Fresh DSVW URL-to-promotion/mirror-refresh: 330.690 seconds including the actual
+  300-second observation. One new model call cost $0.001287, no uncertain charge.
+  Second cycle NO_CHANGE; rollback 8.166 seconds to the explicitly known-vulnerable
+  retained baseline; audit chain valid; calibration runtime subsequently retired.
+- CLI integration: authenticated read/write intents, same-key transport retry,
+  bounded case diff, failed-setup configuration amendments, terminal-safe output,
+  one JSON envelope, interrupted/review-boundary watches and atomic report export.
+  Six live CLI commands against actual evidence passed; the API dispatcher was
+  deliberately disabled in that read-surface check.
+- Frontend production build passes at 89.28 kB initial JavaScript gzip. Three
+  focused mutation-identity tests pass; existing layout remains unchanged.
+- Full platform suite: 220 passed; Ruff passes. Campaign compatibility, static,
+  model-triage and runtime outcomes are recorded separately, without precision,
+  recall or security claims unsupported by adjudicated truth.
+
+Remaining broad-product work is not silently declared complete: generic repair
+oracles, source-update reconciliation, other stacks, target-linked formal policies,
+full public benchmark adapters/campaigns and broader fault/UX acceptance remain.
+The submission guide describes the implemented prototype rather than the entire
+original roadmap.

@@ -19,13 +19,15 @@ from colossus.control.store import Store
 from colossus.onboarding.service import Onboarding
 
 
-async def main(replay_case=None):
+async def main(replay_case=None, output=Path("artifacts/bootstrap/full-cycle.json")):
     settings = Settings.from_environment()
     settings.prepare()
     services = ServiceSupervisor(settings)
     store = Store(settings.data_dir / "state.sqlite3")
     artifacts = ArtifactStore(settings.data_dir / "artifacts")
     receipts, project_id = [], None
+    coordinator = None
+    output.parent.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
     try:
         await services.start()
@@ -120,13 +122,30 @@ async def main(replay_case=None):
             "formal": "UNSUPPORTED for this Python component",
             "deployment_evidence_id": case.get("deployment_evidence_id"),
         }
-        Path("artifacts/bootstrap/full-cycle.json").write_text(json.dumps(report, indent=2) + "\n")
+        output.write_text(json.dumps(report, indent=2) + "\n")
         print(json.dumps(report, indent=2), flush=True)
+    except Exception as exc:
+        report = {
+            "repo": "stamparm/DSVW",
+            "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+            "generation_mode": "replayed_proposal" if replay_case else "fresh_inference",
+            "outcome": "FAILED",
+            "project_id": project_id,
+            "elapsed_seconds": time.monotonic() - started,
+            "reason_code": getattr(exc, "code", type(exc).__name__),
+            "reason": str(exc),
+            "cases": store.list("case", project_id) if project_id else [],
+            "model_calls": store.list("model_call", project_id) if project_id else [],
+            "audit_valid": store.verify_audit(),
+        }
+        output.write_text(json.dumps(report, indent=2) + "\n")
+        raise
     finally:
         if project_id and "launcher" in services.clients:
             if "deployer" in services.clients:
                 await services.clients["deployer"].call("/retire", {"project_id": project_id})
-                await coordinator.synchronize_destination(project_id)
+                if coordinator is not None:
+                    await coordinator.synchronize_destination(project_id)
             await services.clients["launcher"].call(
                 "/terminate-work", {"project_id": project_id, "keep": []}
             )
@@ -159,5 +178,6 @@ async def main(replay_case=None):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--replay-case")
+parser.add_argument("--output", type=Path, default=Path("artifacts/bootstrap/full-cycle.json"))
 args = parser.parse_args()
-asyncio.run(main(args.replay_case))
+asyncio.run(main(args.replay_case, args.output))

@@ -13,3 +13,4 @@ artifacts/
 .colossus/
 node_modules/
 frontend/dist/
+frontend/.test-build/

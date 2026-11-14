@@ -35,3 +35,29 @@ Integrated updates through `8782354`, preserving the existing async gateway/feed
 Replaced the contributor's old evaluator entrypoint, which loaded `.env` and invoked a superseded local broker, with a stored-result scorer. It never executes a repository or invokes inference. It requires identical source commits, validates the reference cases, matches file/CWE/declared line window and deduplicates findings. Unmatched signals remain unadjudicated; the output does not invent precision. The supplied `truth.json` is explicitly unfrozen and cannot be passed directly as scored truth.
 
 Preserved the lane's reported DSVW/VAmPI results with prominent provenance and metric corrections. They used another model and matching protocol, and do not replace this host's DSVW evidence. Removed the incoming Compose fixture from the merge: it would execute repository Dockerfiles outside the approved build boundary and enable two targets together. Use the launcher and current DSVW-only scope. No additional target or model call was made during this integration.
+
+## Submission CLI integration (14 November)
+
+Selectively integrated CLI client/render/commands and behavioral tests from Kiro
+`c1c3674`, preserving the existing deployment authority routes. Added a bounded,
+project-bound case diff and revision-checked configuration recovery for failed
+setup. Configuration does not replace running deployments. Evaluation submission
+remains explicitly unavailable until its server runner exists.
+
+HTTP retries preserve request bytes and idempotency keys, loopback clients ignore
+proxy environment variables, token files require owner-only permissions, watch
+interruptions detach, and report export refuses concurrent overwrite without
+`--force`. JSON output has one envelope, including doctor and login-code commands.
+The doctor still reports incomplete full-product acceptance honestly.
+
+Validation: `uv run pytest -q`: 211 passed; Ruff passed. These are platform and
+mock/API boundary checks, not public-repository benchmark results. Actual campaign
+and fresh lifecycle evidence are recorded separately in `evaluation/submission/`.
+
+Final submission branch watch: `kiro/colossus` advanced to `908850e`, which
+primarily merges earlier formal/red-team work already integrated here.
+`lane-b/redteam-metrics` at `a6f6eeb` adds a Windows/WSL probe backend and direct
+provider evaluator. These are not imported into this release: the runtime is
+macOS/Colima/gVisor, and that evaluator reads provider keys outside the shared
+broker, uses an independent spend counter and does not enforce source/CWE-bound
+scoring. The existing source-bound evaluator and shared gateway remain authoritative.

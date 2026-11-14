@@ -228,6 +228,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/configuration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Configuration */
+        get: operations["configuration_api_v1_projects__project_id__configuration_get"];
+        put?: never;
+        /** Configure */
+        post: operations["configure_api_v1_projects__project_id__configuration_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/cycles/{cycle_id}": {
         parameters: {
             query?: never;
@@ -271,6 +289,23 @@ export interface paths {
         };
         /** Case */
         get: operations["case_api_v1_cases__case_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/cases/{case_id}/diff": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Case Diff */
+        get: operations["case_diff_api_v1_cases__case_id__diff_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -633,6 +668,38 @@ export interface components {
         LoginRequest: {
             /** Code */
             code: string;
+        };
+        /** ProjectConfigAmendment */
+        ProjectConfigAmendment: {
+            /** Expected Revision */
+            expected_revision: number;
+            /**
+             * Requested Ref
+             * @default null
+             */
+            requested_ref: string | null;
+            /**
+             * Subdir
+             * @default null
+             */
+            subdir: string | null;
+            /**
+             * Owner Policy Id
+             * @enum {string}
+             */
+            owner_policy_id: "lab-auto-v1" | "review-v1";
+            /**
+             * Deployment Profile Id
+             * @enum {string}
+             */
+            deployment_profile_id: "local-web-v1" | "local-consumer-v1";
+            /**
+             * Assurance Profile
+             * @enum {string}
+             */
+            assurance_profile: "tested" | "formal_required";
+            /** Requirement Ids */
+            requirement_ids?: string[];
         };
         /** ProjectSnapshot */
         ProjectSnapshot: {
@@ -1270,38 +1337,6 @@ export interface components {
              */
             result_ref: string | null;
         };
-        /** ProjectConfigAmendment */
-        ProjectConfigAmendment: {
-            /** Expected Revision */
-            expected_revision: number;
-            /**
-             * Requested Ref
-             * @default null
-             */
-            requested_ref: string | null;
-            /**
-             * Subdir
-             * @default null
-             */
-            subdir: string | null;
-            /**
-             * Owner Policy Id
-             * @enum {string}
-             */
-            owner_policy_id: "lab-auto-v1" | "review-v1";
-            /**
-             * Deployment Profile Id
-             * @enum {string}
-             */
-            deployment_profile_id: "local-web-v1" | "local-consumer-v1";
-            /**
-             * Assurance Profile
-             * @enum {string}
-             */
-            assurance_profile: "tested" | "formal_required";
-            /** Requirement Ids */
-            requirement_ids?: string[];
-        };
         /** ReviewDecision */
         ReviewDecision: {
             /** Case Id */
@@ -1823,6 +1858,72 @@ export interface operations {
             };
         };
     };
+    configuration_api_v1_projects__project_id__configuration_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectConfigAmendment"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    configure_api_v1_projects__project_id__configuration_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectConfigAmendment"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     cycle_api_v1_cycles__cycle_id__get: {
         parameters: {
             query?: never;
@@ -1903,6 +2004,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CaseReview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    case_diff_api_v1_cases__case_id__diff_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

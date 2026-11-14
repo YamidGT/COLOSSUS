@@ -14,6 +14,7 @@ from colossus.gateway.source import tree_hash
 from colossus.onboarding.bundle import assembled_files, runtime_files
 from colossus.repair.patch import apply_proposal
 from colossus.repair.service import propose
+from colossus.verification.agent import TEST_INSTRUCTIONS, verify_with_model
 from colossus.verification.policy import REQUIRED_CHECKS, validate_gates
 
 
@@ -77,6 +78,7 @@ class CycleEngine:
             "discovery": "completed",
             "repair": "UNSUPPORTED",
             "formal": "UNSUPPORTED",
+            "mandatory_tests": TEST_INSTRUCTIONS,
             "reason": "No approved protected repair oracle is registered for this application",
             "raw_count": result["raw_count"],
             "findings": len(result["findings"]),
@@ -374,6 +376,15 @@ class CycleEngine:
                             reason="Protected check passed" if passed else "Protected check failed",
                         )
                     )
+                formal = await verify_with_model(
+                    self.broker,
+                    self.launcher,
+                    project_id=project_id,
+                    case_id=case_id,
+                    profile_id=None,  # No registered proof template matches the SQL adapter.
+                    component_hash=candidate_hash,
+                )
+                formal_evidence_id = evidence(formal)
                 gates.append(
                     GateResult(
                         gate_id=new_id(),
@@ -383,7 +394,7 @@ class CycleEngine:
                         check_profile_id="formal-coverage-v1",
                         category="formal",
                         status="not_applicable",
-                        proof_outcome="UNSUPPORTED",
+                        proof_outcome=formal["target_proof_outcome"],
                         scope=["Ordinary Python SQL adapter"],
                         assumptions=["No approved linked proof obligation for this component"],
                         tool_version="colossus-v1",
@@ -392,8 +403,8 @@ class CycleEngine:
                         ),
                         started_at=now,
                         finished_at=now,
-                        evidence_ids=[],
-                        reason="Tests do not establish a mathematical proof",
+                        evidence_ids=[formal_evidence_id],
+                        reason=formal["reason"],
                     )
                 )
                 for gate in gates:

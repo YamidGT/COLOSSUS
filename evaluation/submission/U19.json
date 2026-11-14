@@ -1,0 +1,55 @@
+{
+  "repo_id": "U19",
+  "repository": "bridgecrewio/terragoat",
+  "repo_url": "https://github.com/bridgecrewio/terragoat",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:32.931519Z",
+  "source": {
+    "status": "accepted",
+    "commit": "729f8da62c6a85ce4af5ad3d123de97776d954c4",
+    "archive_sha256": "b69155fb5a8a1bbcf99152896b1e1b13abc227a97fff133ece5ce798de05bfdb",
+    "tree_sha256": "e8bc53180c0bae9e272c7487b66564404b46f403618461f9e83fd002b84ead0e",
+    "file_count": 72,
+    "total_bytes": 1528323
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Use a dedicated IaC/cluster adapter and static policy checks.",
+    "Do not deploy cloud resources or grant cloud credentials for this submission.",
+    "No application functional or security suite was executed."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 1.138,
+  "finished_at": "2026-11-14T21:34:34.069469Z"
+}

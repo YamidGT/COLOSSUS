@@ -1,0 +1,169 @@
+{
+  "repo_id": "U07",
+  "repository": "mattvaldes/vulnerable-api",
+  "repo_url": "https://github.com/mattvaldes/vulnerable-api",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:26.330199Z",
+  "source": {
+    "status": "accepted",
+    "commit": "4b050235e20bc272e646fa62e14cb8f015ec2592",
+    "archive_sha256": "1bac93d3f8294fec844c732bea1e445b21aa93c6bda2089a258cb5fdbe15aa4f",
+    "tree_sha256": "10813c32705ef1c806505b785fd42f40ef538451bc081ecbf3b6c38f57de87e7",
+    "file_count": 17,
+    "total_bytes": 899473
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 1,
+    "finding_count": 14,
+    "findings": [
+      {
+        "rule": "xxe",
+        "cwe": "CWE-611",
+        "title": "XML parsed with external entities possible",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 56,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "xxe",
+        "cwe": "CWE-611",
+        "title": "XML parsed with external entities possible",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 57,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 68,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 78,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 78,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 88,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 108,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 121,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 156,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 159,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 159,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 190,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 190,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "ansible/roles/api/files/vAPI.py",
+        "line": 203,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 1.188,
+  "finished_at": "2026-11-14T21:34:27.518415Z"
+}

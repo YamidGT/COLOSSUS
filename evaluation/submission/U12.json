@@ -1,0 +1,56 @@
+{
+  "repo_id": "U12",
+  "repository": "juice-shop/juice-shop",
+  "repo_url": "https://github.com/juice-shop/juice-shop",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:29.027537Z",
+  "source": {
+    "status": "accepted",
+    "commit": "266448aba68cd8ba5915f526a128da4fa7bc3f9f",
+    "archive_sha256": "f47f3dfe64d97256d437fb6d2e4fc096f4dd6d6d03cfeb9e75364a9ddb909156",
+    "tree_sha256": "b8df424562afc0d872a4e6488fff93af4c24281221edb78fd9b7a25457eeff36",
+    "file_count": 1498,
+    "total_bytes": 32238021
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "intake_seconds": 3.85,
+  "finished_at": "2026-11-14T21:34:32.877752Z"
+}

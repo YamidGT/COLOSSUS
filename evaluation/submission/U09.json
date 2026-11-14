@@ -1,0 +1,597 @@
+{
+  "repo_id": "U09",
+  "repository": "adeyosemanputra/pygoat",
+  "repo_url": "https://github.com/adeyosemanputra/pygoat",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:27.391034Z",
+  "source": {
+    "status": "accepted",
+    "commit": "2aa4cc14f251e4a780e94e200aed6b36a5b15c21",
+    "archive_sha256": "19db7dc2e4a1dfba72dacf15e8dbbfad092929604abf760ad3b9316457b88971",
+    "tree_sha256": "d25257beaca3aa6e3dcc3b7e835a54f03946647ad461726885619cb8a1998ea4",
+    "file_count": 463,
+    "total_bytes": 1743460
+  },
+  "setup": {
+    "status": "ready",
+    "artifact_digest": "sha256:6dd3f60d05d2fe054404b68faad5d98f3612e9340e59c986a78001c6d7e63fb8",
+    "recipe_id": "python-flask-v1",
+    "project_id": "9518d844-5e15-4187-b8d8-3faf835e6e6f"
+  },
+  "tests": {
+    "status": "bounded_http_checks",
+    "checks": [
+      {
+        "path": "/",
+        "status": 200,
+        "body_sha256": "9771f2c53cff07e2ad3c31cbb72c97e766846494de3e8cbb791c21703ba1450a",
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "path": "/health",
+        "status": 200,
+        "body_sha256": "565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3",
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "path": "/login",
+        "status": 200,
+        "body_sha256": "f3f64b3a9d05a3619364489c597697d3dfba5148e1241439cd0bd94c5583b751",
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "path": "/dashboard",
+        "status": 302,
+        "body_sha256": "5da82accbf2ff96f465a16f1cdcc2d40c70e57c66897bcdc06a6925f033102ee",
+        "expected_status": 302,
+        "passed": true
+      },
+      {
+        "path": "/api/project/1/details",
+        "status": 401,
+        "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+        "expected_status": 401,
+        "passed": true
+      },
+      {
+        "path": "/api/project/1/safe",
+        "status": 401,
+        "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+        "expected_status": 401,
+        "passed": true
+      },
+      {
+        "path": "/missing-submission-route",
+        "status": 404,
+        "body_sha256": "e9639e3c4681ce85f852fbac48e2eeee5ba51296dbfec57c200d59b76237ab80",
+        "expected_status": 404,
+        "passed": true
+      }
+    ],
+    "outcome": "pass",
+    "passed": 7,
+    "total": 7,
+    "functional_suite": "GET home/health/login; dashboard redirects before login; unknown route 404",
+    "security_suite": "Two project APIs deny unauthenticated reads (401); no authenticated property-disclosure test",
+    "command": "launcher /targets/request for seven fixed GET paths on the frozen BOPLA lab artifact"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "unsupported",
+    "reason": "No approved repair/security oracle for generic runtime profile; no patch or promotion attempted"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 116,
+    "finding_count": 40,
+    "findings": [
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "challenge/labs/bopla_lab/app.py",
+        "line": 152,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "challenge/labs/business_logic_lab/app.py",
+        "line": 5,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "challenge/labs/business_logic_lab/app.py",
+        "line": 200,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "challenge/labs/security_headers_lab/app.py",
+        "line": 15,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "challenge/labs/security_headers_lab/app.py",
+        "line": 233,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "yaml-load",
+        "cwe": "CWE-502",
+        "title": "yaml.load without safe loader",
+        "file": "dockerized_labs/a9_uckv_lab/app.py",
+        "line": 62,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/a9_uckv_lab/app.py",
+        "line": 124,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/auth_failure_lab/app.py",
+        "line": 44,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/auth_failure_lab/app.py",
+        "line": 238,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/broken_access_lab/main.py",
+        "line": 70,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/broken_auth_lab/app.py",
+        "line": 16,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "dockerized_labs/broken_auth_lab/app.py",
+        "line": 103,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/broken_auth_lab/app.py",
+        "line": 147,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/command_injection_lab/app.py",
+        "line": 60,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/crypto_failure_lab/app.py",
+        "line": 7,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "dockerized_labs/crypto_failure_lab/app.py",
+        "line": 25,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "md5",
+        "cwe": "CWE-327",
+        "title": "Weak hash (MD5/SHA1)",
+        "file": "dockerized_labs/crypto_failure_lab/app.py",
+        "line": 38,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/dependency_attack_lab/app.py",
+        "line": 198,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "dockerized_labs/insec_des_lab/main.py",
+        "line": 40,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/insecure_design_lab/app.py",
+        "line": 8,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/insecure_design_lab/app.py",
+        "line": 153,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/insufficient_logging_lab/app.py",
+        "line": 7,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/insufficient_logging_lab/app.py",
+        "line": 96,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/open_source_library_attack_lab/app.py",
+        "line": 259,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/package_injection_lab/app.py",
+        "line": 260,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/sde/app.py",
+        "line": 49,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/sec_misconfig/app.py",
+        "line": 8,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/sec_misconfig/app.py",
+        "line": 98,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/sec_misconfig/app.py",
+        "line": 115,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/sec_misconfig/app.py",
+        "line": 135,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py",
+        "line": 8,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "pickle",
+        "cwe": "CWE-502",
+        "title": "Unsafe deserialization (pickle)",
+        "file": "dockerized_labs/software_integrity_lab/app.py",
+        "line": 44,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/software_integrity_lab/app.py",
+        "line": 90,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/sql_injection_lab/app.py",
+        "line": 51,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/sql_injection_lab/app.py",
+        "line": 78,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "dockerized_labs/ssrf_lab/app.py",
+        "line": 6,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/template_injection_lab/app.py",
+        "line": 123,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "dockerized_labs/xxe_lab/app.py",
+        "line": 95,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "pygoat/settings.py",
+        "line": 23,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "pygoat/settings.py",
+        "line": 179,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+  },
+  "intake_seconds": 2.011,
+  "finished_at": "2026-11-14T21:40:43.853980Z",
+  "assisted_attempt": {
+    "changes": [
+      "Evaluator selected challenge/labs/bopla_lab/; this is one lab, not the full PyGoat application"
+    ],
+    "source_tree_sha256": "306d16742151bd8b35f4691dd7d8856919e9b52b08e515b39e0f895581f24b40"
+  },
+  "automatic_discovery": {
+    "status": "needs_configuration",
+    "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+  },
+  "manifest_evidence": "evidence/U09-attempt-1-manifest.json",
+  "dependency_evidence": "evidence/U09-attempt-1-dependencies.json",
+  "dependency_inventory": {
+    "machine": "aarch64",
+    "packages": [
+      {
+        "ecosystem": "PyPI",
+        "name": "blinker",
+        "version": "1.9.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "click",
+        "version": "8.5.1"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "Flask",
+        "version": "2.3.3"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "itsdangerous",
+        "version": "2.2.0"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "MarkupSafe",
+        "version": "3.0.4"
+      },
+      {
+        "ecosystem": "PyPI",
+        "name": "Werkzeug",
+        "version": "2.3.7"
+      }
+    ],
+    "python": "3.12.16 (main, Nov  5 2026, 08:06:14) [GCC 14.2.0]",
+    "scope": "installed wheel inventory"
+  },
+  "investigation_cycle": {
+    "status": "NO_CHANGE",
+    "coverage": {
+      "recipe_id": "python-flask-v1",
+      "discovery": "completed",
+      "repair": "UNSUPPORTED",
+      "formal": "UNSUPPORTED",
+      "mandatory_tests": [
+        "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
+        "Reproduce the reported defect on the baseline; require the exploit attempt to fail on the patched candidate and the protected security regression test to pass.",
+        "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
+        "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
+        "Under tested policy, report the formal limitation; formal_required still blocks without linked proof."
+      ],
+      "reason": "No approved protected repair oracle is registered for this application",
+      "raw_count": 1,
+      "findings": 1,
+      "requests_sent": 0,
+      "model_diagnostics": [],
+      "excluded_tools": [
+        "Bandit: not installed in worker"
+      ]
+    },
+    "evidence_id": "5a2e346dda8cefab4627dccdbc1db856c87c1db9e1eea202f5675809e1729d93"
+  },
+  "runtime_seconds": 18.932,
+  "cleanup": "completed",
+  "audit_evidence": "evidence/U09-attempt-1-audit.json",
+  "runtime_attempts": [
+    {
+      "attempt": 1,
+      "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+      "finished_at": "2026-11-14T21:40:43.853980Z",
+      "seconds": 18.932,
+      "setup": {
+        "status": "ready",
+        "artifact_digest": "sha256:6dd3f60d05d2fe054404b68faad5d98f3612e9340e59c986a78001c6d7e63fb8",
+        "recipe_id": "python-flask-v1",
+        "project_id": "9518d844-5e15-4187-b8d8-3faf835e6e6f"
+      },
+      "tests": {
+        "status": "bounded_http_checks",
+        "checks": [
+          {
+            "path": "/",
+            "status": 200,
+            "body_sha256": "9771f2c53cff07e2ad3c31cbb72c97e766846494de3e8cbb791c21703ba1450a",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/health",
+            "status": 200,
+            "body_sha256": "565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/login",
+            "status": 200,
+            "body_sha256": "f3f64b3a9d05a3619364489c597697d3dfba5148e1241439cd0bd94c5583b751",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/dashboard",
+            "status": 302,
+            "body_sha256": "5da82accbf2ff96f465a16f1cdcc2d40c70e57c66897bcdc06a6925f033102ee",
+            "expected_status": 302,
+            "passed": true
+          },
+          {
+            "path": "/api/project/1/details",
+            "status": 401,
+            "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+            "expected_status": 401,
+            "passed": true
+          },
+          {
+            "path": "/api/project/1/safe",
+            "status": 401,
+            "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+            "expected_status": 401,
+            "passed": true
+          },
+          {
+            "path": "/missing-submission-route",
+            "status": 404,
+            "body_sha256": "e9639e3c4681ce85f852fbac48e2eeee5ba51296dbfec57c200d59b76237ab80",
+            "expected_status": 404,
+            "passed": true
+          }
+        ],
+        "outcome": "pass",
+        "passed": 7,
+        "total": 7,
+        "functional_suite": "GET home/health/login; dashboard redirects before login; unknown route 404",
+        "security_suite": "Two project APIs deny unauthenticated reads (401); no authenticated property-disclosure test",
+        "command": "launcher /targets/request for seven fixed GET paths on the frozen BOPLA lab artifact"
+      },
+      "cleanup": "completed",
+      "assistance": [
+        "Evaluator selected challenge/labs/bopla_lab/; this is one lab, not the full PyGoat application"
+      ],
+      "source_tree_sha256": "306d16742151bd8b35f4691dd7d8856919e9b52b08e515b39e0f895581f24b40",
+      "manifest_evidence": "evidence/U09-attempt-1-manifest.json"
+    }
+  ]
+}

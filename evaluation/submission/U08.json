@@ -1,0 +1,81 @@
+{
+  "repo_id": "U08",
+  "repository": "dolevf/Damn-Vulnerable-GraphQL-Application",
+  "repo_url": "https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:26.995969Z",
+  "source": {
+    "status": "accepted",
+    "commit": "a961308c02d1fb462b192681c336b0739e432da7",
+    "archive_sha256": "ce16094a23fffb5d9726a3b0684cabf1fda5888e1ba8bc8b105592c3c86604b8",
+    "tree_sha256": "aabaa88b9fb918cc396daa711fcc221824c468db32cee56bb3cf6907ff09b291",
+    "file_count": 129,
+    "total_bytes": 8418616
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "dependency_policy",
+    "reason": "Unsupported requirement syntax"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 20,
+    "finding_count": 3,
+    "findings": [
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "core/helpers.py",
+        "line": 21,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "core/helpers.py",
+        "line": 25,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "setup.py",
+        "line": 64,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "dependency_policy",
+    "reason": "Unsupported requirement syntax"
+  },
+  "intake_seconds": 2.031,
+  "finished_at": "2026-11-14T21:34:29.026651Z"
+}
