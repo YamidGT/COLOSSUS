@@ -26,16 +26,42 @@ Host for every command below: Arch Linux x86_64, kernel 7.2.11, Docker 29.9.2 (`
 
 Observed: `COLOSSUS_DOCKER_CONTEXT=default uv run colossus --json doctor` -> `runtime_preflight: blocked`, exit 3. Architecture, disk (105 GiB) and cgroup checks ok; `sandbox.gvisor` blocked (`gVisor runtime missing`); provider keys missing (no `.env` in this checkout); `.env` ignored.
 
+## S4 live gVisor challenges on Linux
+
+gVisor `runsc release-20261109.0` (same as Daniel) installed by the user on this host and registered in the `default` Docker context.
+
+- `scripts/check_sandbox.py` reads `COLOSSUS_DOCKER_CONTEXT`. `COLOSSUS_DOCKER_CONTEXT=default uv run python scripts/check_sandbox.py` passed: uid 1000, gVisor kernel, external connection denied, host home/socket/provider keys absent, root read-only.
+- `tests/security/test_gvisor_live.py` (marker `gvisor`, skipped without runsc): 11 live tests, all trusted fixture programs.
+
+| Challenge | Observed |
+|---|---|
+| No-network job: IPv4, IPv6, cloud metadata address, DNS | all denied |
+| Project network: own packaged target over HTTP | 200, body matches |
+| Project network: internet, cloud metadata, DNS | denied |
+| Other project's probe to the target address | denied |
+| Other project joins target network / uses request API | refused (DomainError) |
+| Job past deadline (3 s) | killed, container removed |
+| 512 MiB allocation under a 128 MiB limit | process killed |
+| 400 processes under pids-limit 128 | limited below 128 |
+| Upload path `../evil.py` | refused |
+| `terminate_project_work` | 2 workers and network removed, confirmed |
+| Host `MISTRAL_API_KEY` sentinel | absent inside job |
+| Kernel | gVisor |
+
+- Bug fixed in `SandboxLauncher.destroy`: Docker 29 says `no such object` in lowercase, so an already-removed container raised. Now matched case-insensitively, with a unit test.
+
+After the run: 0 managed containers, 0 managed networks, 0 managed images.
+
 ## Commands and results
 
 ```text
 uv sync --python 3.12 --all-extras
-uv run pytest -q          -> 106 passed (Daniel's 49 + 57 new)
+COLOSSUS_DOCKER_CONTEXT=default uv run pytest -q -> 117 passed (Daniel's 49 + 68 new; 11 live gVisor)
 uv run ruff check src tests -> All checks passed
 ```
 
 ## Not done
 
-- No gVisor run on this Linux host: `runsc` is not installed, so Daniel's launcher refuses every job here, as designed. His Colima evidence remains the only real gVisor run.
-- Multi-container egress, cancellation and cross-case challenges still need a gVisor host.
+- Restart/cancel fault injection through the API and controller is still unvalidated.
+- Docker here is not rootless.
 - Recipe validator wiring into onboarding.

@@ -497,8 +497,8 @@ class SandboxLauncher:
         if not environment_id.startswith("colossus-"):
             raise DomainError("invalid_environment", "Unknown sandbox identity", 422)
         check = self.docker("inspect", environment_id)
-        if check.exit_code and "No such" in check.stderr:
-            return
+        if check.exit_code and "no such" in check.stderr.lower():
+            return  # already gone (Docker wording differs by version: "No such" / "no such")
         self.inspect(environment_id)
         self.checked("rm", "-f", environment_id)
 

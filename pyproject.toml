@@ -29,6 +29,7 @@ packages = ["src/colossus"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+markers = ["gvisor: live gVisor sandbox challenge; skipped unless runsc is registered"]
 
 [tool.ruff]
 target-version = "py312"
