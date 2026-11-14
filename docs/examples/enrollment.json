@@ -1,0 +1,9 @@
+{
+  "repo_url": "https://github.com/erev0s/VAmPI",
+  "requested_ref": null,
+  "subdir": null,
+  "owner_policy_id": "lab-auto-v1",
+  "deployment_profile_id": "local-web-v1",
+  "assurance_profile": "tested",
+  "requirement_ids": []
+}

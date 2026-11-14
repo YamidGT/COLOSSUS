@@ -1,0 +1,41 @@
+{
+  "documentation_example": true,
+  "standard": {
+    "case_seconds": 5400,
+    "cycle_seconds": 7200,
+    "onboarding_seconds": 1200,
+    "investigation_seconds": 900,
+    "triage_seconds": 300,
+    "patch_seconds_per_candidate": 360,
+    "build_test_seconds_per_candidate": 720,
+    "proof_seconds_per_candidate": 480,
+    "proof_seconds_per_obligation": 90,
+    "max_obligations": 5,
+    "observation_seconds": 300,
+    "refresh_seconds": 300,
+    "max_candidates": 3
+  },
+  "heavy": {
+    "case_seconds": 10800,
+    "cycle_seconds": 14400,
+    "observation_seconds": 600
+  },
+  "scheduler": {
+    "feed_poll_seconds": 900,
+    "source_poll_seconds": 300,
+    "source_debounce_seconds": 60,
+    "t1_seconds": 21600,
+    "t2_seconds": 86400,
+    "reaper_seconds": 60
+  },
+  "resources": {
+    "heavy_workers": 1,
+    "model_requests_in_flight": 2
+  },
+  "budget": {
+    "total_credit_micro_usd": 150000000,
+    "automatic_ceiling_micro_usd": 120000000,
+    "contingency_micro_usd": 30000000,
+    "case_ceiling_micro_usd": 2000000
+  }
+}
