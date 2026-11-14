@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "kind": "submission_evidence_summary",
-  "updated_at": "2026-11-14T21:46:08.322759+00:00",
+  "updated_at": "2026-11-14T21:46:21.343846+00:00",
   "scope": "Observed development/calibration evidence. No heldout accuracy or public benchmark score.",
   "repository": "https://github.com/YamidGT/COLOSSUS",
   "host": {
@@ -219,7 +219,7 @@
     "dsvw_fresh_lifecycle": {
       "status": "COMPLETE",
       "source": "evaluation/submission/dsvw-full-cycle.json",
-      "sha256": "08ba9dd5ecf7e5292394c9f53baed25bfa2e0f4f0398b774c912f704e91100b9",
+      "sha256": "a73f29e68329a6badba74cd15afc849b22a4fad9d19e9a69abe4c73ee5ecb7ec",
       "elapsed_seconds": 330.69011249998584,
       "generation_mode": "fresh_inference",
       "model_calls": 1,
@@ -238,7 +238,10 @@
       },
       "rollback_seconds": 8.166125750169158,
       "audit_valid": true,
-      "formal": "UNSUPPORTED for this Python component"
+      "formal": "UNSUPPORTED for this Python component",
+      "target_commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+      "artifact_digest": "sha256:6336a766f02f0099bb944301189011978b5ae096337267580d9f1d1727c062f6",
+      "detailed_evidence": "evaluation/submission/dsvw-evidence.json"
     },
     "catalog_triage": {
       "status": "measured",
