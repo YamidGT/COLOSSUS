@@ -344,6 +344,9 @@ class ProjectSnapshot(Contract):
     cost_summary: dict
     feed_freshness: list[dict]
     allowed_actions: list[AllowedAction]
+    owner_policy_id: str
+    assurance_profile: Assurance
+    reason: str | None = None
 
 
 class CaseReview(Contract):
@@ -374,8 +377,14 @@ class OperationReceipt(Contract):
     result_ref: str | None = None
 
 
-class ProjectConfigAmendment(Enrollment):
+class ProjectConfigAmendment(Contract):
     expected_revision: NonNegative
+    requested_ref: str | None = None
+    subdir: str | None = None
+    owner_policy_id: Literal["lab-auto-v1", "review-v1"]
+    deployment_profile_id: Literal["local-web-v1", "local-consumer-v1"]
+    assurance_profile: Assurance
+    requirement_ids: list[str] = Field(default_factory=list, max_length=5)
 
 
 class ReviewDecision(Contract):

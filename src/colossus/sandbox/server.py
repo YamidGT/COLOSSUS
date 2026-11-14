@@ -1,0 +1,144 @@
+"""Runtime authority process with no provider credentials."""
+
+import argparse
+import base64
+import secrets
+from dataclasses import asdict
+from pathlib import Path
+
+import uvicorn
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from pydantic import Field
+
+from colossus.contracts.core import Contract, DomainError, Identifier
+from colossus.sandbox.launcher import SandboxLauncher
+
+
+class RunJob(Contract):
+    project_id: str
+    role: str
+    files: dict[str, str]
+    argv: list[str]
+    timeout: int = Field(default=60, ge=1, le=3600)
+    network: str = "none"
+
+
+class PackageJob(Contract):
+    files: dict[str, str]
+    argv: list[str]
+
+
+class StartTarget(Contract):
+    project_id: Identifier
+    artifact_digest: str
+    ttl_seconds: int = Field(default=7200, ge=60, le=14400)
+
+
+class TargetRequest(Contract):
+    project_id: Identifier
+    environment_id: str
+    port: int = Field(ge=1, le=65535)
+    path: str = "/"
+    method: str = "GET"
+    body: str | None = None
+
+
+class TerminateWork(Contract):
+    project_id: Identifier
+    keep: list[str] = Field(default_factory=list, max_length=4)
+
+
+class StopTarget(Contract):
+    project_id: Identifier
+    environment_id: str
+    network_id: str
+
+
+def decode_files(encoded: dict[str, str]) -> dict[str, bytes]:
+    if len(encoded) > 10000 or sum(map(len, encoded.values())) > 140 * 1024 * 1024:
+        raise DomainError("source_limit", "Source exceeds transfer budget", 413)
+    try:
+        files = {path: base64.b64decode(value, validate=True) for path, value in encoded.items()}
+    except ValueError:
+        raise DomainError("invalid_source", "Invalid encoded source file", 422) from None
+    if sum(map(len, files.values())) > 100 * 1024 * 1024:
+        raise DomainError("source_limit", "Source exceeds sandbox transfer budget", 413)
+    return files
+
+
+def create_launcher(token: str, context: str):
+    app = FastAPI(docs_url=None, openapi_url=None)
+    launcher = SandboxLauncher(context)
+
+    @app.middleware("http")
+    async def authenticate(request: Request, call_next):
+        if not secrets.compare_digest(request.headers.get("authorization", ""), "Bearer " + token):
+            return JSONResponse(
+                {"error": {"code": "unauthorized", "message": "Invalid service capability"}},
+                status_code=403,
+            )
+        return await call_next(request)
+
+    @app.exception_handler(DomainError)
+    async def domain_error(request, exc):
+        return JSONResponse({"error": exc.as_dict()}, status_code=exc.status_code)
+
+    @app.get("/health")
+    def health():
+        return launcher.preflight()
+
+    @app.post("/run")
+    def run(body: RunJob):
+        files = decode_files(body.files)
+        return asdict(
+            launcher.run(body.project_id, body.role, files, body.argv, body.timeout, body.network)
+        )
+
+    @app.post("/package")
+    def package(body: PackageJob):
+        return launcher.package(decode_files(body.files), body.argv)
+
+    @app.post("/targets")
+    def start_target(body: StartTarget):
+        return launcher.start_target(body.project_id, body.artifact_digest, body.ttl_seconds)
+
+    @app.post("/targets/request")
+    def target_request(body: TargetRequest):
+        return launcher.request(**body.model_dump())
+
+    @app.post("/targets/stop")
+    def stop_target(body: StopTarget):
+        info = launcher.inspect(body.environment_id)
+        if info["Config"]["Labels"].get("org.colossus.project") != body.project_id:
+            raise DomainError("target_scope", "Target belongs to another project", 403)
+        launcher.destroy(body.environment_id)
+        launcher.destroy_network(body.network_id, body.project_id)
+        return {"stopped": True}
+
+    @app.post("/terminate-work")
+    def terminate_work(body: TerminateWork):
+        return launcher.terminate_project_work(body.project_id, body.keep)
+
+    @app.post("/reap")
+    def reap():
+        return {"removed": launcher.reap()}
+
+    return app
+
+
+if __name__ == "__main__":
+    from colossus.control.lifecycle import watch_parent
+
+    watch_parent()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--socket", type=Path, required=True)
+    parser.add_argument("--token-file", type=Path, required=True)
+    parser.add_argument("--context", required=True)
+    args = parser.parse_args()
+    uvicorn.run(
+        create_launcher(args.token_file.read_text().strip(), args.context),
+        uds=str(args.socket),
+        access_log=False,
+        log_level="warning",
+    )

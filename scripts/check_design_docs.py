@@ -54,4 +54,4 @@ assert all(not line.split('=',1)[1].strip() for line in example.splitlines() if 
 if errors:
     raise SystemExit('\n'.join(errors))
 print(f'PASS: {len(required)} required handoff files, local links/code fences, JSON examples, 10 candidate records and runtime accounting.')
-print('This checks documents only; no implementation, sandbox, repository or benchmark has been executed.')
+print('This check validates documents only; it does not execute or validate implementation, sandboxes or benchmarks.')

@@ -1918,6 +1918,30 @@
         },
         "title": "Allowed Actions",
         "type": "array"
+      },
+      "owner_policy_id": {
+        "title": "Owner Policy Id",
+        "type": "string"
+      },
+      "assurance_profile": {
+        "enum": [
+          "tested",
+          "formal_required"
+        ],
+        "title": "Assurance Profile",
+        "type": "string"
+      },
+      "reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Reason"
       }
     },
     "required": [
@@ -1935,7 +1959,9 @@
       "attention_count",
       "cost_summary",
       "feed_freshness",
-      "allowed_actions"
+      "allowed_actions",
+      "owner_policy_id",
+      "assurance_profile"
     ],
     "title": "ProjectSnapshot",
     "type": "object"
@@ -2329,15 +2355,14 @@
   "ProjectConfigAmendment": {
     "additionalProperties": false,
     "properties": {
-      "repo_url": {
-        "maxLength": 512,
-        "title": "Repo Url",
-        "type": "string"
+      "expected_revision": {
+        "minimum": 0,
+        "title": "Expected Revision",
+        "type": "integer"
       },
       "requested_ref": {
         "anyOf": [
           {
-            "maxLength": 200,
             "type": "string"
           },
           {
@@ -2360,7 +2385,6 @@
         "title": "Subdir"
       },
       "owner_policy_id": {
-        "default": "lab-auto-v1",
         "enum": [
           "lab-auto-v1",
           "review-v1"
@@ -2369,7 +2393,6 @@
         "type": "string"
       },
       "deployment_profile_id": {
-        "default": "local-web-v1",
         "enum": [
           "local-web-v1",
           "local-consumer-v1"
@@ -2378,7 +2401,6 @@
         "type": "string"
       },
       "assurance_profile": {
-        "default": "tested",
         "enum": [
           "tested",
           "formal_required"
@@ -2393,21 +2415,13 @@
         "maxItems": 5,
         "title": "Requirement Ids",
         "type": "array"
-      },
-      "start_cycle": {
-        "default": false,
-        "title": "Start Cycle",
-        "type": "boolean"
-      },
-      "expected_revision": {
-        "minimum": 0,
-        "title": "Expected Revision",
-        "type": "integer"
       }
     },
     "required": [
-      "repo_url",
-      "expected_revision"
+      "expected_revision",
+      "owner_policy_id",
+      "deployment_profile_id",
+      "assurance_profile"
     ],
     "title": "ProjectConfigAmendment",
     "type": "object"

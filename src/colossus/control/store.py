@@ -295,7 +295,9 @@ class Store:
                 "UPDATE tasks SET state='expired' WHERE state='queued' AND deadline<=?", (now,)
             )
             task = db.execute(
-                "SELECT * FROM tasks WHERE state='queued' ORDER BY created_at LIMIT 1"
+                """SELECT tasks.* FROM tasks LEFT JOIN records ON records.id=tasks.project_id
+                   WHERE tasks.state='queued' AND COALESCE(json_extract(records.data,'$.admission_state'),'active')='active'
+                   ORDER BY tasks.created_at LIMIT 1"""
             ).fetchone()
             if task is None:
                 return None

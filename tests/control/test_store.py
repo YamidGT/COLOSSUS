@@ -92,3 +92,17 @@ def test_generation_cas_rejects_stale_writer(store):
     with pytest.raises(DomainError, match="changed"):
         store.put("deployment", "d", {"generation": 3}, "p", expected_revision=state["revision"])
     assert store.get("deployment", "d")["generation"] == 2
+
+
+def test_paused_project_tasks_wait_for_resume(store):
+    import time
+
+    from colossus.contracts.core import new_id
+
+    project_id = new_id()
+    store.put("project", project_id, {"admission_state": "paused"}, project_id)
+    with store.transaction() as db:
+        store.enqueue(db, project_id, "onboard", {}, time.time() + 100)
+    assert store.claim("worker") is None
+    store.put("project", project_id, {"admission_state": "active"}, project_id)
+    assert store.claim("worker")["project_id"] == project_id
