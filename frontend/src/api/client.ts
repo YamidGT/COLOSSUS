@@ -1,3 +1,4 @@
+import { mutationIntent } from './intents'
 import type { components } from './schema'
 
 export type Project = components['schemas']['ProjectSnapshot']
@@ -13,11 +14,14 @@ export class ApiError extends Error {
 }
 export async function api<T>(path: string, options: { method?: string; body?: unknown; signal?: AbortSignal; key?: string } = {}): Promise<T> {
   const method = options.method ?? 'GET'
+  const body = options.body === undefined ? undefined : JSON.stringify(options.body)
+  const intent = method === 'GET' ? null : mutationIntent(method, path, body, options.key)
   const response = await fetch('/api/v1' + path, { method, credentials: 'same-origin', signal: options.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(30000)]) : AbortSignal.timeout(30000),
-    headers: { 'Accept': 'application/json', ...(options.body === undefined ? {} : { 'Content-Type': 'application/json' }), ...(method === 'GET' ? {} : { 'X-CSRF-Token': csrf, 'Idempotency-Key': options.key ?? crypto.randomUUID() }) },
-    body: options.body === undefined ? undefined : JSON.stringify(options.body),
+    headers: { 'Accept': 'application/json', ...(options.body === undefined ? {} : { 'Content-Type': 'application/json' }), ...(method === 'GET' ? {} : { 'X-CSRF-Token': csrf, 'Idempotency-Key': intent!.key }) },
+    body,
   })
   const data = await response.json()
+  if (response.ok || (response.status >= 400 && response.status < 500)) intent?.resolve()
   if (!response.ok) {
     if (response.status === 401 && path !== '/sessions/exchange') window.dispatchEvent(new Event('colossus:session-expired'))
     throw new ApiError(response.status, data.error?.code ?? 'request_failed', data.error?.message ?? 'The controller could not complete this request.')
