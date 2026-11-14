@@ -167,3 +167,13 @@ oracles, source-update reconciliation, other stacks, target-linked formal polici
 full public benchmark adapters/campaigns and broader fault/UX acceptance remain.
 The submission guide describes the implemented prototype rather than the entire
 original roadmap.
+
+## Requested additional submission repetition
+
+A second fresh DSVW lifecycle from submission revision `992d45c` completed in
+341.002 seconds. Its first candidate failed the protected security gate and was
+not promoted; the second candidate passed. Two model calls cost $0.002657. The
+next cycle returned NO_CHANGE; rollback completed in 7.883 seconds; audit checks
+passed. Full failed/passing gate records are committed in
+`evaluation/submission/dsvw-repeat-evidence.json`. Formal remains UNSUPPORTED.
+This is an additional development repetition, not an official benchmark score.

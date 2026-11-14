@@ -64,3 +64,30 @@ uv run python scripts/run_submission_campaign.py runtime --assisted --vampi-comp
 ```
 
 Runtime uses the existing gVisor launcher; it never executes repository Dockerfiles or package hooks on the host. Cloud/Kubernetes/C targets are not deployed by this runner.
+
+## Additional fresh DSVW repetition
+
+After the initial submission was pushed, Daniel requested more testing. The same
+frozen DSVW source was run again from implementation revision `992d45c` with fresh
+model inference and the full 300-second health-observation window.
+
+| Measurement | Primary run | Additional run |
+|---|---:|---:|
+| URL to verified promotion and mirror refresh | 330.690 s | 341.002 s |
+| Model calls | 1 | 2 |
+| Settled model cost | $0.001287 | $0.002657 |
+| Second cycle | NO_CHANGE | NO_CHANGE |
+| Rollback | 8.166 s | 7.883 s |
+| Formal coverage | UNSUPPORTED | UNSUPPORTED |
+
+The additional run's first candidate failed `dsvw-security-v1` and was not
+promoted. The bounded repair loop generated another candidate, which passed the
+required gates. Both candidates' gate records and both model calls are retained
+in [repeat evidence](dsvw-repeat-evidence.json); the [run summary](dsvw-repeat-cycle.json)
+records the full lifecycle. Rollback restored the explicitly known-vulnerable
+training baseline before calibration teardown. Both audit checks passed.
+
+These are two successful fresh development repetitions, not a measured security
+accuracy rate or a universal reliability claim. Earlier development failures
+remain documented separately. The extra repetition does not increase the
+24-repository denominator or convert unsupported repository rows into successes.
