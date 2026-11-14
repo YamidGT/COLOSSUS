@@ -1,5 +1,6 @@
 import { FormEvent, ReactNode, useCallback, useEffect, useState } from "react";
 import { Link, Route, Routes, useNavigate, useParams } from "react-router";
+import { ActionButton, AllowedAction } from "./actions";
 import { ApiError, api, setCsrf, text } from "./api";
 
 type Session = { operator: string; csrf_token: string | null };
@@ -10,7 +11,7 @@ type Project = {
   revision: number;
   setup_state: string;
   admission_state: string;
-  active_cycle: { cycle_id?: string; status?: string } | null;
+  active_cycle: { cycle_id?: string; status?: string; cancel_requested?: boolean } | null;
   attention_count: number;
   deployment_summary: Record<string, unknown>;
   mirror_summary: Record<string, unknown>;
@@ -19,13 +20,23 @@ type Project = {
   owner_policy_id: string;
   assurance_profile: string;
   reason: string | null;
+  allowed_actions?: AllowedAction[];
 };
 type ActionItem = {
   action_id: string;
+  project_id?: string;
+  case_id?: string | null;
   title: string;
   reason: string;
+  reason_code?: string;
   kind: string;
+  allowed_actions?: AllowedAction[];
+  disabled_reasons?: Record<string, string>;
 };
+
+function allowed(list: AllowedAction[] | undefined, ...names: string[]): AllowedAction | undefined {
+  return list?.find((item) => names.includes(item.action));
+}
 type Finding = { finding_id?: string; title?: string; status?: string; cwe?: string };
 type Gate = {
   gate_id?: string;
@@ -238,6 +249,33 @@ function Repositories() {
   );
 }
 
+const RUN_BODY = { trigger: "manual" };
+
+function ProjectActions({ project, stale, onAccepted }: { project: Project; stale: boolean; onAccepted: () => void }) {
+  const id = encodeURIComponent(project.project_id);
+  const run = allowed(project.allowed_actions, "run");
+  const admission = allowed(project.allowed_actions, "pause", "resume");
+  return (
+    <div className="flex flex-wrap items-start gap-2">
+      {run ? (
+        <ActionButton label="Run cycle" path={`/projects/${id}/cycles`} body={RUN_BODY} allowed={run} stale={stale} onAccepted={onAccepted} />
+      ) : null}
+      {admission?.action === "pause" ? (
+        <ActionButton
+          label="Pause schedule"
+          path={`/projects/${id}/pause`}
+          allowed={admission}
+          stale={stale}
+          onAccepted={onAccepted}
+          confirm={{ title: "Pause schedule?", body: "No new cycles are admitted until you resume. A running cycle is not cancelled." }}
+        />
+      ) : admission?.action === "resume" ? (
+        <ActionButton label="Resume schedule" path={`/projects/${id}/resume`} allowed={admission} stale={stale} onAccepted={onAccepted} />
+      ) : null}
+    </div>
+  );
+}
+
 function ProjectPage() {
   const { projectId = "" } = useParams();
   const [project, setProject] = useState<Project | null>(null);
@@ -261,6 +299,8 @@ function ProjectPage() {
     }
   }, [projectId]);
 
+  const reload = useCallback(() => void load(), [load]);
+
   useEffect(() => {
     const delay = project?.active_cycle ? 2000 : 10000;
     const timer = window.setInterval(() => {
@@ -281,15 +321,42 @@ function ProjectPage() {
             {project ? `${text(project.owner_policy_id)} · ${text(project.assurance_profile)}` : "Not available"}
           </p>
         </div>
+        {project ? <ProjectActions project={project} stale={Boolean(error)} onAccepted={reload} /> : null}
         {error ? <Banner tone="bad">{error}</Banner> : null}
         <div>
           <h2 className="mb-2 text-[13px] leading-[18px] tracking-wide text-muted uppercase">Needs attention</h2>
           {actions.length === 0 ? <p>Nothing needs your attention</p> : null}
           <ul className="divide-y divide-line border-y border-line bg-surface">
             {actions.map((item) => (
-              <li key={item.action_id} className="px-3 py-3">
-                <p className="font-medium">{text(item.title)}</p>
-                <p className="text-[13px] leading-[18px] text-muted">{text(item.reason)}</p>
+              <li key={item.action_id} className="flex flex-wrap items-start justify-between gap-3 px-3 py-3">
+                <div className="min-w-0">
+                  <p className="font-medium">{text(item.title)}</p>
+                  <p className="text-[13px] leading-[18px] text-muted">{text(item.reason)}</p>
+                  {Object.entries(item.disabled_reasons || {}).map(([name, why]) => (
+                    <p key={name} className="text-[13px] leading-[18px] text-muted">
+                      {name}: {why}
+                    </p>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {item.case_id ? (
+                    <Link
+                      to={`/projects/${encodeURIComponent(projectId)}/cases/${encodeURIComponent(item.case_id)}`}
+                      className="inline-flex h-11 items-center rounded-md border border-accent px-4 text-accent"
+                    >
+                      Review patch
+                    </Link>
+                  ) : null}
+                  {allowed(item.allowed_actions, "retry_setup") ? (
+                    <ActionButton
+                      label="Retry setup"
+                      path={`/projects/${encodeURIComponent(projectId)}/retry-setup`}
+                      allowed={allowed(item.allowed_actions, "retry_setup")!}
+                      stale={Boolean(error)}
+                      onAccepted={reload}
+                    />
+                  ) : null}
+                </div>
               </li>
             ))}
           </ul>
@@ -314,6 +381,24 @@ function ProjectPage() {
         <p>Setup {project ? text(project.setup_state) : "Not available"}</p>
         <p>Mirror {project && Object.keys(project.mirror_summary).length ? "recorded" : "Not available"}</p>
         <p>Cycle {project?.active_cycle ? text(project.active_cycle.status) : "Not available"}</p>
+        {project?.active_cycle?.cycle_id ? (
+          project.active_cycle.cancel_requested ? (
+            <p className="rounded-md bg-warn-tint px-3 py-2 text-warn">Cancellation requested; waiting for termination</p>
+          ) : (
+            // The snapshot has no AllowedAction for cancel yet; the server's 409 reason is shown on refusal.
+            <ActionButton
+              label="Cancel cycle"
+              path={`/cycles/${encodeURIComponent(project.active_cycle.cycle_id)}/cancel`}
+              allowed={allowed(project.allowed_actions, "cancel") ?? null}
+              stale={Boolean(error)}
+              onAccepted={reload}
+              confirm={{
+                title: "Cancel this cycle?",
+                body: "Outstanding tasks stop and evidence is kept. Cancellation stays pending until the controller observes termination.",
+              }}
+            />
+          )
+        ) : null}
         <p className="font-mono">Cost reserved {text(cost)}</p>
         <p>Feeds {project ? String(project.feed_freshness.length) : "Not available"}</p>
         {project?.reason ? <p>{project.reason}</p> : null}
@@ -337,6 +422,10 @@ function CasePage() {
   }, [caseId]);
 
   const gates = Array.isArray(record?.gate_results) ? (record.gate_results as Gate[]) : [];
+  const assurance =
+    record && typeof record.assurance_summary === "object" && record.assurance_summary
+      ? (record.assurance_summary as { profile?: unknown; formal?: unknown })
+      : null;
   return (
     <div className="space-y-6">
       <p className="text-[13px] leading-[18px]">
@@ -345,6 +434,19 @@ function CasePage() {
       <h1 className="text-2xl leading-8">Case review</h1>
       {error ? <Banner tone="bad">{error}</Banner> : null}
       <p className="font-mono text-[13px] leading-5">{caseId}</p>
+      {record ? (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[13px] leading-[18px]">
+          <dt className="text-muted">Case status</dt>
+          <dd>{text(record.status)}</dd>
+          <dt className="text-muted">Assurance profile</dt>
+          <dd>{text(assurance?.profile)}</dd>
+          <dt className="text-muted">Formal outcome</dt>
+          <dd>{text(assurance?.formal)}</dd>
+        </dl>
+      ) : null}
+      <p className="text-[13px] leading-[18px] text-muted">
+        Passing tests is not a proof. Only PROVED is a proof, limited to its scope and assumptions; UNKNOWN and UNSUPPORTED mean not proved.
+      </p>
       <h2 className="text-[13px] leading-[18px] tracking-wide text-muted uppercase">Gates</h2>
       {gates.length === 0 ? <p>Not available</p> : null}
       <ul className="divide-y divide-line border-y border-line bg-surface">

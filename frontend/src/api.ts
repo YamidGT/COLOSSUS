@@ -27,7 +27,9 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   const method = (init.method || "GET").toUpperCase();
   if (init.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
   if (method !== "GET" && method !== "HEAD") {
-    headers.set("Idempotency-Key", crypto.randomUUID());
+    // A caller that retries one user action passes its own key so the controller returns
+    // the original receipt; a fresh key is only generated when none was supplied.
+    if (!headers.has("Idempotency-Key")) headers.set("Idempotency-Key", crypto.randomUUID());
     if (csrf) headers.set("X-CSRF-Token", csrf);
   }
   let response: Response;
