@@ -105,7 +105,7 @@ async def hypothesize(broker, project_id, case_id, files, known, diagnostics):
                         ),
                     },
                 ],
-                max_tokens=2048,
+                max_tokens=4096,
                 reasoning="high",
             )
         except DomainError as exc:
@@ -122,6 +122,10 @@ async def hypothesize(broker, project_id, case_id, files, known, diagnostics):
             }
         )
         if result.status != "succeeded":
+            # A truncated reply says nothing about the next file/batch: keep going. Any other
+            # failure (refusal, provider error, exhausted budget) still stops the stage.
+            if getattr(result, "reason_code", None) == "output_truncated":
+                continue
             break
         try:
             response = json.loads(result.content)
@@ -194,7 +198,7 @@ async def triage(broker, project_id, case_id, files, groups, tier="T1", diagnost
                         ),
                     },
                 ],
-                max_tokens=2048,
+                max_tokens=4096,
                 reasoning="high" if tier == "T2" else "low",
             )
         except DomainError as exc:
@@ -202,6 +206,10 @@ async def triage(broker, project_id, case_id, files, groups, tier="T1", diagnost
             break
         diagnostics.append({"stage": "triage", "call_id": call_id, "status": result.status})
         if result.status != "succeeded":
+            # A truncated reply says nothing about the next file/batch: keep going. Any other
+            # failure (refusal, provider error, exhausted budget) still stops the stage.
+            if getattr(result, "reason_code", None) == "output_truncated":
+                continue
             break
         try:
             response = json.loads(result.content)

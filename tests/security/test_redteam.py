@@ -346,3 +346,32 @@ def test_shell_rule_flags_nonliteral_commands_only(tmp_path):
     )
     hits = sorted(f.line for f in scan(tmp_path) if f.rule == "shell-nonliteral")
     assert hits == [3, 5]
+
+
+@pytest.mark.asyncio
+async def test_truncated_model_reply_does_not_abort_the_hypothesis_stage():
+    """Regression: one output_truncated reply used to `break`, skipping every later file."""
+    from types import SimpleNamespace
+
+    from colossus.detect.redteam import hypothesize
+
+    files = {
+        "a.py": b"@app.route('/a')\ndef a():\n    return request.args['x']\n",
+        "b.py": b"@app.route('/b')\ndef b():\n    return request.args['y']\n",
+    }
+    calls = []
+
+    class Broker:
+        async def complete(self, *args, **kwargs):
+            calls.append(1)
+            if len(calls) == 1:
+                return "c1", SimpleNamespace(
+                    status="failed", content=None, reason_code="output_truncated"
+                )
+            return "c2", SimpleNamespace(
+                status="succeeded", reason_code=None,
+                content='{"issues":[{"line":3,"cwe":"CWE-79","title":"t","reason":"r"}]}',
+            )
+
+    found = await hypothesize(Broker(), "p", "c", files, [], [])
+    assert len(calls) == 2 and [f.cwe for f in found] == ["CWE-79"]
