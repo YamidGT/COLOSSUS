@@ -32,6 +32,8 @@ Figure 1. Models propose; deterministic gates control effects.
 
 We evaluated two fresh runs of one DSVW SQL-query repair through protected tests, deployment, recurrence and rollback. An owned four-method policy fixture exercises proof, compilation and wrong implementations. A 24-repository compatibility pilot accepted 20 archives; five additional runtime attempts yielded two assisted starts and three failures. GLM triaged Python snippets in 11 repositories; judgments remain unconfirmed. Metrics are scope, completion, latency and cost, not security accuracy. CTIBench, CyberSecEval and DafnyBench remain unrun [3-5].
 
+Evaluated target: [Damn Small Vulnerable Web (DSVW)](https://github.com/stamparm/DSVW).
+
 ## 4. Results
 
 | Measurement | Scope / baseline | Observed result |

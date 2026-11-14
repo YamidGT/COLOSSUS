@@ -339,6 +339,11 @@ flow = [
     p("Evaluation and results", "title"),
     p("3. How we evaluated", "heading"),
     p(evaluation),
+    Paragraph(
+        'Evaluated target: <link href="https://github.com/stamparm/DSVW" color="#174EA6">'
+        'Damn Small Vulnerable Web (DSVW) - github.com/stamparm/DSVW</link>',
+        STYLES["reference"],
+    ),
     p("4. Results", "heading"),
 ]
 table_data = [
@@ -416,6 +421,7 @@ md = [
     "Figure 1. Models propose; deterministic gates control effects.",
     "## 3. How we evaluated",
     evaluation,
+    "Evaluated target: [Damn Small Vulnerable Web (DSVW)](https://github.com/stamparm/DSVW).",
     "## 4. Results",
 ]
 table_lines = ["| " + " | ".join(rows[0]) + " |", "|---|---|---|"]
