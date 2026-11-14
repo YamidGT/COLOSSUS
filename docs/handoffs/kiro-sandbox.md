@@ -65,3 +65,45 @@ uv run ruff check src tests -> All checks passed
 - Restart/cancel fault injection through the API and controller is still unvalidated.
 - Docker here is not rootless.
 - Recipe validator wiring into onboarding.
+
+## S5 `wip/sandbox`: evidence before teardown, scratch caps, reaping, gateway isolation
+
+Host: Arch Linux x86_64, Docker 29.9.2 `default` context (rootful), gVisor `runsc release-20261109.0`.
+
+Launcher changes (`src/colossus/sandbox/launcher.py`, existing method signatures unchanged):
+
+- `run_collect(...)` (new): create, copy, execute, then `export_files` **before** `destroy`. Returns `evidence: exported | quarantined | lost_timeout`. If the export raises (`unsafe_export`, `export_failed`, `export_timeout`), the worker is `docker pause`d and kept, and the result names it with the error code. A timed-out job is killed and reported `lost_timeout`; its tmpfs scratch is gone.
+- Quarantine: `quarantine()`, `quarantined()`, `MAX_QUARANTINE = 4`. `create()` refuses new work with `quarantine_full` (507) at the cap. `reap()` skips paused workers. `destroy()` unpauses first, because runsc refuses `rm -f` on a paused sandbox (observed: `PID ... is zombie and can not be killed`).
+- `reap()` now also removes expired, empty, managed `colossus-net-*` networks. Networks carry `org.colossus.expires` (`network(project_id, ttl_seconds=14400)`; `start_target` passes its TTL). Networks without an expiry label are left alone. `server.py` runs one `reap()` at launcher start, before serving.
+- **Gap found and fixed:** a job on a project network reached a host listener bound to the network's bridge gateway (`172.27.0.1:<port>` -> `allowed`). Networks are now created with `--opt com.docker.network.bridge.inhibit_ipv4=true`, so the host has no address in the case subnet, and `_validate_network` refuses networks without that option.
+
+Live checks (`tests/security/test_gvisor_evidence.py`, 10 tests, marker `gvisor`):
+
+| Check | Observed |
+|---|---|
+| Job writes `/work/results/r.json`, `run_collect` | exported `{"ok": 1}`, worker gone |
+| Results contain a symlink to `/etc/passwd` | `unsafe_export`, worker paused, `r.txt` still readable after unpause |
+| Quarantined worker with TTL 1 s, then `reap()` | kept; `create` with cap reached -> `quarantine_full` |
+| Fill `/tmp` (64 MiB) and `/work` (512 MiB) | `errno 28` inside the job, written <= cap, worker still answers, host `/` free space drop < 64 MiB |
+| `reap()` with expired managed container + network, fresh managed network, unmanaged look-alikes (`colossus-plain-*` runc container never started, `colossus-net-plain-*` network, both labelled expired) | only the expired managed pair removed; look-alikes untouched, then removed by exact name |
+| Two targets of the same project on two networks | probe on B: own target allowed, A denied |
+| Target returns 302 to `http://1.1.1.1/x` and to `/hit` | `request()` returns 302 with Location; `/hit` counter stays 0 |
+| Job identity | uid/gid 1000, CapEff and CapBnd 0, NoNewPrivs 1, write to `/` denied, exec from `/tmp` denied |
+| Probe to host listener on `docker0` (172.17.0.1) and external IPv6 from a project network | denied; network IPAM has no gateway, no host address in the subnet |
+
+Unit tests (`tests/security/test_launcher_evidence.py`, 7 tests, fake Docker): export-before-rm ordering, quarantine on export failure, admission refusal, timeout path, reaper selection of containers and networks, network expiry bounds, `inhibit_ipv4` required.
+
+```text
+COLOSSUS_DOCKER_CONTEXT=default uv run pytest -q -p no:cacheprovider -> 158 passed (21 live gVisor)
+uv run ruff check src tests -> All checks passed!
+python3 scripts/check_design_docs.py -> PASS
+docker ps -aq / network ls -q / image ls -q --filter label=org.colossus.managed=true -> 0 / 0 / 0
+```
+
+Not done:
+
+- `run_collect` is not exposed through `server.py` or used by `src/colossus/control/**`; callers still use `run()`, whose only evidence is stdout/stderr.
+- Quarantine is bounded by count, not bytes; there is no operator release endpoint (only `destroy`).
+- Partial results of a timed-out job are lost (`lost_timeout`); exporting after a kill would need the frozen worker kept alive.
+- Networks created before this change lack `inhibit_ipv4` and an expiry label: `_validate_network` refuses them and `reap()` leaves them. Remove such leftovers by exact name.
+- Docker is still not rootless here; clean rebuild, setup retry cap and incompatible-architecture checks from step 6 remain.

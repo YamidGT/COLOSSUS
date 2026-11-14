@@ -136,6 +136,10 @@ if __name__ == "__main__":
     parser.add_argument("--token-file", type=Path, required=True)
     parser.add_argument("--context", required=True)
     args = parser.parse_args()
+    try:  # reconcile orphans left by a previous launcher before serving
+        SandboxLauncher(args.context).reap()
+    except Exception as error:  # noqa: BLE001
+        print("startup reap failed:", type(error).__name__, flush=True)
     uvicorn.run(
         create_launcher(args.token_file.read_text().strip(), args.context),
         uds=str(args.socket),
