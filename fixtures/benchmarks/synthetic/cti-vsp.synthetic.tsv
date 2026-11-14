@@ -1,0 +1,5 @@
+URL	Description	Prompt	GT
+https://example.invalid/SYNTHETIC/CVE-0000-0000	SYNTHETIC fixture 0: not a real CVE.	SYNTHETIC prompt 0: give CVSS v3.1 vector on last line.	CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+https://example.invalid/SYNTHETIC/CVE-0000-0001	SYNTHETIC fixture 1: not a real CVE.	SYNTHETIC prompt 1: give CVSS v3.1 vector on last line.	CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H
+https://example.invalid/SYNTHETIC/CVE-0000-0002	SYNTHETIC fixture 2: not a real CVE.	SYNTHETIC prompt 2: give CVSS v3.1 vector on last line.	CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+https://example.invalid/SYNTHETIC/CVE-0000-0003	SYNTHETIC fixture 3: not a real CVE.	SYNTHETIC prompt 3: give CVSS v3.1 vector on last line.	CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H

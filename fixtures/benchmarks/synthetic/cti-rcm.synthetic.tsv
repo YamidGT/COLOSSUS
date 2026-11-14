@@ -1,0 +1,7 @@
+URL	Description	Prompt	GT
+https://example.invalid/SYNTHETIC/CVE-0000-0000	SYNTHETIC fixture 0: not a real CVE.	SYNTHETIC prompt 0: map to a CWE. Last line: CWE ID only.	CWE-79
+https://example.invalid/SYNTHETIC/CVE-0000-0001	SYNTHETIC fixture 1: not a real CVE.	SYNTHETIC prompt 1: map to a CWE. Last line: CWE ID only.	CWE-89
+https://example.invalid/SYNTHETIC/CVE-0000-0002	SYNTHETIC fixture 2: not a real CVE.	SYNTHETIC prompt 2: map to a CWE. Last line: CWE ID only.	CWE-416
+https://example.invalid/SYNTHETIC/CVE-0000-0003	SYNTHETIC fixture 3: not a real CVE.	SYNTHETIC prompt 3: map to a CWE. Last line: CWE ID only.	CWE-787
+https://example.invalid/SYNTHETIC/CVE-0000-0004	SYNTHETIC fixture 4: not a real CVE.	SYNTHETIC prompt 4: map to a CWE. Last line: CWE ID only.	CWE-20
+https://example.invalid/SYNTHETIC/CVE-0000-0005	SYNTHETIC fixture 5: not a real CVE.	SYNTHETIC prompt 5: map to a CWE. Last line: CWE ID only.	CWE-22
