@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "ActionKind": {
+      "enum": [
+        "approve",
+        "reject",
+        "rollback",
+        "pause",
+        "resume",
+        "cancel",
+        "retry_setup",
+        "configure",
+        "run"
+      ],
+      "title": "ActionKind",
+      "type": "string"
+    },
+    "AllowedAction": {
+      "additionalProperties": false,
+      "description": "UI hint only; the server rechecks every action.",
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/ActionKind"
+        },
+        "disabled_reason": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Disabled Reason"
+        },
+        "eligible": {
+          "title": "Eligible",
+          "type": "boolean"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "required_confirmation": {
+          "title": "Required Confirmation",
+          "type": "boolean"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "resource_id",
+        "expected_revision",
+        "eligible",
+        "disabled_reason",
+        "required_confirmation"
+      ],
+      "title": "AllowedAction",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_id": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Action Id",
+      "type": "string"
+    },
+    "allowed_actions": {
+      "items": {
+        "$ref": "#/$defs/AllowedAction"
+      },
+      "maxItems": 16,
+      "title": "Allowed Actions",
+      "type": "array"
+    },
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Case Id"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "disabled_reasons": {
+      "additionalProperties": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "default": {},
+      "title": "Disabled Reasons",
+      "type": "object"
+    },
+    "evidence_refs": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "kind": {
+      "title": "Kind",
+      "type": "string"
+    },
+    "priority": {
+      "maximum": 100,
+      "minimum": 0,
+      "title": "Priority",
+      "type": "integer"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "reason_code": {
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "action_id",
+    "project_id",
+    "case_id",
+    "kind",
+    "priority",
+    "title",
+    "reason_code",
+    "reason",
+    "created_at",
+    "updated_at",
+    "evidence_refs",
+    "allowed_actions"
+  ],
+  "title": "ActionItem",
+  "type": "object"
+}

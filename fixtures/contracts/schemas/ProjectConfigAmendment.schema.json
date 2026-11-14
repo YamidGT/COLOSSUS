@@ -1,0 +1,75 @@
+{
+  "$defs": {
+    "AssuranceProfile": {
+      "enum": [
+        "tested",
+        "formal_required"
+      ],
+      "title": "AssuranceProfile",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assurance_profile": {
+      "$ref": "#/$defs/AssuranceProfile"
+    },
+    "deployment_profile_id": {
+      "title": "Deployment Profile Id",
+      "type": "string"
+    },
+    "expected_revision": {
+      "minimum": 1,
+      "title": "Expected Revision",
+      "type": "integer"
+    },
+    "owner_policy_id": {
+      "title": "Owner Policy Id",
+      "type": "string"
+    },
+    "requested_ref": {
+      "anyOf": [
+        {
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._/-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Requested Ref"
+    },
+    "requirement_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Requirement Ids",
+      "type": "array"
+    },
+    "subdir": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Subdir"
+    }
+  },
+  "required": [
+    "expected_revision",
+    "requested_ref",
+    "subdir",
+    "owner_policy_id",
+    "deployment_profile_id",
+    "assurance_profile",
+    "requirement_ids"
+  ],
+  "title": "ProjectConfigAmendment",
+  "type": "object"
+}

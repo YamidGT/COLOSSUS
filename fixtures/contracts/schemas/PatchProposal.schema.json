@@ -1,0 +1,144 @@
+{
+  "$defs": {
+    "DependencyUpdate": {
+      "additionalProperties": false,
+      "properties": {
+        "ecosystem": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Ecosystem",
+          "type": "string"
+        },
+        "from_version": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "From Version",
+          "type": "string"
+        },
+        "package": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Package",
+          "type": "string"
+        },
+        "to_version": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "To Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ecosystem",
+        "package",
+        "from_version",
+        "to_version"
+      ],
+      "title": "DependencyUpdate",
+      "type": "object"
+    },
+    "PatchEdit": {
+      "additionalProperties": false,
+      "properties": {
+        "base_file_hash": {
+          "title": "Base File Hash",
+          "type": "string"
+        },
+        "exact_new": {
+          "maxLength": 65536,
+          "title": "Exact New",
+          "type": "string"
+        },
+        "exact_old": {
+          "maxLength": 65536,
+          "title": "Exact Old",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "base_file_hash",
+        "exact_old",
+        "exact_new"
+      ],
+      "title": "PatchEdit",
+      "type": "object"
+    },
+    "PatchRoute": {
+      "enum": [
+        "upstream",
+        "generated"
+      ],
+      "title": "PatchRoute",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "base_tree_hash": {
+      "title": "Base Tree Hash",
+      "type": "string"
+    },
+    "edits": {
+      "items": {
+        "$ref": "#/$defs/PatchEdit"
+      },
+      "maxItems": 64,
+      "title": "Edits",
+      "type": "array"
+    },
+    "finding_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "title": "Finding Ids",
+      "type": "array"
+    },
+    "model_call_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Model Call Ids",
+      "type": "array"
+    },
+    "proposal_id": {
+      "title": "Proposal Id",
+      "type": "string"
+    },
+    "proposed_dependency_updates": {
+      "items": {
+        "$ref": "#/$defs/DependencyUpdate"
+      },
+      "maxItems": 32,
+      "title": "Proposed Dependency Updates",
+      "type": "array"
+    },
+    "rationale": {
+      "maxLength": 8192,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "route": {
+      "$ref": "#/$defs/PatchRoute"
+    }
+  },
+  "required": [
+    "proposal_id",
+    "base_tree_hash",
+    "finding_ids",
+    "route",
+    "edits",
+    "proposed_dependency_updates",
+    "rationale",
+    "model_call_ids"
+  ],
+  "title": "PatchProposal",
+  "type": "object"
+}

@@ -1,0 +1,163 @@
+{
+  "$defs": {
+    "GateCategory": {
+      "enum": [
+        "build",
+        "functional",
+        "security",
+        "static",
+        "formal",
+        "policy"
+      ],
+      "title": "GateCategory",
+      "type": "string"
+    },
+    "GateStatus": {
+      "enum": [
+        "pass",
+        "fail",
+        "error",
+        "timeout",
+        "not_applicable"
+      ],
+      "title": "GateStatus",
+      "type": "string"
+    },
+    "ProofOutcome": {
+      "enum": [
+        "PROVED",
+        "BOUNDED_PASS",
+        "COUNTEREXAMPLE",
+        "UNKNOWN",
+        "UNSUPPORTED"
+      ],
+      "title": "ProofOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assumptions": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "candidate_hash": {
+      "title": "Candidate Hash",
+      "type": "string"
+    },
+    "candidate_id": {
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "category": {
+      "$ref": "#/$defs/GateCategory"
+    },
+    "check_profile_id": {
+      "title": "Check Profile Id",
+      "type": "string"
+    },
+    "command_profile_hash": {
+      "title": "Command Profile Hash",
+      "type": "string"
+    },
+    "evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "exit_code": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Exit Code"
+    },
+    "finished_at": {
+      "format": "date-time",
+      "title": "Finished At",
+      "type": "string"
+    },
+    "gate_id": {
+      "title": "Gate Id",
+      "type": "string"
+    },
+    "proof_outcome": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ProofOutcome"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reason": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "scope": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Scope",
+      "type": "array"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/GateStatus"
+    },
+    "tool_version": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Tool Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "gate_id",
+    "case_id",
+    "candidate_id",
+    "candidate_hash",
+    "check_profile_id",
+    "category",
+    "status",
+    "proof_outcome",
+    "scope",
+    "assumptions",
+    "tool_version",
+    "command_profile_hash",
+    "exit_code",
+    "started_at",
+    "finished_at",
+    "evidence_ids",
+    "reason"
+  ],
+  "title": "GateResult",
+  "type": "object"
+}

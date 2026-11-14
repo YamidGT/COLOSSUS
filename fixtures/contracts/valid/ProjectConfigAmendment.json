@@ -1,0 +1,9 @@
+{
+  "assurance_profile": "tested",
+  "deployment_profile_id": "local-web-v1",
+  "expected_revision": 2,
+  "owner_policy_id": "lab-auto-v1",
+  "requested_ref": "main",
+  "requirement_ids": [],
+  "subdir": null
+}

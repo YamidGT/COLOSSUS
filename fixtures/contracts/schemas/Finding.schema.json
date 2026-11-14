@@ -1,0 +1,188 @@
+{
+  "$defs": {
+    "Disposition": {
+      "enum": [
+        "retain",
+        "suppress",
+        "needs_review"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "FindingLocation": {
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "File"
+        },
+        "route": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Route"
+        },
+        "symbol": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Symbol"
+        }
+      },
+      "required": [
+        "file",
+        "symbol",
+        "route"
+      ],
+      "title": "FindingLocation",
+      "type": "object"
+    },
+    "FindingStatus": {
+      "enum": [
+        "suspected",
+        "confirmed",
+        "unconfirmed"
+      ],
+      "title": "FindingStatus",
+      "type": "string"
+    },
+    "SeverityOrigin": {
+      "enum": [
+        "official",
+        "predicted",
+        "heuristic"
+      ],
+      "title": "SeverityOrigin",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "advisory_ids": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Advisory Ids",
+      "type": "array"
+    },
+    "cvss_vector": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Cvss Vector"
+    },
+    "cwe": {
+      "anyOf": [
+        {
+          "pattern": "^CWE-[0-9]{1,5}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Cwe"
+    },
+    "disposition": {
+      "$ref": "#/$defs/Disposition"
+    },
+    "disposition_reason": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Disposition Reason",
+      "type": "string"
+    },
+    "evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 128,
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "finding_id": {
+      "title": "Finding Id",
+      "type": "string"
+    },
+    "fingerprint": {
+      "title": "Fingerprint",
+      "type": "string"
+    },
+    "location": {
+      "$ref": "#/$defs/FindingLocation"
+    },
+    "manifest_hash": {
+      "title": "Manifest Hash",
+      "type": "string"
+    },
+    "severity_origin": {
+      "$ref": "#/$defs/SeverityOrigin"
+    },
+    "source_tools": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Source Tools",
+      "type": "array"
+    },
+    "status": {
+      "$ref": "#/$defs/FindingStatus"
+    },
+    "title": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "finding_id",
+    "manifest_hash",
+    "fingerprint",
+    "title",
+    "cwe",
+    "location",
+    "status",
+    "source_tools",
+    "evidence_ids",
+    "advisory_ids",
+    "severity_origin",
+    "cvss_vector",
+    "disposition",
+    "disposition_reason"
+  ],
+  "title": "Finding",
+  "type": "object"
+}

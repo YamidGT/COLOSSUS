@@ -1,0 +1,22 @@
+{
+  "_invalid_because": "required but inferred",
+  "payload": {
+    "allowed_bound_profile_id": null,
+    "approved": true,
+    "assumptions": [
+      "wrapper calls compiled policy"
+    ],
+    "backend": "dafny",
+    "bounds": {},
+    "component": "policy",
+    "description": "only the owner may read a user's books",
+    "harness_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "obligation_id": "vampi-req-1",
+    "origin": "inferred",
+    "required": true,
+    "required_evidence_kind": "proof",
+    "source_ref": "docs/vampi-formal-plan.md#REQ-1",
+    "spec_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "symbol": "CanReadBook"
+  }
+}

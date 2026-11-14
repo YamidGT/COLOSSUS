@@ -1,0 +1,134 @@
+{
+  "$defs": {
+    "EvidenceKind": {
+      "enum": [
+        "proof",
+        "bounded"
+      ],
+      "title": "EvidenceKind",
+      "type": "string"
+    },
+    "ObligationOrigin": {
+      "enum": [
+        "existing_contract",
+        "approved_template",
+        "owner_approved",
+        "inferred"
+      ],
+      "title": "ObligationOrigin",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allowed_bound_profile_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Allowed Bound Profile Id"
+    },
+    "approved": {
+      "title": "Approved",
+      "type": "boolean"
+    },
+    "assumptions": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "backend": {
+      "enum": [
+        "dafny",
+        "crosshair",
+        "cbmc"
+      ],
+      "title": "Backend",
+      "type": "string"
+    },
+    "bounds": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "propertyNames": {
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "title": "Bounds",
+      "type": "object"
+    },
+    "component": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Component",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 8192,
+      "title": "Description",
+      "type": "string"
+    },
+    "harness_hash": {
+      "title": "Harness Hash",
+      "type": "string"
+    },
+    "obligation_id": {
+      "title": "Obligation Id",
+      "type": "string"
+    },
+    "origin": {
+      "$ref": "#/$defs/ObligationOrigin"
+    },
+    "required": {
+      "title": "Required",
+      "type": "boolean"
+    },
+    "required_evidence_kind": {
+      "$ref": "#/$defs/EvidenceKind"
+    },
+    "source_ref": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Source Ref",
+      "type": "string"
+    },
+    "spec_hash": {
+      "title": "Spec Hash",
+      "type": "string"
+    },
+    "symbol": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Symbol",
+      "type": "string"
+    }
+  },
+  "required": [
+    "obligation_id",
+    "description",
+    "origin",
+    "source_ref",
+    "approved",
+    "required",
+    "component",
+    "symbol",
+    "backend",
+    "spec_hash",
+    "harness_hash",
+    "assumptions",
+    "required_evidence_kind",
+    "allowed_bound_profile_id"
+  ],
+  "title": "Obligation",
+  "type": "object"
+}

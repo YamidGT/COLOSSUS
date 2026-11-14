@@ -1,0 +1,10 @@
+{
+  "_invalid_because": "approval via review decision",
+  "payload": {
+    "candidate_id": "00000000-0000-4000-8000-000000000009",
+    "case_id": "00000000-0000-4000-8000-000000000012",
+    "decision": "approve",
+    "expected_revision": 3,
+    "reason": "changes protected behaviour"
+  }
+}

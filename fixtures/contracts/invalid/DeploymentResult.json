@@ -1,0 +1,25 @@
+{
+  "_invalid_because": "string generation",
+  "payload": {
+    "authorization_id": "00000000-0000-4000-8000-000000000015",
+    "candidate_digest": "registry.local/colossus/fixture@sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "deployment_id": "00000000-0000-4000-8000-000000000016",
+    "generation": "1",
+    "observation_evidence_ids": [
+      "00000000-0000-4000-8000-000000000018"
+    ],
+    "previous_digest": "registry.local/colossus/fixture@sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "readiness_evidence_ids": [
+      "00000000-0000-4000-8000-000000000017"
+    ],
+    "refreshed_manifest_hash": null,
+    "rollback_result": {
+      "evidence_ids": [
+        "00000000-0000-4000-8000-000000000019"
+      ],
+      "restored_digest": "registry.local/colossus/fixture@sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "status": "ROLLED_BACK"
+    },
+    "status": "ROLLED_BACK"
+  }
+}

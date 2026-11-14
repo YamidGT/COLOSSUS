@@ -1,0 +1,66 @@
+{
+  "$defs": {
+    "AuthorizationMode": {
+      "enum": [
+        "owner_approval",
+        "preauthorized_policy"
+      ],
+      "title": "AuthorizationMode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actor_or_policy_id": {
+      "title": "Actor Or Policy Id",
+      "type": "string"
+    },
+    "authorization_id": {
+      "title": "Authorization Id",
+      "type": "string"
+    },
+    "destination_id": {
+      "title": "Destination Id",
+      "type": "string"
+    },
+    "evidence_manifest_hash": {
+      "title": "Evidence Manifest Hash",
+      "type": "string"
+    },
+    "expected_deployment_generation": {
+      "minimum": 0,
+      "title": "Expected Deployment Generation",
+      "type": "integer"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "issued_at": {
+      "format": "date-time",
+      "title": "Issued At",
+      "type": "string"
+    },
+    "mode": {
+      "$ref": "#/$defs/AuthorizationMode"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "authorization_id",
+    "project_id",
+    "evidence_manifest_hash",
+    "destination_id",
+    "expected_deployment_generation",
+    "mode",
+    "actor_or_policy_id",
+    "issued_at",
+    "expires_at"
+  ],
+  "title": "Authorization",
+  "type": "object"
+}

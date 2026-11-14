@@ -1,0 +1,11 @@
+{
+  "actor_or_policy_id": "lab-auto-v1",
+  "authorization_id": "00000000-0000-4000-8000-000000000015",
+  "destination_id": "lab-local",
+  "evidence_manifest_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "expected_deployment_generation": 0,
+  "expires_at": "2026-11-14T12:05:00Z",
+  "issued_at": "2026-11-14T12:00:00Z",
+  "mode": "preauthorized_policy",
+  "project_id": "00000000-0000-4000-8000-000000000002"
+}

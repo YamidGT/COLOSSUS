@@ -1,0 +1,50 @@
+{
+  "allowed_patch_paths": [
+    "dsvw.py"
+  ],
+  "artifact_digest": "registry.local/colossus/fixture@sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "commit": "0000000000000000000000000000000000000000",
+  "data_seed_id": "seed-0",
+  "dependency_inventory_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "dependency_inventory_id": "00000000-0000-4000-8000-000000000003",
+  "deployment_profile_id": "local-web-v1",
+  "manifest_id": "00000000-0000-4000-8000-000000000001",
+  "network_profile_id": "case-internal",
+  "obligation_ids": [],
+  "platform": "linux/amd64",
+  "policy_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "project_id": "00000000-0000-4000-8000-000000000002",
+  "protected_paths": [
+    "tests"
+  ],
+  "readiness_profile_id": "http-get-root",
+  "recipe_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "recipe_id": "python-template-v1",
+  "repo_url": "https://github.com/stamparm/DSVW",
+  "revision": 1,
+  "services": [
+    {
+      "artifact_digest": "registry.local/colossus/fixture@sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "command_profile_id": "python-web-v1",
+      "dependency_service_ids": [],
+      "health_check_id": "http-get-root",
+      "internal_ports": [
+        5000
+      ],
+      "resource_profile_id": "target-standard",
+      "service_id": "web",
+      "writable_paths": [
+        "instance"
+      ]
+    }
+  ],
+  "setup_provenance": [
+    "template:python-template-v1"
+  ],
+  "target_kind": "web",
+  "test_profile_ids": [
+    "dsvw-positive-v1"
+  ],
+  "toolchain_manifest_id": "00000000-0000-4000-8000-000000000004",
+  "tree_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

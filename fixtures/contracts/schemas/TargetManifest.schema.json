@@ -1,0 +1,236 @@
+{
+  "$defs": {
+    "ServiceSpec": {
+      "additionalProperties": false,
+      "description": "Never host mounts or credentials: there are deliberately no such fields.",
+      "properties": {
+        "artifact_digest": {
+          "title": "Artifact Digest",
+          "type": "string"
+        },
+        "command_profile_id": {
+          "title": "Command Profile Id",
+          "type": "string"
+        },
+        "dependency_service_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Dependency Service Ids",
+          "type": "array"
+        },
+        "health_check_id": {
+          "title": "Health Check Id",
+          "type": "string"
+        },
+        "internal_ports": {
+          "items": {
+            "maximum": 65535,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "maxItems": 16,
+          "title": "Internal Ports",
+          "type": "array"
+        },
+        "resource_profile_id": {
+          "title": "Resource Profile Id",
+          "type": "string"
+        },
+        "service_id": {
+          "title": "Service Id",
+          "type": "string"
+        },
+        "writable_paths": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Writable Paths",
+          "type": "array"
+        }
+      },
+      "required": [
+        "service_id",
+        "artifact_digest",
+        "command_profile_id",
+        "internal_ports",
+        "resource_profile_id",
+        "dependency_service_ids",
+        "health_check_id",
+        "writable_paths"
+      ],
+      "title": "ServiceSpec",
+      "type": "object"
+    },
+    "TargetKind": {
+      "enum": [
+        "web",
+        "multiservice",
+        "library"
+      ],
+      "title": "TargetKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allowed_patch_paths": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 512,
+      "title": "Allowed Patch Paths",
+      "type": "array"
+    },
+    "artifact_digest": {
+      "title": "Artifact Digest",
+      "type": "string"
+    },
+    "commit": {
+      "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$",
+      "title": "Commit",
+      "type": "string"
+    },
+    "data_seed_id": {
+      "title": "Data Seed Id",
+      "type": "string"
+    },
+    "dependency_inventory_hash": {
+      "title": "Dependency Inventory Hash",
+      "type": "string"
+    },
+    "dependency_inventory_id": {
+      "title": "Dependency Inventory Id",
+      "type": "string"
+    },
+    "deployment_profile_id": {
+      "title": "Deployment Profile Id",
+      "type": "string"
+    },
+    "manifest_id": {
+      "title": "Manifest Id",
+      "type": "string"
+    },
+    "network_profile_id": {
+      "title": "Network Profile Id",
+      "type": "string"
+    },
+    "obligation_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Obligation Ids",
+      "type": "array"
+    },
+    "platform": {
+      "title": "Platform",
+      "type": "string"
+    },
+    "policy_hash": {
+      "title": "Policy Hash",
+      "type": "string"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "protected_paths": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 512,
+      "title": "Protected Paths",
+      "type": "array"
+    },
+    "readiness_profile_id": {
+      "title": "Readiness Profile Id",
+      "type": "string"
+    },
+    "recipe_hash": {
+      "title": "Recipe Hash",
+      "type": "string"
+    },
+    "recipe_id": {
+      "title": "Recipe Id",
+      "type": "string"
+    },
+    "repo_url": {
+      "title": "Repo Url",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "services": {
+      "items": {
+        "$ref": "#/$defs/ServiceSpec"
+      },
+      "maxItems": 16,
+      "title": "Services",
+      "type": "array"
+    },
+    "setup_provenance": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Setup Provenance",
+      "type": "array"
+    },
+    "target_kind": {
+      "$ref": "#/$defs/TargetKind"
+    },
+    "test_profile_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Test Profile Ids",
+      "type": "array"
+    },
+    "toolchain_manifest_id": {
+      "title": "Toolchain Manifest Id",
+      "type": "string"
+    },
+    "tree_sha256": {
+      "title": "Tree Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "manifest_id",
+    "revision",
+    "project_id",
+    "repo_url",
+    "commit",
+    "tree_sha256",
+    "platform",
+    "target_kind",
+    "recipe_id",
+    "recipe_hash",
+    "artifact_digest",
+    "services",
+    "dependency_inventory_id",
+    "dependency_inventory_hash",
+    "test_profile_ids",
+    "readiness_profile_id",
+    "data_seed_id",
+    "obligation_ids",
+    "protected_paths",
+    "allowed_patch_paths",
+    "network_profile_id",
+    "deployment_profile_id",
+    "policy_hash",
+    "toolchain_manifest_id",
+    "setup_provenance"
+  ],
+  "title": "TargetManifest",
+  "type": "object"
+}

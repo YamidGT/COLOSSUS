@@ -1,0 +1,294 @@
+{
+  "$defs": {
+    "BudgetConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "automatic_ceiling_micro_usd": {
+          "default": 120000000,
+          "minimum": 0,
+          "title": "Automatic Ceiling Micro Usd",
+          "type": "integer"
+        },
+        "case_ceiling_micro_usd": {
+          "default": 2000000,
+          "minimum": 0,
+          "title": "Case Ceiling Micro Usd",
+          "type": "integer"
+        },
+        "contingency_micro_usd": {
+          "default": 30000000,
+          "minimum": 0,
+          "title": "Contingency Micro Usd",
+          "type": "integer"
+        },
+        "total_credit_micro_usd": {
+          "default": 150000000,
+          "minimum": 0,
+          "title": "Total Credit Micro Usd",
+          "type": "integer"
+        }
+      },
+      "title": "BudgetConfig",
+      "type": "object"
+    },
+    "HeavyLimits": {
+      "additionalProperties": false,
+      "properties": {
+        "case_seconds": {
+          "default": 10800,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Case Seconds",
+          "type": "integer"
+        },
+        "cycle_seconds": {
+          "default": 14400,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Cycle Seconds",
+          "type": "integer"
+        },
+        "observation_seconds": {
+          "default": 600,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Observation Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "HeavyLimits",
+      "type": "object"
+    },
+    "ResourceConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "heavy_workers": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Heavy Workers",
+          "type": "integer"
+        },
+        "model_requests_in_flight": {
+          "default": 2,
+          "maximum": 2,
+          "minimum": 1,
+          "title": "Model Requests In Flight",
+          "type": "integer"
+        }
+      },
+      "title": "ResourceConfig",
+      "type": "object"
+    },
+    "SchedulerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "feed_poll_seconds": {
+          "default": 900,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Feed Poll Seconds",
+          "type": "integer"
+        },
+        "reaper_seconds": {
+          "default": 60,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Reaper Seconds",
+          "type": "integer"
+        },
+        "source_debounce_seconds": {
+          "default": 60,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Source Debounce Seconds",
+          "type": "integer"
+        },
+        "source_poll_seconds": {
+          "default": 300,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Source Poll Seconds",
+          "type": "integer"
+        },
+        "t1_seconds": {
+          "default": 21600,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "T1 Seconds",
+          "type": "integer"
+        },
+        "t2_seconds": {
+          "default": 86400,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "T2 Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "SchedulerConfig",
+      "type": "object"
+    },
+    "StandardLimits": {
+      "additionalProperties": false,
+      "properties": {
+        "build_test_seconds_per_candidate": {
+          "default": 720,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Build Test Seconds Per Candidate",
+          "type": "integer"
+        },
+        "case_seconds": {
+          "default": 5400,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Case Seconds",
+          "type": "integer"
+        },
+        "cycle_seconds": {
+          "default": 7200,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Cycle Seconds",
+          "type": "integer"
+        },
+        "investigation_seconds": {
+          "default": 900,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Investigation Seconds",
+          "type": "integer"
+        },
+        "max_candidates": {
+          "default": 3,
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Max Candidates",
+          "type": "integer"
+        },
+        "max_obligations": {
+          "default": 5,
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Max Obligations",
+          "type": "integer"
+        },
+        "observation_seconds": {
+          "default": 300,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Observation Seconds",
+          "type": "integer"
+        },
+        "onboarding_seconds": {
+          "default": 1200,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Onboarding Seconds",
+          "type": "integer"
+        },
+        "patch_seconds_per_candidate": {
+          "default": 360,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Patch Seconds Per Candidate",
+          "type": "integer"
+        },
+        "proof_seconds_per_candidate": {
+          "default": 480,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Proof Seconds Per Candidate",
+          "type": "integer"
+        },
+        "proof_seconds_per_obligation": {
+          "default": 90,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Proof Seconds Per Obligation",
+          "type": "integer"
+        },
+        "refresh_seconds": {
+          "default": 300,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Refresh Seconds",
+          "type": "integer"
+        },
+        "triage_seconds": {
+          "default": 300,
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Triage Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "StandardLimits",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "budget": {
+      "$ref": "#/$defs/BudgetConfig",
+      "default": {
+        "automatic_ceiling_micro_usd": 120000000,
+        "case_ceiling_micro_usd": 2000000,
+        "contingency_micro_usd": 30000000,
+        "total_credit_micro_usd": 150000000
+      }
+    },
+    "documentation_example": {
+      "default": false,
+      "title": "Documentation Example",
+      "type": "boolean"
+    },
+    "heavy": {
+      "$ref": "#/$defs/HeavyLimits",
+      "default": {
+        "case_seconds": 10800,
+        "cycle_seconds": 14400,
+        "observation_seconds": 600
+      }
+    },
+    "resources": {
+      "$ref": "#/$defs/ResourceConfig",
+      "default": {
+        "heavy_workers": 1,
+        "model_requests_in_flight": 2
+      }
+    },
+    "scheduler": {
+      "$ref": "#/$defs/SchedulerConfig",
+      "default": {
+        "feed_poll_seconds": 900,
+        "reaper_seconds": 60,
+        "source_debounce_seconds": 60,
+        "source_poll_seconds": 300,
+        "t1_seconds": 21600,
+        "t2_seconds": 86400
+      }
+    },
+    "standard": {
+      "$ref": "#/$defs/StandardLimits",
+      "default": {
+        "build_test_seconds_per_candidate": 720,
+        "case_seconds": 5400,
+        "cycle_seconds": 7200,
+        "investigation_seconds": 900,
+        "max_candidates": 3,
+        "max_obligations": 5,
+        "observation_seconds": 300,
+        "onboarding_seconds": 1200,
+        "patch_seconds_per_candidate": 360,
+        "proof_seconds_per_candidate": 480,
+        "proof_seconds_per_obligation": 90,
+        "refresh_seconds": 300,
+        "triage_seconds": 300
+      }
+    }
+  },
+  "title": "RuntimeConfig",
+  "type": "object"
+}

@@ -1,0 +1,14 @@
+{
+  "artifact_digest": "registry.local/colossus/fixture@sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "command_profile_id": "python-web-v1",
+  "dependency_service_ids": [],
+  "health_check_id": "http-get-root",
+  "internal_ports": [
+    5000
+  ],
+  "resource_profile_id": "target-standard",
+  "service_id": "web",
+  "writable_paths": [
+    "instance"
+  ]
+}

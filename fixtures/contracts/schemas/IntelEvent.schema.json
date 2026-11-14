@@ -1,0 +1,166 @@
+{
+  "$defs": {
+    "AffectedStatus": {
+      "enum": [
+        "affected",
+        "not_affected",
+        "unknown"
+      ],
+      "title": "AffectedStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "advisory_id": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Advisory Id",
+      "type": "string"
+    },
+    "affected_status": {
+      "$ref": "#/$defs/AffectedStatus"
+    },
+    "aliases": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Aliases",
+      "type": "array"
+    },
+    "ecosystem": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Ecosystem",
+      "type": "string"
+    },
+    "fetched_at": {
+      "format": "date-time",
+      "title": "Fetched At",
+      "type": "string"
+    },
+    "fixed_versions": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Fixed Versions",
+      "type": "array"
+    },
+    "kev_status": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Kev Status"
+    },
+    "modified_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Modified At"
+    },
+    "package": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Package",
+      "type": "string"
+    },
+    "published_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Published At"
+    },
+    "raw_content_hash": {
+      "title": "Raw Content Hash",
+      "type": "string"
+    },
+    "raw_content_id": {
+      "title": "Raw Content Id",
+      "type": "string"
+    },
+    "replay": {
+      "title": "Replay",
+      "type": "boolean"
+    },
+    "severity_source": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Severity Source",
+      "type": "string"
+    },
+    "severity_vector": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Severity Vector"
+    },
+    "source": {
+      "title": "Source",
+      "type": "string"
+    },
+    "source_url": {
+      "maxLength": 2048,
+      "pattern": "^https://",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source",
+    "source_url",
+    "raw_content_id",
+    "raw_content_hash",
+    "fetched_at",
+    "published_at",
+    "modified_at",
+    "advisory_id",
+    "aliases",
+    "package",
+    "ecosystem",
+    "version",
+    "affected_status",
+    "fixed_versions",
+    "severity_vector",
+    "severity_source",
+    "kev_status",
+    "replay"
+  ],
+  "title": "IntelEvent",
+  "type": "object"
+}

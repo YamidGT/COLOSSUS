@@ -1,0 +1,21 @@
+{
+  "base_tree_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "edits": [
+    {
+      "base_file_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "exact_new": "cur.execute(q, (name,))",
+      "exact_old": "cur.execute(q % name)",
+      "path": "app.py"
+    }
+  ],
+  "finding_ids": [
+    "00000000-0000-4000-8000-000000000006"
+  ],
+  "model_call_ids": [
+    "00000000-0000-4000-8000-000000000008"
+  ],
+  "proposal_id": "00000000-0000-4000-8000-000000000007",
+  "proposed_dependency_updates": [],
+  "rationale": "parameterize the query",
+  "route": "generated"
+}

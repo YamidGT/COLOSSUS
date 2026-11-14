@@ -1,0 +1,156 @@
+{
+  "$defs": {
+    "AssuranceProfile": {
+      "enum": [
+        "tested",
+        "formal_required"
+      ],
+      "title": "AssuranceProfile",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_digest": {
+      "title": "Artifact Digest",
+      "type": "string"
+    },
+    "assurance_profile": {
+      "$ref": "#/$defs/AssuranceProfile"
+    },
+    "baseline_hash": {
+      "title": "Baseline Hash",
+      "type": "string"
+    },
+    "candidate_hash": {
+      "title": "Candidate Hash",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "content_hash": {
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "diff_hash": {
+      "title": "Diff Hash",
+      "type": "string"
+    },
+    "exclusions": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Exclusions",
+      "type": "array"
+    },
+    "gate_result_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 128,
+      "title": "Gate Result Ids",
+      "type": "array"
+    },
+    "harness_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Harness Hashes",
+      "type": "array"
+    },
+    "issued_at": {
+      "format": "date-time",
+      "title": "Issued At",
+      "type": "string"
+    },
+    "manifest_id": {
+      "title": "Manifest Id",
+      "type": "string"
+    },
+    "model_call_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 128,
+      "title": "Model Call Ids",
+      "type": "array"
+    },
+    "policy_hash": {
+      "title": "Policy Hash",
+      "type": "string"
+    },
+    "proof_summary": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Proof Summary",
+      "type": "array"
+    },
+    "required_gate_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 128,
+      "title": "Required Gate Ids",
+      "type": "array"
+    },
+    "spec_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Spec Hashes",
+      "type": "array"
+    },
+    "target_manifest_hash": {
+      "title": "Target Manifest Hash",
+      "type": "string"
+    },
+    "test_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 128,
+      "title": "Test Hashes",
+      "type": "array"
+    },
+    "total_cost_micro_usd": {
+      "minimum": 0,
+      "title": "Total Cost Micro Usd",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "manifest_id",
+    "case_id",
+    "baseline_hash",
+    "candidate_hash",
+    "artifact_digest",
+    "diff_hash",
+    "target_manifest_hash",
+    "policy_hash",
+    "spec_hashes",
+    "harness_hashes",
+    "test_hashes",
+    "required_gate_ids",
+    "gate_result_ids",
+    "assurance_profile",
+    "proof_summary",
+    "exclusions",
+    "model_call_ids",
+    "total_cost_micro_usd",
+    "issued_at",
+    "content_hash"
+  ],
+  "title": "EvidenceManifest",
+  "type": "object"
+}
