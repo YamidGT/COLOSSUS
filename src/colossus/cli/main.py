@@ -107,20 +107,38 @@ def doctor(ctx: typer.Context, profile: str = "standard", check_model: bool = Fa
     """Inspect configured local services without printing credentials."""
     import shutil
 
+    from colossus.cli.doctor import as_dicts, overall, repo_root, run_checks
+    from colossus.sandbox.launcher import SandboxLauncher
+
+    if profile != "standard":
+        raise typer.BadParameter("Only the standard profile exists")
     settings = Settings.from_environment()
+
+    def preflight():
+        if not shutil.which("docker"):
+            return {
+                "ready": False,
+                "context": settings.docker_context,
+                "reason": "docker CLI missing",
+            }
+        return SandboxLauncher(settings.docker_context, settings.sandbox_runtime).preflight()
+
+    found = run_checks(repo_root(), preflight)
     checks = {
         "python": "ready",
         "docker_cli": "available" if shutil.which("docker") else "missing",
         "docker_context": settings.docker_context,
         "sandbox_runtime": settings.sandbox_runtime,
-        "runtime_preflight": "pending",
+        "runtime_preflight": overall(found),
         "profile": profile,
         "model_capability": "not_checked",
         "pipeline": "under_construction",
+        "checks": as_dicts(found),
     }
     if check_model:
         checks["model_capability"] = "gateway_not_connected"
     emit(ctx, checks)
+    # Exit 3 while any check blocks or the pipeline is still under construction.
     raise typer.Exit(3)
 
 

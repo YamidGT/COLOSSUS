@@ -92,6 +92,121 @@ def bounded_process(
     )
 
 
+_FORBIDDEN_CREATE_FLAGS = frozenset(
+    {
+        "--privileged",
+        "--cap-add",
+        "--device",
+        "--pid",
+        "--userns",
+        "--uts",
+        "--cgroupns",
+        "--volumes-from",
+        "-v",
+        "--volume",
+        "--mount",
+        "-p",
+        "--publish",
+        "-P",
+        "--publish-all",
+        "--add-host",
+        "--env-file",
+        "--group-add",
+        "--isolation",
+        "--sysctl",
+    }
+)
+_REQUIRED_CREATE = {
+    "--read-only": None,
+    "--cap-drop": "ALL",
+    "--security-opt": "no-new-privileges",
+    "--ipc": "private",
+    "--user": "1000:1000",
+}
+
+
+def assert_safe_create(args: list[str], runtime: str = "runsc") -> None:
+    """Second line of defence: refuse any `docker create` that weakens isolation.
+
+    Only option tokens before the image are checked; the container command after
+    it is never parsed as docker flags.
+    """
+
+    def deny(why: str):
+        raise DomainError("sandbox_policy", "Sandbox create refused: " + why, 422)
+
+    if not args or args[0] != "create":
+        deny("not a create command")
+    takes_value = {
+        "--name",
+        "--runtime",
+        "--network",
+        "--cap-drop",
+        "--security-opt",
+        "--ipc",
+        "--user",
+        "--pids-limit",
+        "--memory",
+        "--memory-swap",
+        "--cpus",
+        "--stop-timeout",
+        "--tmpfs",
+        "--workdir",
+        "--label",
+    }
+    values: dict[str, list[str]] = {}
+    seen: set[str] = set()
+    i = 1
+    while i < len(args) and args[i].startswith("-"):  # stop at the image
+        flag, eq, inline = args[i].partition("=")
+        if flag in _FORBIDDEN_CREATE_FLAGS:
+            deny(f"forbidden flag {flag}")
+        if flag == "--read-only":
+            if eq or flag in seen:
+                deny("read-only must be enabled exactly once")
+            seen.add(flag)
+            i += 1
+            continue
+        if flag not in takes_value:
+            deny(f"unexpected flag {flag}")
+        value = inline if eq else (args[i + 1] if i + 1 < len(args) else "")
+        if not value or value.startswith("-"):
+            deny(f"missing value for {flag}")
+        if flag in seen and flag not in {"--tmpfs", "--label"}:
+            deny(f"duplicate flag {flag}")
+        values.setdefault(flag, []).append(value)
+        seen.add(flag)
+        i += 1 if eq else 2
+    if i >= len(args) or not (
+        args[i] == PYTHON_IMAGE or re.fullmatch(r"sha256:[a-f0-9]{64}", args[i])
+    ):
+        deny("image must be pinned")
+    if values.get("--runtime") != [runtime] or runtime != "runsc":
+        deny("runtime must be runsc")
+    net = values.get("--network", [])
+    if len(net) != 1 or not (net[0] == "none" or net[0].startswith("colossus-net-")):
+        deny("network must be none or a colossus-net-* internal network")
+    for flag, want in _REQUIRED_CREATE.items():
+        if want is None:
+            if flag not in seen:
+                deny(f"missing {flag}")
+        elif values.get(flag) != [want]:
+            deny(f"missing {flag} {want}")
+    if any("unconfined" in v for v in values.get("--security-opt", [])):
+        deny("unconfined security option")
+    if values.get("--memory") != values.get("--memory-swap"):
+        deny("memory-swap must equal memory")
+    memory = values.get("--memory", [""])[0]
+    if not re.fullmatch(r"[0-9]+m", memory) or not 64 <= int(memory[:-1]) <= 6144:
+        deny("memory must be bounded")
+    if values.get("--cpus") != ["2"] or values.get("--pids-limit") != ["128"]:
+        deny("CPU and PID limits are required")
+    for tmpfs in values.get("--tmpfs", []):
+        opts = tmpfs.split(":", 1)[1] if ":" in tmpfs else ""
+        if "nosuid" not in opts or "nodev" not in opts or "size=" not in opts:
+            deny("tmpfs must be nosuid,nodev and size-bounded")
+
+
 class SandboxLauncher:
     def __init__(self, context: str = "colima-colossus", runtime: str = "runsc"):
         if not context or runtime != "runsc":
@@ -104,6 +219,8 @@ class SandboxLauncher:
         return bounded_process(["docker", "--context", self.context, *args], timeout, stdin)
 
     def checked(self, *args: str, timeout: int = 30, stdin: bytes | None = None) -> str:
+        if args and args[0] == "create":
+            assert_safe_create(list(args), self.runtime)
         result = self.docker(*args, timeout=timeout, stdin=stdin)
         if result.exit_code != 0 or result.timed_out:
             raise DomainError(
@@ -198,6 +315,8 @@ class SandboxLauncher:
             "ALL",
             "--security-opt",
             "no-new-privileges",
+            "--ipc",
+            "private",
             "--user",
             "1000:1000",
             "--pids-limit",

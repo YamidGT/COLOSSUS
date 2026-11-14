@@ -23,3 +23,7 @@ The recipe-validator logic, additional hostile fixtures and doctor check vocabul
 ## Kiro selective port completed
 
 Ported `sandbox/recipe_validator.py` from `kiro/integracion` (original A-M0-02 work) into the existing package. Hardened named-volume declarations against `driver_opts` host binds, rejected malformed mount/environment shapes, host-variable interpolation, nonpositive/nonfinite CPU and memory limits, and retained digest/privilege/network/credential guards. Added hostile-shape tests. This validator evaluates plan data only; it does not authorize executing an arbitrary repository Dockerfile. The alternative Kiro launcher and contract modules are not installed alongside the current authority.
+
+## Kiro integration based on the implementation branch
+
+Merged `origin/kiro/integracion-fs` after inspection: real host/runtime doctor checks and a second Docker-create policy check, with its regression cases. Retained the already hardened recipe validator from the implementation branch when resolving add/add conflicts. The doctor inspects `.env` metadata only; it does not read provider values (the original proposal did). Added rejection of duplicate authority flags, `--read-only=false`, missing/zero resource bounds and unpinned images. This integration adds explicit private IPC. Observed combined suite: 113 passed. Live doctor detects ARM64 gVisor on `colima-colossus`; overall pipeline remains under construction. The teammate's original handoff describes its own host/results, not evidence from this machine.
