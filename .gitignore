@@ -13,3 +13,5 @@ artifacts/
 .colossus/
 node_modules/
 frontend/dist/
+.pt/
+.uvenv/
