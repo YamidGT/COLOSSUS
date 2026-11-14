@@ -16,6 +16,7 @@ from colossus.contracts.models import (
     ApprovalRequest,
     CaseReview,
     Enrollment,
+    ProjectConfigAmendment,
     ProjectSnapshot,
     RejectionRequest,
     RollbackRequest,
@@ -294,6 +295,14 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
     def retry_setup(project_id: str, request: Request):
         return controller.retry_setup(project_id, key(request), request.state.actor)
 
+    @app.get("/api/v1/projects/{project_id}/configuration", response_model=ProjectConfigAmendment)
+    def configuration(project_id: str):
+        return controller.configuration(project_id)
+
+    @app.post("/api/v1/projects/{project_id}/configuration", status_code=202)
+    def configure(project_id: str, body: ProjectConfigAmendment, request: Request):
+        return controller.configure(project_id, body, key(request), request.state.actor)
+
     @app.get("/api/v1/cycles/{cycle_id}")
     def cycle(cycle_id: str):
         return store.get("cycle", cycle_id)
@@ -306,6 +315,27 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
     def case(case_id: str):
         return controller.case_review(case_id)
 
+    @app.get("/api/v1/cases/{case_id}/diff")
+    def case_diff(case_id: str):
+        current = store.get("case", case_id)
+        artifact_id = current.get("diff_ref")
+        if not artifact_id:
+            raise DomainError("diff_unavailable", "This case has no candidate diff", 404)
+        project_id = current["project_id"]
+        record = operator_artifact(artifact_id, project_id)
+        if record.get("media_type") != "text/plain":
+            raise DomainError("invalid_diff", "Case diff is not a text artifact", 409)
+        data = evidence.get(artifact_id)
+        limit = 200 * 1024
+        return {
+            "artifact_id": artifact_id,
+            "project_id": project_id,
+            "text": data[:limit].decode("utf-8", errors="replace"),
+            "truncated": len(data) > limit,
+            "total_bytes": len(data),
+            "download_url": f"/api/v1/artifacts/{artifact_id}/download?project_id={project_id}",
+        }
+
     @app.get("/api/v1/evidence/{manifest_hash}/review")
     def evidence_review(manifest_hash: str):
         matches = [
@@ -315,7 +345,7 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
         ]
         if len(matches) != 1:
             raise DomainError("not_found", "Evidence has no unique case review", 404)
-        return matches[0]
+        return controller.case_review(matches[0]["case_id"])
 
     @app.post("/api/v1/cases/{case_id}/approve", status_code=202)
     def approve(case_id: str, body: ApprovalRequest, request: Request):
@@ -357,8 +387,7 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
     def report(run_id: str):
         return controller.report(run_id)
 
-    @app.get("/api/v1/artifacts/{artifact_id}/download")
-    def artifact(artifact_id: str, project_id: str):
+    def operator_artifact(artifact_id: str, project_id: str):
         record = store.get(
             "artifact",
             content_hash({"project_id": project_id, "artifact_id": artifact_id}),
@@ -366,6 +395,11 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
         )
         if record.get("visibility") != "operator":
             raise DomainError("forbidden", "Artifact is not available to operator clients", 403)
+        return record
+
+    @app.get("/api/v1/artifacts/{artifact_id}/download")
+    def artifact(artifact_id: str, project_id: str):
+        operator_artifact(artifact_id, project_id)
         return Response(
             evidence.get(artifact_id),
             media_type="application/octet-stream",

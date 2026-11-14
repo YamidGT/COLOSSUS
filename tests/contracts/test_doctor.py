@@ -75,7 +75,7 @@ def test_cli_doctor_json_hides_secret_and_exits_3(tmp_path, monkeypatch):
     res = CliRunner().invoke(app, ["--json", "doctor"])
     assert res.exit_code == 3
     assert secret not in res.output
-    body = json.loads(res.output)
+    body = json.loads(res.output)["data"]
     ids = {c["check_id"]: c["state"] for c in body["checks"]}
     assert ids["sandbox.gvisor"] == "blocked"
     assert ids["repo.env_ignored"] == "ok"

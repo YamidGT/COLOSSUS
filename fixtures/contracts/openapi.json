@@ -513,6 +513,90 @@
         }
       }
     },
+    "/api/v1/projects/{project_id}/configuration": {
+      "get": {
+        "summary": "Configuration",
+        "operationId": "configuration_api_v1_projects__project_id__configuration_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectConfigAmendment"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Configure",
+        "operationId": "configure_api_v1_projects__project_id__configuration_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectConfigAmendment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/cycles/{cycle_id}": {
       "get": {
         "summary": "Cycle",
@@ -610,6 +694,43 @@
                 "schema": {
                   "$ref": "#/components/schemas/CaseReview"
                 }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}/diff": {
+      "get": {
+        "summary": "Case Diff",
+        "operationId": "case_diff_api_v1_cases__case_id__diff_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -1496,6 +1617,81 @@
           "code"
         ],
         "title": "LoginRequest"
+      },
+      "ProjectConfigAmendment": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_revision": {
+            "minimum": 0,
+            "title": "Expected Revision",
+            "type": "integer"
+          },
+          "requested_ref": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Requested Ref"
+          },
+          "subdir": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subdir"
+          },
+          "owner_policy_id": {
+            "enum": [
+              "lab-auto-v1",
+              "review-v1"
+            ],
+            "title": "Owner Policy Id",
+            "type": "string"
+          },
+          "deployment_profile_id": {
+            "enum": [
+              "local-web-v1",
+              "local-consumer-v1"
+            ],
+            "title": "Deployment Profile Id",
+            "type": "string"
+          },
+          "assurance_profile": {
+            "enum": [
+              "tested",
+              "formal_required"
+            ],
+            "title": "Assurance Profile",
+            "type": "string"
+          },
+          "requirement_ids": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 5,
+            "title": "Requirement Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "expected_revision",
+          "owner_policy_id",
+          "deployment_profile_id",
+          "assurance_profile"
+        ],
+        "title": "ProjectConfigAmendment",
+        "type": "object"
       },
       "ProjectSnapshot": {
         "additionalProperties": false,
@@ -3178,80 +3374,6 @@
           "updated_at"
         ],
         "title": "OperationReceipt",
-        "type": "object"
-      },
-      "ProjectConfigAmendment": {
-        "additionalProperties": false,
-        "properties": {
-          "expected_revision": {
-            "minimum": 0,
-            "title": "Expected Revision",
-            "type": "integer"
-          },
-          "requested_ref": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": null,
-            "title": "Requested Ref"
-          },
-          "subdir": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": null,
-            "title": "Subdir"
-          },
-          "owner_policy_id": {
-            "enum": [
-              "lab-auto-v1",
-              "review-v1"
-            ],
-            "title": "Owner Policy Id",
-            "type": "string"
-          },
-          "deployment_profile_id": {
-            "enum": [
-              "local-web-v1",
-              "local-consumer-v1"
-            ],
-            "title": "Deployment Profile Id",
-            "type": "string"
-          },
-          "assurance_profile": {
-            "enum": [
-              "tested",
-              "formal_required"
-            ],
-            "title": "Assurance Profile",
-            "type": "string"
-          },
-          "requirement_ids": {
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 5,
-            "title": "Requirement Ids",
-            "type": "array"
-          }
-        },
-        "required": [
-          "expected_revision",
-          "owner_policy_id",
-          "deployment_profile_id",
-          "assurance_profile"
-        ],
-        "title": "ProjectConfigAmendment",
         "type": "object"
       },
       "ReviewDecision": {
