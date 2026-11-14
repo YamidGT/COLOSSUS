@@ -1,0 +1,282 @@
+{
+  "schema_version": "1.0",
+  "kind": "submission_evidence_summary",
+  "updated_at": "2026-11-14T21:46:08.322759+00:00",
+  "scope": "Observed development/calibration evidence. No heldout accuracy or public benchmark score.",
+  "repository": "https://github.com/YamidGT/COLOSSUS",
+  "host": {
+    "observed": "Local dedicated Colima Linux ARM64 VM",
+    "cpu": 4,
+    "memory_gib": 8,
+    "configured_oracle_capacity_only": {
+      "cpu": 4,
+      "memory_gb": 24
+    }
+  },
+  "resources": {
+    "provider": "Mistral",
+    "model": "zai-glm-5-3-flash",
+    "available_credit_usd": 150,
+    "automated_cap_usd": 120
+  },
+  "baseline": {
+    "dsvw_fresh_repair": {
+      "source": {
+        "local_path": "artifacts/bootstrap/repair.json",
+        "sha256": "7374f84e2715f3e276e3cbbaf501df49c4c8a2dcddee2fd1e9ca39599246c7dd",
+        "raw_file_committed": false
+      },
+      "target_url": "https://github.com/stamparm/DSVW",
+      "target_commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+      "generation_mode": "fresh_inference",
+      "case_id": "6a8f4fac-7e7d-4ffe-ad3f-c8529311744c",
+      "status": "REVIEW_READY",
+      "elapsed_seconds": 19.287371832877398,
+      "cost_micro_usd": 1273,
+      "model_calls": 1,
+      "formal": "UNSUPPORTED",
+      "passed_required_gates": 7,
+      "total_gates": 8,
+      "deployment_attempted": false
+    },
+    "dsvw_replayed_lifecycle": {
+      "source": {
+        "local_path": "artifacts/bootstrap/full-cycle.json",
+        "sha256": "aa598fdb7ddc19c54af837f9584f7911e96a554c2d41c161db89859324a5d6eb",
+        "raw_file_committed": false
+      },
+      "repo": "stamparm/DSVW",
+      "generation_mode": "replayed_proposal",
+      "replayed_case_id": "6a8f4fac-7e7d-4ffe-ad3f-c8529311744c",
+      "project_id": "46bd7c5f-1917-421e-9f01-bc9fedb3963d",
+      "cycle_id": "bab0675f-fa42-46f3-916f-272a363effaa",
+      "case_id": "5334355e-cbc3-4674-9916-ace255621957",
+      "promoted": {
+        "status": "COMPLETE",
+        "case_id": "5334355e-cbc3-4674-9916-ace255621957",
+        "generation": 1,
+        "manifest_hash": "50783cd4280b50c49317842a3971dc8dc07f585da58c421f7d34b13388dc03e7"
+      },
+      "first_cycle_seconds": 332.7714140419848,
+      "second_cycle": {
+        "status": "NO_CHANGE",
+        "case_id": "d4866511-9a39-411a-a7f0-4fdbd9de8307"
+      },
+      "rollback": {
+        "status": "ROLLED_BACK",
+        "generation": 2,
+        "manifest_hash": "af7ebb8d59beb64d88ad3779d247bf14f96048df8898bedd2054c52233960385",
+        "known_vulnerable_baseline": true
+      },
+      "recovery_seconds": 10.397368249949068,
+      "cost": {
+        "committed_micro_usd": 0,
+        "settled_micro_usd": 0,
+        "calls": 0,
+        "uncertain_micro_usd": 0
+      },
+      "audit_valid": true,
+      "observation_seconds": 300,
+      "formal": "UNSUPPORTED for this Python component",
+      "deployment_evidence_id": "9aebb921f138f79093f5b2e7fe8c7a1627304184856dc7f2deedd9841fdeeb21"
+    },
+    "formal_component_calibration": {
+      "source": {
+        "local_path": "artifacts/bootstrap/formal.json",
+        "sha256": "410bf40f0b8183d545058e7c0b3497e51597fae84cc9fc591f489aa4e5e82e41",
+        "raw_file_committed": false
+      },
+      "kind": "owned_policy_toolchain_calibration",
+      "target_repositories_run": [],
+      "proved_methods": [
+        "Policy.MayChangePassword",
+        "Policy.MayReadBookSecret",
+        "Policy.PublicUserProjection",
+        "Policy.RegistrationRole"
+      ],
+      "spec_hash": "90bb80b140a04fe0d8166cea2f8cbb92286d7aed68c0de1876c975fafcbff41c",
+      "toolchain_digest": "sha256:7718ff0ee631dbecb4571972bcdfd0742dbe1369e555e5468643839e67afc189",
+      "valid_outcome": "PROVED",
+      "compiled": true,
+      "verification_seconds": 1.2127164171542972,
+      "compilation_seconds": 1.4845799580216408,
+      "bad_implementation_controls": {
+        "allow_everyone": "UNKNOWN",
+        "deny_everyone": "UNKNOWN",
+        "public_admin": "UNKNOWN",
+        "secret_projection": "UNKNOWN"
+      },
+      "wrapper_checks": 39,
+      "wrapper_passed": true,
+      "wrapper_bypass_rejected": true,
+      "generated_file_substitution_rejected": true,
+      "generated_file_omission_rejected": true,
+      "application_proof_claim": false
+    }
+  },
+  "submission_checks": {
+    "platform_tests": {
+      "passed": 220,
+      "failed": 0,
+      "command": "uv run pytest -q",
+      "source": "Root integration run reported 2026-11-14T21:38Z; includes CLI and formal workflow"
+    },
+    "frontend_build": {
+      "passed": true,
+      "initial_js_gzip_kb": 89.28,
+      "source": "Root integration build after lost-response fix, reported 2026-11-14T21:40Z"
+    },
+    "cli_smoke": {
+      "source": "evaluation/submission/cli-smoke.json",
+      "sha256": "09653035886fc9e27c692ac105b7e3d7c46dfe58b7ba3764c3062161d3df7021",
+      "commands_passed": 6,
+      "transport": "actual HTTP",
+      "new_target_jobs": 0,
+      "model_calls": 0
+    },
+    "ruff": {
+      "passed": true,
+      "source": "Root integration run reported 2026-11-14T21:38Z"
+    },
+    "frontend_intent_tests": {
+      "passed": 3,
+      "failed": 0,
+      "source": "Root targeted run after lost-response fix"
+    }
+  },
+  "new_runs": {
+    "formal_agent": {
+      "status": "PROVED_COMPONENT",
+      "display": "5.50 s; 1 call; $0.000078",
+      "source": "evaluation/submission/formal-agent.json",
+      "sha256": "98fd706112f12317fb4c9ddb56271132a279e522e5d36dc50f3a0a4cd48d3be8",
+      "elapsed_seconds": 5.496,
+      "elapsed_scope": "model + verifier/compile RPC; excludes subsequent wrapper packaging",
+      "proof_outcome": "PROVED",
+      "target_proof_outcome": "UNSUPPORTED",
+      "scope": [
+        "Policy.MayChangePassword",
+        "Policy.MayReadBookSecret",
+        "Policy.PublicUserProjection",
+        "Policy.RegistrationRole"
+      ],
+      "attempts": 1,
+      "model_calls": 1,
+      "cost_micro_usd": 78,
+      "compiled": true,
+      "profile_id": "authorization-policy-calibration-v1",
+      "spec_hash": "90bb80b140a04fe0d8166cea2f8cbb92286d7aed68c0de1876c975fafcbff41c",
+      "fixture_runtime_linkage": true,
+      "audit_valid": true
+    },
+    "repository_campaign": {
+      "status": "completed_capability_audit",
+      "display": "20 / 24 archives admitted",
+      "source": "evaluation/submission/results.json",
+      "sha256": "436b759d404cb67f183d93cd6d48646cce9dfa7d2858fccad6d42767b97e28bb",
+      "generated_at": "2026-11-14T21:45:15.032247Z",
+      "catalog_count": 24,
+      "recorded_count": 24,
+      "source_status_counts": {
+        "accepted": 20,
+        "rejected": 4
+      },
+      "setup_status_counts": {
+        "ready": 3,
+        "not_run": 4,
+        "failed": 2,
+        "unsupported": 15
+      },
+      "runtime_attempt_count": 5,
+      "runtime_attempt_status_counts": {
+        "failed": 3,
+        "ready": 2
+      },
+      "runtime_attempt_scope": "Catalog runner only; separate fresh DSVW lifecycle is additional and source intake is not execution",
+      "python_rule_covered_repositories": 11,
+      "scope": "24 intake records; five catalog runtime attempts plus one separate fresh DSVW full cycle. Not 24 repairs.",
+      "assisted_runtime_checks": {
+        "VAmPI": {
+          "scope": "GLM-advised MarkupSafe2.1.2->2.1.5 compatibility variant; original failure retained",
+          "passed": 6,
+          "total": 6,
+          "setup_seconds": 42.994,
+          "repair": "UNSUPPORTED",
+          "formal": "UNSUPPORTED",
+          "promotion": "not_attempted"
+        },
+        "PyGoat": {
+          "scope": "Evaluator-selected challenge/labs/bopla_lab only, not the full application",
+          "passed": 7,
+          "total": 7,
+          "setup_seconds": 18.932,
+          "repair": "UNSUPPORTED",
+          "formal": "UNSUPPORTED",
+          "promotion": "not_attempted"
+        }
+      }
+    },
+    "dsvw_fresh_lifecycle": {
+      "status": "COMPLETE",
+      "source": "evaluation/submission/dsvw-full-cycle.json",
+      "sha256": "08ba9dd5ecf7e5292394c9f53baed25bfa2e0f4f0398b774c912f704e91100b9",
+      "elapsed_seconds": 330.69011249998584,
+      "generation_mode": "fresh_inference",
+      "model_calls": 1,
+      "settled_micro_usd": 1287,
+      "uncertain_micro_usd": 0,
+      "observation_seconds": 300,
+      "second_cycle": {
+        "status": "NO_CHANGE",
+        "case_id": "62260d3e-323e-4c82-9d70-820d42b71818"
+      },
+      "rollback": {
+        "status": "ROLLED_BACK",
+        "generation": 2,
+        "manifest_hash": "420b502e9ec681974dc9c70f9e880c3022dfbb2cc8e2de051ed83d8e259b6d95",
+        "known_vulnerable_baseline": true
+      },
+      "rollback_seconds": 8.166125750169158,
+      "audit_valid": true,
+      "formal": "UNSUPPORTED for this Python component"
+    },
+    "catalog_triage": {
+      "status": "measured",
+      "source": "evaluation/submission/model-triage.json",
+      "sha256": "c751cdf8eb13c1a913513c37d4010dc08e46a59c2c38b72bd5810b7456371ac9",
+      "elapsed_seconds": 31.366,
+      "model": "zai-glm-5-3-flash",
+      "model_calls": 11,
+      "settled_micro_usd": 4014,
+      "uncertain_micro_usd": 0,
+      "status_counts": {
+        "reviewed": 10,
+        "unsupported": 4,
+        "partial_or_invalid_output": 1,
+        "no_eligible_signals": 9
+      },
+      "selected_groups": 59,
+      "valid_verdicts": 57,
+      "scope": "Bounded Python snippets; every verdict unconfirmed; no runtime/probe/repair/precision/recall score"
+    },
+    "vampi_setup_advice": {
+      "source": "evaluation/submission/vampi-setup-advice.json",
+      "sha256": "8e15a8b9c3be6f21bc6447a550a15ba6e2495e3aba1cdf86752c5ce2bce2529e",
+      "scope": "Compatibility pin proposal, not a security patch",
+      "model_calls": 1,
+      "settled_micro_usd": 145,
+      "elapsed_seconds": 3.985
+    }
+  },
+  "public_benchmarks": {
+    "CTIBench": "not_run",
+    "CyberSecEval": "not_run",
+    "DafnyBench": "not_run"
+  },
+  "limitations": [
+    "Baseline lifecycle reused a previously generated proposal; it is not fresh inference latency.",
+    "Rollback deliberately returned to the retained known-vulnerable training baseline.",
+    "Component proof is not proof of DSVW or VAmPI.",
+    "All-repository request is a time-bounded compatibility campaign, not 24 full-cycle successes."
+  ]
+}
