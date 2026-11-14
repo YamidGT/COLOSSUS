@@ -176,9 +176,9 @@
         {"attempt_id": "INJ-12a", "driver": "probe_external_host", "known_gap": null},
         {"attempt_id": "INJ-12b", "driver": "probe_undeclared_canary", "known_gap": null},
         {"attempt_id": "INJ-12c", "driver": "redact_plain_assignments", "known_gap": null},
-        {"attempt_id": "INJ-12d", "driver": "redact_bearer_header", "known_gap": "observability.redact_text replaces only the first token after `Authorization:`, so `Authorization: Bearer <token>` becomes `Authorization: [redacted] <token>` and the token is logged. Owner: observability."},
+        {"attempt_id": "INJ-12d", "driver": "redact_bearer_header", "known_gap": null},
         {"attempt_id": "INJ-12e", "driver": "redact_prefixed_env_key", "known_gap": "observability._ASSIGN uses \\bapi_key\\b; in `MISTRAL_API_KEY=...` the underscore is a word character, so no word boundary exists and the value is logged unredacted. Owner: observability."},
-        {"attempt_id": "INJ-12f", "driver": "redact_groq_key", "known_gap": "observability.redact_text has no pattern for Groq `gsk_` keys (only `sk-`), although AGENTS.md names a Groq key in .env. Owner: observability."}
+        {"attempt_id": "INJ-12f", "driver": "redact_groq_key", "known_gap": null}
       ],
       "clean_driver": "clean_probe"
     }

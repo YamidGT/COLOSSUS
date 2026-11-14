@@ -49,9 +49,9 @@ uv run python scripts/run_safety_campaign.py
 |---|---|---|
 | INJ-07c | `recipe_validator` rejects only `${`. Compose also expands unbraced `$VAR`, so `environment: {X: $MISTRAL_API_KEY}` passes. | sandbox |
 | INJ-11b | `detect.redteam.investigate` records `injection_markers` for a line but still applies `disposition=suppress` from the triage verdict for that same line. Raw evidence is retained (INJ-11a passes). | detection B |
-| INJ-12d | `redact_text` turns `Authorization: Bearer <tok>` into `Authorization: [redacted] <tok>`, so the token is still logged. | observability |
+| INJ-12d | Fixed on `kiro/colossus` by the observability ticket (`_BEARER` pattern); now blocked. | observability |
 | INJ-12e | `\bapi_key\b` does not match inside `MISTRAL_API_KEY=...` (`_` is a word character), so the value is logged. | observability |
-| INJ-12f | There is no pattern for Groq `gsk_` keys, only for `sk-` keys. | observability |
+| INJ-12f | Fixed on `kiro/colossus` by the observability ticket (prefixed-key pattern covers `gsk_`); now blocked. | observability |
 | G08 | `deploy.policy.promote` accepts any well-formed digest, and `Authorization` has no artifact-digest field. `LabDeployer.promote` binds the digest via the certificate (G06/G07 pass), but the pure policy function and `control.promotion.publication` (digest taken from the case dict) depend on the caller. | Daniel (contracts/deploy) |
 | G23 | `validate_gates` accepts a formal gate labelled PROVED with an empty scope and no `evidence_ids` under `formal_required`. | Daniel (verification policy) |
 
