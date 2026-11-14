@@ -54,6 +54,11 @@ class ServiceSupervisor:
                     self.settings.docker_context,
                     "--deploy-token-file",
                     str(deploy_token_file),
+                    *(
+                        ["--formal-toolchain", self.settings.formal_toolchain_digest]
+                        if self.settings.formal_toolchain_digest
+                        else []
+                    ),
                 ],
             ),
             (

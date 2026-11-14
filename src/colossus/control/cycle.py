@@ -111,6 +111,7 @@ class CycleEngine:
                     "raw_count": additional["raw_count"],
                     "injection_markers": additional["injection_markers"],
                     "excluded_tools": additional["excluded_tools"],
+                    "model_diagnostics": additional["model_diagnostics"],
                 }
             )
             scan = await static_scan(self.launcher, project_id, source["files"])

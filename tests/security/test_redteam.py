@@ -8,7 +8,7 @@ import httpx
 import pytest
 
 from colossus.detect.probes import ProbeRefused, ProbeRunner
-from colossus.detect.redteam import dedupe, investigate
+from colossus.detect.redteam import dedupe, hypothesize, investigate
 from colossus.detect.static import scan
 from colossus.intel.osv import ThreatFeeds, parse_requirements
 
@@ -182,3 +182,120 @@ async def test_osv_fixed_versions_are_scoped_to_the_matched_package():
     assert result["events"][0]["fixed_versions"] == ["2.0"]
     assert result["events"][0]["affected_status"] == "affected"
     assert all(feed["raw_base64"] for feed in result["feeds"])
+
+
+@pytest.mark.asyncio
+async def test_hypotheses_use_visible_lines_and_shared_broker_without_confirming():
+    import base64
+
+    class Launcher:
+        async def call(self, *args):
+            return {
+                "exit_code": 0,
+                "truncated": False,
+                "stdout": json.dumps({"findings": [], "excluded_tools": []}),
+            }
+
+    class Broker:
+        calls = 0
+
+        async def complete(self, project_id, case_id, messages, **kwargs):
+            assert (project_id, case_id) == ("project", "case")
+            self.calls += 1
+            task = json.loads(messages[1]["content"])
+            if "untrusted_source" in task:
+                issues = [
+                    {
+                        "line": 1,
+                        "cwe": "CWE-639",
+                        "title": "Ownership missing",
+                        "reason": "Needs confirmation",
+                    },
+                    {"line": 1000, "cwe": "CWE-89", "title": "Invisible line", "reason": "Reject"},
+                    {"line": True, "cwe": "CWE-89", "title": "Invalid line", "reason": "Reject"},
+                    {
+                        "line": 1,
+                        "cwe": "CWE-0; command",
+                        "title": "Invalid CWE",
+                        "reason": "Reject",
+                    },
+                    None,
+                ]
+                return "hypothesis-call", SimpleNamespace(
+                    status="succeeded", content=json.dumps({"issues": issues})
+                )
+            return "triage-call", SimpleNamespace(
+                status="succeeded",
+                content=json.dumps(
+                    {"verdicts": [{"id": 0, "real": True, "cwe": "CWE-639", "reason": "claim"}]}
+                ),
+            )
+
+    broker = Broker()
+    result = await investigate(
+        project_id="project",
+        case_id="case",
+        encoded_files={"app.py": base64.b64encode(b"# source\n").decode()},
+        manifest_hash="a" * 64,
+        launcher=Launcher(),
+        evidence=lambda _: "b" * 64,
+        broker=broker,
+        tier="T2",
+    )
+    assert broker.calls == 2 and len(result["findings"]) == 1
+    assert result["findings"][0].disposition == "needs_review"
+    assert result["findings"][0].status == "suspected"
+    assert result["model_diagnostics"][0]["selected_files"] == ["app.py"]
+
+
+@pytest.mark.asyncio
+async def test_hypothesis_refusal_stops_model_work_and_retains_static_evidence(target):
+    import base64
+
+    raw = scan(target)
+
+    class Launcher:
+        async def call(self, *args):
+            return {
+                "exit_code": 0,
+                "truncated": False,
+                "stdout": json.dumps({"findings": [asdict(f) for f in raw], "excluded_tools": []}),
+            }
+
+    class Broker:
+        calls = 0
+
+        async def complete(self, *args, **kwargs):
+            self.calls += 1
+            return "refusal", SimpleNamespace(status="refused", content=None)
+
+    broker = Broker()
+    result = await investigate(
+        project_id="project",
+        case_id="case",
+        encoded_files={"app.py": base64.b64encode(VULN.encode()).decode()},
+        manifest_hash="a" * 64,
+        launcher=Launcher(),
+        evidence=lambda _: "b" * 64,
+        broker=broker,
+        tier="T2",
+    )
+    assert broker.calls == 1 and result["findings"]
+    assert all(f.disposition == "needs_review" for f in result["findings"])
+
+
+@pytest.mark.asyncio
+async def test_hypothesis_input_cap_and_invalid_json_do_not_erase_findings():
+    class Broker:
+        calls = 0
+
+        async def complete(self, *args, **kwargs):
+            self.calls += 1
+            return str(self.calls), SimpleNamespace(status="succeeded", content="[]")
+
+    broker, diagnostics = Broker(), []
+    files = {f"file{n}.py": b"# ordinary source" for n in range(6)} | {"tests/a.py": b"# skip"}
+    assert await hypothesize(broker, "project", "case", files, [], diagnostics) == []
+    assert broker.calls == 4
+    assert diagnostics[0]["eligible_files"] == 6
+    assert sum(d.get("reason") == "invalid_output" for d in diagnostics) == 4

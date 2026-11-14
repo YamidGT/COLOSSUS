@@ -16,6 +16,7 @@ class Settings(Contract):
     api_port: int = Field(default=8787, ge=1024, le=65535)
     docker_context: str = "colima-colossus"
     sandbox_runtime: str = "runsc"
+    formal_toolchain_digest: str | None = Field(default=None, pattern=r"^sha256:[a-f0-9]{64}$")
     runtime: RuntimeConfig = Field(default_factory=RuntimeConfig)
     frontend_dir: Path = Path("frontend/dist")
 
@@ -25,6 +26,7 @@ class Settings(Contract):
             data_dir=Path(os.environ.get("COLOSSUS_DATA_DIR", ".colossus")).resolve(),
             docker_context=os.environ.get("COLOSSUS_DOCKER_CONTEXT", "colima-colossus"),
             sandbox_runtime=os.environ.get("COLOSSUS_SANDBOX_RUNTIME", "runsc"),
+            formal_toolchain_digest=os.environ.get("COLOSSUS_FORMAL_TOOLCHAIN_DIGEST"),
         )
 
     def prepare(self):

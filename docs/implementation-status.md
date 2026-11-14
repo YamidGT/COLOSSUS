@@ -28,7 +28,7 @@ Active implementation branch: `implementation/full-system`. This file records ob
 | Broker and global model accounting | Separate gateway and actual Mistral capability/accounting validated; refusal/retry scenarios need broader coverage |
 | Upstream and generated patch routes | Generated exact-span DSVW repair validated; upstream-update route remains pending |
 | Security/functionality/static gates | One DSVW candidate passed protected positive and security checks plus AST regression checks; broader mutation controls pending |
-| Dafny compiled runtime integration | Not implemented; real proof/compiler/wrapper evidence required |
+| Dafny compiled runtime integration | Owned four-method fixture proved/compiled and packaged wrapper checked; target integration and approved requirements still pending |
 | CrossHair/unsupported proof outcomes | Not implemented; no counterexample must remain UNKNOWN |
 | Policy-bound staging/promotion | DSVW replay passed exact-artifact promotion and real 300-second observation; fresh model full-cycle acceptance remains |
 | Rollback/mirror refresh/second cycle | DSVW replay passed mirror refresh, second NO_CHANGE cycle and rollback (10.397 s); restart/fault scenarios remain |
@@ -102,3 +102,21 @@ Intel refresh retains exact response bytes and validates their hashes, stores re
 `uv run python scripts/check_intel.py` fetched live CISA KEV successfully and replayed the retained snapshot against an existing DSVW manifest. No target started and no model called. The stdlib-only installed inventory was empty, so there was no live OSV package-match claim. Evidence: `artifacts/bootstrap/intel.json`. Focused platform suite: **119 passed**; Ruff passes. OSV behavior was checked against the primary [batch API](https://google.github.io/osv.dev/post-v1-querybatch/) and [full advisory API](https://google.github.io/osv.dev/get-v1-vulns/) documentation.
 
 New Kiro commits through `7883b87` were inspected. Their formal helpers only classify supplied output, their evaluation command only validates a lock, and their deploy policy does not execute a rollout; they are not completion evidence. Integrate useful pieces with the existing real runtime, preserving its contracts and existing action center.
+
+## Actual compiled formal component
+
+Built the pinned Dafny v4.11.0 source on ARM64 and executed it under gVisor with Z3 4.13.0. The binary reports `0.0.0.0` (source-build metadata), explicitly recorded rather than relabeled. Image: `sha256:7718ff0ee631dbecb4571972bcdfd0742dbe1369e555e5468643839e67afc189`. The first bootstrap failed because the upstream build requires Java; the documented recipe includes that dependency. The solver differs from the official default; this is a calibrated custom toolchain, not the official Linux x64 release binary.
+
+`uv run python scripts/check_formal.py` proved four owned policy methods, compiled the exact source to Python, and exercised **39 wrapper checks against a packaged image** in gVisor. Valid verification took **1.213 s**, compilation **1.485 s**, and packaged wrapper execution **0.285 s**, excluding container/image setup. Four wrong implementations failed their unchanged postconditions: allow everyone, deny everyone, public admin assignment and secret projection. A separately packaged wrapper that ignored the authorization decision failed the behavior harness; changed or omitted generated files failed the binding check. No model was called and no additional target repository ran. Evidence: `artifacts/bootstrap/formal.json`, `formal-toolchain.json` and declaration-level CSV files.
+
+The launcher now exposes a controller-only formal policy endpoint with a configured immutable toolchain digest. Implementation edits use a restricted expression grammar; contracts, imports, attributes and verifier switches are not model-writable. Proof acceptance checks both process status and successful results for every named declaration, rejecting empty, partial, truncated and timed-out runs. Whole proof/compile work shares one deadline.
+
+This is **owned component calibration**, not a VAmPI experiment, a DafnyBench score or proof of the DSVW patch. Actual target wrappers, target artifact integration, approved business requirements and benchmark hint recovery remain separate work. DSVW's tested assurance stays explicitly formal-unsupported. See [toolchain runbook](formal-toolchain.md). Platform checks: **134 passed**; Ruff passes.
+
+Remote review found new `lane-b/redteam` commits through `8782354` and Kiro through `2fd8c85`. Lane B adds hypotheses and an evaluator, but its evaluator still loads provider keys directly and calls the old interface; its Compose recipe builds repository Dockerfiles outside the current execution boundary. These paths must be adapted before integration, not run as supplied. Their static VAmPI results are teammate-reported evidence and were not reproduced here; target validation remains DSVW-only.
+
+## Second red-team integration
+
+The Lane B updates above are now adapted and merged: bounded T2 hypotheses use the shared broker; invalid/out-of-view model locations are rejected; model-only signals remain `needs_review`; model refusal stops the investigation's remaining model work while preserving deterministic evidence. Diagnostics record selected files, visible line counts and call status. No fresh T2 quality score is claimed.
+
+The evaluation command now scores stored JSON only and requires commit-bound reference cases. It cannot read provider keys or start a target. It distinguishes reference matching from precision, requires matching CWE and deduplicates repeated findings. Imported legacy numbers and unfrozen reference hypotheses are labeled separately. The alternate Compose fixture was excluded. Combined platform suite: **143 passed**; Ruff passes. Full public benchmark adapters, campaign execution, generic repair/setup and the remaining acceptance ledger are still unfinished.

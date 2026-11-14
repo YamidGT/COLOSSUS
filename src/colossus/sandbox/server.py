@@ -29,6 +29,13 @@ class PackageJob(Contract):
     argv: list[str]
 
 
+class FormalPolicyJob(Contract):
+    project_id: Identifier
+    profile_id: str
+    expressions: dict[str, str]
+    timeout: int = Field(default=90, ge=1, le=480)
+
+
 class StartTarget(Contract):
     project_id: Identifier
     artifact_digest: str
@@ -71,7 +78,9 @@ def decode_files(encoded: dict[str, str]) -> dict[str, bytes]:
     return files
 
 
-def create_launcher(token: str, context: str, deploy_token: str | None = None):
+def create_launcher(
+    token: str, context: str, deploy_token: str | None = None, formal_toolchain: str | None = None
+):
     app = FastAPI(docs_url=None, openapi_url=None)
     launcher = SandboxLauncher(context)
 
@@ -123,6 +132,24 @@ def create_launcher(token: str, context: str, deploy_token: str | None = None):
     def package(body: PackageJob):
         return launcher.package(decode_files(body.files), body.argv)
 
+    @app.post("/formal/policy")
+    def formal_policy(body: FormalPolicyJob):
+        from colossus.verification.dafny import POLICY_CALIBRATION, DafnyAdapter
+
+        if not formal_toolchain:
+            raise DomainError(
+                "formal_unsupported", "No calibrated formal toolchain configured", 422
+            )
+        if body.profile_id != POLICY_CALIBRATION.profile_id:
+            raise DomainError("formal_unsupported", "Policy profile is not registered", 422)
+        result = DafnyAdapter(launcher, formal_toolchain).execute(
+            body.project_id, POLICY_CALIBRATION, body.expressions, body.timeout
+        )
+        result["files"] = {
+            path: base64.b64encode(data).decode() for path, data in result["files"].items()
+        }
+        return result
+
     @app.post("/targets")
     def start_target(body: StartTarget):
         return launcher.start_target(body.project_id, body.artifact_digest, body.ttl_seconds)
@@ -155,6 +182,7 @@ if __name__ == "__main__":
     parser.add_argument("--token-file", type=Path, required=True)
     parser.add_argument("--context", required=True)
     parser.add_argument("--deploy-token-file", type=Path)
+    parser.add_argument("--formal-toolchain")
     args = parser.parse_args()
     try:  # reconcile orphans left by a previous launcher before serving
         SandboxLauncher(args.context).reap()
@@ -165,6 +193,7 @@ if __name__ == "__main__":
             args.token_file.read_text().strip(),
             args.context,
             args.deploy_token_file.read_text().strip() if args.deploy_token_file else None,
+            args.formal_toolchain,
         ),
         uds=str(args.socket),
         access_log=False,
