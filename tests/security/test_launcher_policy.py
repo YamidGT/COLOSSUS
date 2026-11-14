@@ -77,7 +77,9 @@ def test_create_uses_hardened_flags(fake):
     assert f"org.colossus.project={PROJECT}" in labels and "org.colossus.managed=true" in labels
 
 
-@pytest.mark.parametrize("kw", [{"role": "shell"}, {"memory_mb": 32}, {"memory_mb": 99999}, {"ttl_seconds": 0}])
+@pytest.mark.parametrize(
+    "kw", [{"role": "shell"}, {"memory_mb": 32}, {"memory_mb": 99999}, {"ttl_seconds": 0}]
+)
 def test_create_rejects_bad_role_or_limits(fake, kw):
     args = {"role": "verify", **kw}
     with pytest.raises(DomainError):
@@ -87,7 +89,10 @@ def test_create_rejects_bad_role_or_limits(fake, kw):
 
 def test_create_rejects_foreign_or_external_network(fake):
     fake.networks["colossus-net-x"] = {"Internal": True, "Labels": {"org.colossus.project": OTHER}}
-    fake.networks["colossus-net-ext"] = {"Internal": False, "Labels": {"org.colossus.project": PROJECT}}
+    fake.networks["colossus-net-ext"] = {
+        "Internal": False,
+        "Labels": {"org.colossus.project": PROJECT},
+    }
     ln = SandboxLauncher("ctx")
     for net in ("bridge", "host", "colossus-net-x", "colossus-net-ext"):
         with pytest.raises(DomainError):
@@ -101,10 +106,37 @@ def test_unpinned_image_refused(fake):
 
 
 def _good_argv():
-    return ["create", "--name", "colossus-1", "--runtime", "runsc", "--network", "none", "--read-only",
-            "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "--ipc", "private",
-            "--user", "1000:1000", "--memory", "64m", "--memory-swap", "64m",
-            "--tmpfs", "/tmp:rw,noexec,nosuid,nodev,size=1", PYTHON_IMAGE, "python", "-v"]
+    return [
+        "create",
+        "--name",
+        "colossus-1",
+        "--runtime",
+        "runsc",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--ipc",
+        "private",
+        "--user",
+        "1000:1000",
+        "--cpus",
+        "2",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "64m",
+        "--memory-swap",
+        "64m",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,nodev,size=1",
+        PYTHON_IMAGE,
+        "python",
+        "-v",
+    ]
 
 
 def test_safe_create_accepts_good_argv_and_ignores_container_args():
@@ -114,12 +146,14 @@ def test_safe_create_accepts_good_argv_and_ignores_container_args():
 def _ins(*tokens):
     def go(a):
         a[1:1] = list(tokens)
+
     return go
 
 
 def _swap(old, new, after=None):
     def go(a):
         a[a.index(old, a.index(after) if after else 0)] = new
+
     return go
 
 
@@ -127,6 +161,11 @@ def _swap(old, new, after=None):
     "mutate",
     [
         _ins("--privileged"),
+        _ins("--read-only=false"),
+        _ins("--user", "0:0"),
+        _ins("--ipc", "host"),
+        _swap("64m", "0m"),
+        _swap("2", "0", after="--cpus"),
         _ins("--cap-add=SYS_ADMIN"),
         _ins("-v", "/var/run/docker.sock:/s"),
         _ins("--mount", "type=bind,source=/,target=/h"),
@@ -159,7 +198,12 @@ def test_inspect_refuses_unmanaged_container(fake):
 
 def test_reaper_removes_only_expired_managed(fake):
     now = int(time.time())
-    managed = lambda exp: {"Config": {"Labels": {"org.colossus.managed": "true", "org.colossus.expires": str(exp)}}}  # noqa: E731
+
+    def managed(exp):
+        return {
+            "Config": {"Labels": {"org.colossus.managed": "true", "org.colossus.expires": str(exp)}}
+        }
+
     fake.containers = {"colossus-old": managed(now - 5), "colossus-new": managed(now + 600)}
     assert SandboxLauncher("ctx").reap() == ["colossus-old"]
     removed = [c for c in fake.calls if c[:2] == ["rm", "-f"]]
@@ -177,5 +221,8 @@ def test_destroy_is_idempotent_for_any_docker_wording(monkeypatch):
 
 def test_bounded_process_kills_on_timeout_and_strips_env(monkeypatch):
     monkeypatch.setenv("MISTRAL_API_KEY", "must-not-leak")
-    res = launcher_mod.bounded_process(["python3", "-c", "import os,time;print(os.environ.get('MISTRAL_API_KEY'));time.sleep(30)"], 2)
+    res = launcher_mod.bounded_process(
+        ["python3", "-c", "import os,time;print(os.environ.get('MISTRAL_API_KEY'));time.sleep(30)"],
+        2,
+    )
     assert res.timed_out and "must-not-leak" not in res.stdout

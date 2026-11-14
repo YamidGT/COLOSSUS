@@ -34,12 +34,12 @@ class Onboarding:
                 db, "project", project_id, project | changes, project_id, project["revision"]
             )
 
-    def evidence(self, project_id, value):
+    def evidence(self, project_id, value, *, visibility="internal"):
         key = self.artifacts.put(canonical_json(value))
         self.store.put(
             "artifact",
             content_hash({"project_id": project_id, "artifact_id": key}),
-            {"artifact_id": key, "media_type": "application/json"},
+            {"artifact_id": key, "media_type": "application/json", "visibility": visibility},
             project_id,
         )
         return key

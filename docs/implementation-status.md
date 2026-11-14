@@ -19,19 +19,19 @@ Active implementation branch: `implementation/full-system`. This file records ob
 | M0 contracts and shared fixtures | In progress; typed schemas exported, real service RPC and fixture exchange pending |
 | Controller scheduling/restart/cancel/outbox | Foundation only; integrated runner and restart/recovery tests pending |
 | Operator API/auth and CLI | Core authenticated intents/read models implemented; decision/configuration/evaluation commands remain pending |
-| Tailwind action center | Not implemented; real API data, keyboard/mobile review and screenshots required |
+| Tailwind action center | Implemented on real API data; desktop login/list/project/case inspected. Mobile, keyboard, full decision flow and accessibility acceptance remain |
 | Source URL resolution and safe archive handling | Validated immutable DSVW snapshot and hostile archive rejection; broader GitHub error/size scenarios remain |
 | Isolated build/target/worker execution | gVisor jobs and COPY-only immutable target packaging validated; broader lifecycle/network challenges pending |
 | Stack setup and manifests | DSVW URL-to-ready manifest validated; additional stack adapters remain implementation work; do not run other repos yet |
-| OSV/KEV/advisory intelligence | Not implemented; live+cached+replay provenance and matching tests required |
-| Static/LLM triage and scoped reproduction | Not implemented; actual findings and independent oracles required |
+| OSV/KEV/advisory intelligence | Gateway adapters integrated from lane B; controller polling, cache/replay and recurrence pending |
+| Static/LLM triage and scoped reproduction | DSVW AST/rule detection and protected reproduction validated; generic triage/probe adapters integrated but broader coverage unmeasured |
 | Broker and global model accounting | Separate gateway and actual Mistral capability/accounting validated; refusal/retry scenarios need broader coverage |
 | Upstream and generated patch routes | Generated exact-span DSVW repair validated; upstream-update route remains pending |
 | Security/functionality/static gates | One DSVW candidate passed protected positive and security checks plus AST regression checks; broader mutation controls pending |
 | Dafny compiled runtime integration | Not implemented; real proof/compiler/wrapper evidence required |
 | CrossHair/unsupported proof outcomes | Not implemented; no counterexample must remain UNKNOWN |
-| Policy-bound staging/promotion | Not implemented; exact artifact generation and real canary required |
-| Rollback/mirror refresh/second cycle | Not implemented; actual restored behavior and new snapshot required |
+| Policy-bound staging/promotion | DSVW replay passed exact-artifact promotion and real 300-second observation; fresh model full-cycle acceptance remains |
+| Rollback/mirror refresh/second cycle | DSVW replay passed mirror refresh, second NO_CHANGE cycle and rollback (10.397 s); restart/fault scenarios remain |
 | Observability and redacted reports | Audit foundation only; traces, run reports and UI correlation pending |
 | CTIBench/CyberSecEval/DafnyBench | Not run; frozen pilots and all outcomes required |
 | Repository development/heldout campaign | Not run; all preflight hashes/oracles remain unresolved |
@@ -70,3 +70,24 @@ No teammate branches were present at the latest remote fetch. Continue fetching 
 `uv run python scripts/check_operator_api.py` passed against a real temporary API process: authenticated enrollment dispatched setup through the worker, DSVW reached READY, the durable operation reached succeeded, and a new cycle was rejected while paused. This calibration made no model calls and tore down its target afterward. The focused suite is now **49 passed**; pause-aware task admission and cross-case gate-reuse rejection were added. Restart/cancel fault-injection remains unvalidated.
 
 Timing correction: subsequent gate reports record the actual check/bundle intervals; the initial repair calibration's per-gate timestamps were issuance timestamps, so use its measured whole-run 19.287 seconds only, not those initial per-gate fields for stage latency.
+
+## Full lifecycle and action center checkpoint
+
+Daniel authorized merging into `main` only when the full implementation is ready. Keep implementation on its branch until the remaining acceptance gates pass. The first and only target under test is **https://github.com/stamparm/DSVW**, pinned to `9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908`. No multi-repository campaign is authorized in this phase.
+
+The DSVW **replayed-proposal** lifecycle completed on 2026-11-14: URL intake, fresh verification, promotion, actual 300-second observation and mirror refresh took **332.771 seconds**. The second cycle returned **NO_CHANGE** (no further supported repair, not absence of vulnerabilities). Rollback to the explicitly known-vulnerable retained baseline plus refresh took **10.397 seconds**. The audit chain validated. This replay made zero new model calls; the reused proposal came from the earlier $0.001273 generation. Two fresh lifecycle attempts stopped safely before promotion on an invalid provider response and HTTP 429. No fresh-inference end-to-end success or formal proof is claimed. Local evidence: `artifacts/bootstrap/full-cycle.json`.
+
+An earlier replay exposed a deployment/authorization ID collision after the observation window. Independent deployment IDs and a controller-store regression check fixed it. Retirement now withdraws routing and clears current/previous slots when calibration targets are removed. The private lab front door is an authenticated request gateway, not public production traffic routing.
+
+The React/Tailwind action center uses generated OpenAPI types and real controller data. Browser inspection verified local code exchange, repository navigation, project findings and case gate/replay/unsupported-proof labels. It found operator evidence visibility metadata missing; the fix explicitly publishes check/diff evidence while source archives remain internal. Backend tests cover project isolation and private evidence denial. Browser mobile/keyboard/decision-flow acceptance is still pending. Initial apparent blank rendering resolved before login; no application JavaScript error was observed beyond the expected unauthenticated session 401.
+
+Current validation: **74 backend tests pass**; TypeScript/Vite production build passes, initial JavaScript **89.17 kB gzip**. Pause does not block queued rollback recovery. These are platform tests, not a benchmark score or a run against additional repositories.
+
+
+## Integrated runtime hardening checkpoint
+
+`origin/kiro/integracion-fs` merged into the implementation branch with its doctor and Docker-create safety guard, while preserving the stricter existing recipe validator. The doctor reads credential-file metadata only. Combined backend suite: **113 passed**; Ruff passes. A fresh real gVisor isolation check also passed after private IPC and create-flag validation were enabled. No extra target repository was run.
+
+The six finished DSVW calibration enrollments now show **RETIRED** deployment summaries. Cleanup discovered Docker 29 reports missing objects in lowercase; idempotent teardown now handles both message cases while still failing on daemon errors. Existing diff/gate artifact publication metadata was corrected through audited store writes; source archives remain private. Follow-up browser inspection successfully loaded the actual source diff and verified the case layout at 375px. Broader UI acceptance remains pending.
+
+Checkpoint pushed to `origin/implementation/full-system`; `origin/main` remains unchanged. Remaining full-scope work includes scheduled feed refresh/recurrence, broader setup and patch adapters, linked formal verification, benchmark runners, failure/restart acceptance, final interface acceptance and the template-based technical sheet.

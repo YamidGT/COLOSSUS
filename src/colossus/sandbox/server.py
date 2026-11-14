@@ -67,15 +67,35 @@ def decode_files(encoded: dict[str, str]) -> dict[str, bytes]:
     return files
 
 
-def create_launcher(token: str, context: str):
+def create_launcher(token: str, context: str, deploy_token: str | None = None):
     app = FastAPI(docs_url=None, openapi_url=None)
     launcher = SandboxLauncher(context)
 
     @app.middleware("http")
     async def authenticate(request: Request, call_next):
-        if not secrets.compare_digest(request.headers.get("authorization", ""), "Bearer " + token):
+        supplied = request.headers.get("authorization", "")
+        is_controller = secrets.compare_digest(supplied, "Bearer " + token)
+        is_deployer = bool(
+            deploy_token and secrets.compare_digest(supplied, "Bearer " + deploy_token)
+        )
+        if not is_controller and not is_deployer:
             return JSONResponse(
                 {"error": {"code": "unauthorized", "message": "Invalid service capability"}},
+                status_code=403,
+            )
+        if is_deployer and request.url.path not in {
+            "/health",
+            "/targets",
+            "/targets/request",
+            "/targets/stop",
+        }:
+            return JSONResponse(
+                {
+                    "error": {
+                        "code": "forbidden",
+                        "message": "Deployment capability cannot build or execute arbitrary jobs",
+                    }
+                },
                 status_code=403,
             )
         return await call_next(request)
@@ -109,12 +129,7 @@ def create_launcher(token: str, context: str):
 
     @app.post("/targets/stop")
     def stop_target(body: StopTarget):
-        info = launcher.inspect(body.environment_id)
-        if info["Config"]["Labels"].get("org.colossus.project") != body.project_id:
-            raise DomainError("target_scope", "Target belongs to another project", 403)
-        launcher.destroy(body.environment_id)
-        launcher.destroy_network(body.network_id, body.project_id)
-        return {"stopped": True}
+        return launcher.stop_target(body.project_id, body.environment_id, body.network_id)
 
     @app.post("/terminate-work")
     def terminate_work(body: TerminateWork):
@@ -135,13 +150,18 @@ if __name__ == "__main__":
     parser.add_argument("--socket", type=Path, required=True)
     parser.add_argument("--token-file", type=Path, required=True)
     parser.add_argument("--context", required=True)
+    parser.add_argument("--deploy-token-file", type=Path)
     args = parser.parse_args()
     try:  # reconcile orphans left by a previous launcher before serving
         SandboxLauncher(args.context).reap()
     except Exception as error:  # noqa: BLE001
         print("startup reap failed:", type(error).__name__, flush=True)
     uvicorn.run(
-        create_launcher(args.token_file.read_text().strip(), args.context),
+        create_launcher(
+            args.token_file.read_text().strip(),
+            args.context,
+            args.deploy_token_file.read_text().strip() if args.deploy_token_file else None,
+        ),
         uds=str(args.socket),
         access_log=False,
         log_level="warning",

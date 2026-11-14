@@ -90,20 +90,23 @@ def test_bad_token_exits_3(server, monkeypatch):
     assert "wrong-token-value" not in res.output
 
 
-@pytest.mark.parametrize(
-    "args",
-    [
-        ["case", "c1", "--diff"],
-        ["reject", "c1", "--candidate", "x", "--reason", "unsafe"],
-        ["rollback", "d1", "--yes"],
-    ],
-)
+@pytest.mark.parametrize("args", [["case", "c1", "--diff"]])
 def test_commands_without_server_routes_exit_3(server, args):
     res = invoke("--json", *args)
     assert res.exit_code == 3, res.output
     body = json.loads(res.stdout)
     assert body["reason_code"] == "not_available"
     assert "not available on this server" in body["message"]
+
+
+@pytest.mark.parametrize(
+    "args",
+    [["reject", "c1", "--candidate", "x", "--reason", "unsafe"], ["rollback", "d1", "--yes"]],
+)
+def test_reject_and_rollback_unknown_ids_reach_server(server, args):
+    res = invoke("--json", *args)
+    assert res.exit_code == 2, res.output
+    assert json.loads(res.stdout)["reason_code"] == "not_found"
 
 
 def test_approve_unknown_manifest_reaches_server_and_fails(server):

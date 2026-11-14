@@ -296,7 +296,8 @@ class Store:
             )
             task = db.execute(
                 """SELECT tasks.* FROM tasks LEFT JOIN records ON records.id=tasks.project_id
-                   WHERE tasks.state='queued' AND COALESCE(json_extract(records.data,'$.admission_state'),'active')='active'
+                   WHERE tasks.state='queued' AND (tasks.kind='rollback'
+                   OR COALESCE(json_extract(records.data,'$.admission_state'),'active')='active')
                    ORDER BY tasks.created_at LIMIT 1"""
             ).fetchone()
             if task is None:

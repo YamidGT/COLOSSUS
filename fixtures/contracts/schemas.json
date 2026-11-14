@@ -2426,6 +2426,82 @@
     "title": "ProjectConfigAmendment",
     "type": "object"
   },
+  "ApprovalRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "candidate_id": {
+        "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+        "title": "Candidate Id",
+        "type": "string"
+      },
+      "evidence_manifest_hash": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Evidence Manifest Hash",
+        "type": "string"
+      },
+      "expected_revision": {
+        "minimum": 0,
+        "title": "Expected Revision",
+        "type": "integer"
+      },
+      "expected_deployment_generation": {
+        "minimum": 0,
+        "title": "Expected Deployment Generation",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "candidate_id",
+      "evidence_manifest_hash",
+      "expected_revision",
+      "expected_deployment_generation"
+    ],
+    "title": "ApprovalRequest",
+    "type": "object"
+  },
+  "RollbackRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "expected_generation": {
+        "minimum": 0,
+        "title": "Expected Generation",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "expected_generation"
+    ],
+    "title": "RollbackRequest",
+    "type": "object"
+  },
+  "RejectionRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "candidate_id": {
+        "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+        "title": "Candidate Id",
+        "type": "string"
+      },
+      "expected_revision": {
+        "minimum": 0,
+        "title": "Expected Revision",
+        "type": "integer"
+      },
+      "reason": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "title": "Reason",
+        "type": "string"
+      }
+    },
+    "required": [
+      "candidate_id",
+      "expected_revision",
+      "reason"
+    ],
+    "title": "RejectionRequest",
+    "type": "object"
+  },
   "ReviewDecision": {
     "additionalProperties": false,
     "properties": {

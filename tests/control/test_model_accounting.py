@@ -44,3 +44,37 @@ async def test_provider_error_never_returns_echoed_key():
         )
     assert result.content is None and result.reason_code == "provider_policy_block"
     assert result.actual_cost_micro_usd is None
+
+
+@pytest.mark.asyncio
+async def test_gateway_accepts_text_chunks_without_retaining_thinking():
+    import httpx
+
+    from colossus.gateway.model import ModelGateway
+
+    async def response(request):
+        return httpx.Response(
+            200,
+            json={
+                "model": "zai-glm-5-3-flash",
+                "choices": [
+                    {
+                        "message": {
+                            "content": [
+                                {"type": "thinking", "thinking": [{"text": "private chain"}]},
+                                {"type": "text", "text": '{"status":"ready"}'},
+                            ]
+                        },
+                        "finish_reason": "stop",
+                    }
+                ],
+                "usage": {"prompt_tokens": 10, "completion_tokens": 20},
+            },
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(response)) as client:
+        gateway = ModelGateway("test-key", client)
+        result = await gateway.complete([{"role": "user", "content": "ready"}], 50, "low", True)
+    assert result.status == "succeeded" and result.content == '{"status":"ready"}'
+    assert result.actual_cost_micro_usd is not None
+    assert "private chain" not in str(result)

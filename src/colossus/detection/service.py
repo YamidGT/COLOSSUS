@@ -20,7 +20,7 @@ async def static_scan(launcher, project_id, encoded_files):
             "project_id": project_id,
             "role": "scan",
             "files": encoded_files | {path: base64.b64encode(worker).decode()},
-            "argv": ["python", path],
+            "argv": ["python", "-I", path],
             "timeout": 60,
         },
     )

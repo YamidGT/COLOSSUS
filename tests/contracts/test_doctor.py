@@ -9,18 +9,27 @@ from colossus.cli.main import app
 
 
 def test_missing_gvisor_blocks():
-    (c,) = check_sandbox(lambda: {"ready": False, "context": "default", "reason": "gVisor runtime missing"})
+    (c,) = check_sandbox(
+        lambda: {"ready": False, "context": "default", "reason": "gVisor runtime missing"}
+    )
     assert c.state == "blocked" and "gVisor runtime missing" in c.observed
 
 
 def test_ready_gvisor_ok():
-    info = {"ready": True, "context": "c", "architecture": "aarch64", "cpus": 4, "server_version": "29"}
+    info = {
+        "ready": True,
+        "context": "c",
+        "architecture": "aarch64",
+        "cpus": 4,
+        "server_version": "29",
+    }
     assert check_sandbox(lambda: info)[0].state == "ok"
 
 
 def test_preflight_crash_is_reported_not_raised():
     def boom():
         raise RuntimeError("daemon gone")
+
     assert check_sandbox(boom)[0].state == "blocked"
 
 
@@ -30,14 +39,19 @@ def test_missing_cgroup_controller_blocks(monkeypatch, tmp_path):
     assert checks["host.cgroup_v2"].state == "blocked"
 
 
-def test_credentials_never_printed(tmp_path):
+def test_credentials_never_read_or_printed(tmp_path, monkeypatch):
     secret = "sk-test-DO-NOT-PRINT-123"
     env = tmp_path / ".env"
     env.write_text(f"MISTRAL_API_KEY={secret}\nGROQ_API_KEY=\n")
     os.chmod(env, 0o600)
+
+    def forbidden_read(*args, **kwargs):
+        raise AssertionError("doctor must not read provider values")
+
+    monkeypatch.setattr("pathlib.Path.read_text", forbidden_read)
     checks = {c.check_id: c for c in check_credentials(tmp_path)}
-    assert checks["credentials.mistral"].observed == "configured"
-    assert checks["credentials.groq"].observed == "missing"
+    assert checks["credentials.mistral"].observed == "gateway check required"
+    assert checks["credentials.groq"].state == "unknown"
     assert secret not in repr(checks)
 
 

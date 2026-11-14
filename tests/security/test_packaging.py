@@ -33,3 +33,26 @@ def test_detection_never_executes_a_dockerfile_or_imports_an_app(tmp_path):
     with pytest.raises(DomainError, match="No unambiguous"):
         discover({"Dockerfile": b"RUN anything", "app.py": source})
     assert not marker.exists()
+
+
+def test_target_teardown_accepts_docker_missing_case_variants_and_rejects_transport_error(
+    monkeypatch,
+):
+    import pytest
+
+    from colossus.contracts.core import DomainError
+    from colossus.sandbox.launcher import ProcessResult, SandboxLauncher
+
+    launcher = SandboxLauncher()
+    for message in ("Error: No such object: colossus-gone", "error: no such object: colossus-gone"):
+        monkeypatch.setattr(
+            launcher, "docker", lambda *a, message=message, **kw: ProcessResult(1, "[]", message, False, 0)
+        )
+        assert launcher.stop_target("project", "colossus-gone", "colossus-net-gone") == {
+            "stopped": True
+        }
+    monkeypatch.setattr(
+        launcher, "docker", lambda *a, **kw: ProcessResult(1, "", "daemon unavailable", False, 0)
+    )
+    with pytest.raises(DomainError, match="Cannot establish"):
+        launcher.stop_target("project", "colossus-gone", "colossus-net-gone")

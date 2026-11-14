@@ -12,7 +12,15 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import Field
 
 from colossus.contracts.core import Contract, DomainError, content_hash
-from colossus.contracts.models import Enrollment, ProjectConfigAmendment
+from colossus.contracts.models import (
+    ApprovalRequest,
+    CaseReview,
+    Enrollment,
+    ProjectConfigAmendment,
+    ProjectSnapshot,
+    RejectionRequest,
+    RollbackRequest,
+)
 from colossus.control.artifacts import ArtifactStore
 from colossus.control.auth import COOKIE, OperatorAuth
 from colossus.control.config import Settings
@@ -29,15 +37,6 @@ class RunRequest(Contract):
 
 class LoginRequest(Contract):
     code: str = Field(min_length=1, max_length=100)
-
-
-class ApprovalBody(Contract):
-    evidence_manifest_hash: str = Field(pattern=r"^[a-f0-9]{64}$")
-    destination_id: str = Field(min_length=1, max_length=200)
-
-
-class RollbackBody(Contract):
-    expected_generation: int = Field(ge=0)
 
 
 def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) -> FastAPI:
@@ -255,7 +254,7 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
             "next_cursor": str(offset + limit) if len(rows) == limit else None,
         }
 
-    @app.get("/api/v1/projects/{project_id}/status")
+    @app.get("/api/v1/projects/{project_id}/status", response_model=ProjectSnapshot)
     def status(project_id: str, request: Request):
         value = controller.snapshot(project_id)
         etag = controller.snapshot_etag(value)
@@ -301,9 +300,44 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
     def cancel(cycle_id: str, request: Request):
         return controller.cancel(cycle_id, key(request), request.state.actor)
 
-    @app.get("/api/v1/cases/{case_id}")
+    @app.get("/api/v1/cases/{case_id}", response_model=CaseReview)
     def case(case_id: str):
-        return store.get("case", case_id)
+        return controller.case_review(case_id)
+
+    @app.get("/api/v1/evidence/{manifest_hash}/review")
+    def evidence_review(manifest_hash: str):
+        matches = [
+            c
+            for c in store.list("case", limit=1000)
+            if c.get("evidence_manifest_hash") == manifest_hash
+        ]
+        if len(matches) != 1:
+            raise DomainError("not_found", "Evidence has no unique case review", 404)
+        return matches[0]
+
+    @app.post("/api/v1/cases/{case_id}/approve", status_code=202)
+    def approve(case_id: str, body: ApprovalRequest, request: Request):
+        return controller.approve(case_id, body.model_dump(), key(request), request.state.actor)
+
+    @app.post("/api/v1/cases/{case_id}/reject")
+    def reject(case_id: str, body: RejectionRequest, request: Request):
+        current = store.get("case", case_id)
+        if current.get("candidate_id") != body.candidate_id:
+            raise DomainError("stale_review", "Candidate changed; refresh the case")
+        return controller.reject(
+            case_id, body.expected_revision, body.reason, key(request), request.state.actor
+        )
+
+    @app.get("/api/v1/deployments/{deployment_id}")
+    def deployment(deployment_id: str):
+        return store.get("deployment", deployment_id)
+
+    @app.post("/api/v1/deployments/{deployment_id}/rollback", status_code=202)
+    def rollback(deployment_id: str, body: RollbackRequest, request: Request):
+        value = store.get("deployment", deployment_id)
+        return controller.rollback(
+            value["project_id"], body.expected_generation, key(request), request.state.actor
+        )
 
     @app.get("/api/v1/operations/{operation_id}")
     def operation(operation_id: str):
@@ -324,18 +358,6 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
     @app.post("/api/v1/projects/{project_id}/configuration")
     def configure(project_id: str, body: ProjectConfigAmendment, request: Request):
         return controller.configure(project_id, body, key(request), request.state.actor)
-
-    @app.post("/api/v1/authorizations", status_code=202)
-    def approve(body: ApprovalBody, request: Request):
-        return controller.approve(
-            body.evidence_manifest_hash, body.destination_id, key(request), request.state.actor
-        )
-
-    @app.post("/api/v1/deployments/{deployment_id}/rollback", status_code=202)
-    def rollback(deployment_id: str, body: RollbackBody, request: Request):
-        return controller.rollback(
-            deployment_id, body.expected_generation, key(request), request.state.actor
-        )
 
     @app.post("/api/v1/evaluations", status_code=202)
     async def evaluate(request: Request):

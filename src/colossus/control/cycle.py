@@ -6,12 +6,13 @@ from collections import Counter
 from importlib.resources import files as resources
 
 from colossus.contracts.core import DomainError, content_hash, new_id, utcnow
-from colossus.contracts.models import Candidate, EvidenceManifest, GateResult
+from colossus.contracts.models import Candidate, EvidenceManifest, GateResult, PatchProposal
 from colossus.control.promotion import (
     assert_runnable,
     fixed_mirror_did_not_reproduce,
     publication,
 )
+from colossus.detect.redteam import investigate
 from colossus.detection.service import dsvw_checks, finding_from_signal, static_scan
 from colossus.gateway.source import tree_hash
 from colossus.repair.patch import apply_proposal
@@ -44,7 +45,7 @@ class CycleEngine:
         if time.time() >= cycle["deadline"]:
             raise DomainError("cycle_timeout", "Cycle deadline reached", 409)
 
-    async def run(self, cycle_id):
+    async def run(self, cycle_id, replay_proposal: PatchProposal | None = None):
         cycle = self.update_cycle(cycle_id, status="INVESTIGATING", started_at=utcnow())
         project_id = cycle["project_id"]
         project = self.store.get("project", project_id)
@@ -66,6 +67,7 @@ class CycleEngine:
             "cycle_id": cycle_id,
             "project_id": project_id,
             "status": "INVESTIGATING",
+            "generation_mode": "replayed_proposal" if replay_proposal else "fresh_inference",
             "title": "SQL query construction repair",
             "created_at": utcnow(),
             "finding_refs": [],
@@ -82,10 +84,34 @@ class CycleEngine:
         active = []
 
         def evidence(value):
-            return self.onboarding.evidence(project_id, value)
+            return self.onboarding.evidence(project_id, value, visibility="operator")
 
         try:
             self.check_cancel(cycle_id)
+            additional = await investigate(
+                project_id=project_id,
+                case_id=case_id,
+                encoded_files=source["files"],
+                manifest_hash=project["source"]["manifest_hash"],
+                launcher=self.launcher,
+                evidence=evidence,
+                tier="T0",
+            )
+            for additional_finding in additional["findings"]:
+                self.store.put(
+                    "finding",
+                    additional_finding.finding_id,
+                    additional_finding.model_dump() | {"cycle_id": cycle_id},
+                    project_id,
+                )
+            evidence(
+                {
+                    "detector": "lane-b-rules",
+                    "raw_count": additional["raw_count"],
+                    "injection_markers": additional["injection_markers"],
+                    "excluded_tools": additional["excluded_tools"],
+                }
+            )
             scan = await static_scan(self.launcher, project_id, source["files"])
             scan_id = evidence(scan)
             findings = []
@@ -172,9 +198,22 @@ class CycleEngine:
             feedback = None
             for attempt in range(self.runtime.max_candidates):
                 self.check_cancel(cycle_id)
-                proposal = await propose(
-                    self.broker, project_id, case_id, files, finding, signal, feedback
-                )
+                if replay_proposal is not None:
+                    if attempt:
+                        break
+                    proposal = replay_proposal.model_copy(
+                        update={"proposal_id": new_id(), "finding_ids": [finding["finding_id"]]}
+                    )
+                    evidence(
+                        {
+                            "generation_mode": "replayed_proposal",
+                            "origin_proposal_id": replay_proposal.proposal_id,
+                        }
+                    )
+                else:
+                    proposal = await propose(
+                        self.broker, project_id, case_id, files, finding, signal, feedback
+                    )
                 self.store.put("proposal", proposal.proposal_id, proposal.model_dump(), project_id)
                 scope_started = utcnow()
                 try:
@@ -227,7 +266,7 @@ class CycleEngine:
                 self.store.put(
                     "artifact",
                     content_hash({"project_id": project_id, "artifact_id": diff_id}),
-                    {"artifact_id": diff_id, "media_type": "text/plain"},
+                    {"artifact_id": diff_id, "media_type": "text/plain", "visibility": "operator"},
                     project_id,
                 )
                 candidate = Candidate(
@@ -338,14 +377,15 @@ class CycleEngine:
                     )
                     active.remove(target)
                     continue
-                source_candidate_id = evidence(
+                source_candidate_id = self.onboarding.evidence(
+                    project_id,
                     source
                     | {
                         "files": encoded,
                         "tree_sha256": candidate_hash,
                         "origin": "generated_patch",
                         "proposal_id": proposal.proposal_id,
-                    }
+                    },
                 )
                 proof_summary = [
                     {"outcome": "UNSUPPORTED", "scope": "Python SQL adapter", "required": False}
@@ -377,6 +417,9 @@ class CycleEngine:
                         *recipe["limitations"],
                         "Static coverage uses three AST rules; Semgrep/Bandit adapters are not installed",
                         "Other findings remain unresolved",
+                        "Previously generated proposal replayed; gates rerun without new inference"
+                        if replay_proposal
+                        else "Fresh inference used for this case",
                     ],
                     model_call_ids=proposal.model_call_ids,
                     total_cost_micro_usd=self.store.budget(case_id)["committed_micro_usd"],

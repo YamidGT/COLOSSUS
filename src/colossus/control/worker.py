@@ -7,6 +7,7 @@ import time
 from colossus.contracts.core import DomainError, new_id, utcnow
 from colossus.control.broker import Broker
 from colossus.control.cycle import CycleEngine
+from colossus.control.deployment import DeploymentCoordinator
 from colossus.onboarding.service import Onboarding
 
 
@@ -26,6 +27,14 @@ class Worker:
         self.engine = CycleEngine(
             store, artifacts, services.clients["launcher"], self.broker, self.onboarding, runtime
         )
+        self.deployment = DeploymentCoordinator(
+            store,
+            artifacts,
+            services.clients["deployer"],
+            services.clients["launcher"],
+            self.onboarding,
+            self.engine,
+        )
         self.state = "starting"
         self.current_task_id = None
         self.stop_event = asyncio.Event()
@@ -37,6 +46,14 @@ class Worker:
             for v in (project.get("mirror", {}), project.get("deployment", {}))
             if v.get("environment_id")
         ]
+        destination = await self.services.clients["deployer"].call(
+            "/abort", {"project_id": project_id}
+        )
+        keep.extend(
+            slot["environment_id"]
+            for slot in (destination.get("current"), destination.get("previous"))
+            if slot
+        )
         return await self.services.clients["launcher"].call(
             "/terminate-work", {"project_id": project_id, "keep": keep}
         )
@@ -52,6 +69,16 @@ class Worker:
         for task in tasks:
             # Fail closed after a controller crash. Do not replay a deployment or inference call.
             await self.terminate(task["project_id"])
+            destination = await self.deployment.synchronize_destination(task["project_id"])
+            project = self.store.get("project", task["project_id"])
+            if (
+                destination.get("current")
+                and project.get("mirror", {}).get("artifact_digest")
+                != destination["current"]["artifact_digest"]
+            ):
+                self.onboarding.update(
+                    task["project_id"], mirror=project.get("mirror", {}) | {"state": "STALE"}
+                )
             task["payload"] = json.loads(task["payload"])
             await self.failed(
                 task,
@@ -102,6 +129,9 @@ class Worker:
                 payload["cycle_id"], status=state, reason=message, finished_at=utcnow()
             )
             self.onboarding.update(project_id, active_cycle_id=None)
+        project = self.store.get("project", project_id)
+        if project.get("maintenance_operation_id") == payload["operation_id"]:
+            self.onboarding.update(project_id, maintenance_operation_id=None)
         self.store.finish_operation(payload["operation_id"], "failed", code)
 
     async def execute(self, task):
@@ -116,8 +146,24 @@ class Worker:
             return result
         if task["kind"] == "cycle":
             result = await self.engine.run(payload["cycle_id"])
+            if (
+                result["status"] == "REVIEW_READY"
+                and self.store.get("project", task["project_id"])["owner_policy_id"]
+                == "lab-auto-v1"
+            ):
+                return await self.deployment.promote(result["case_id"])
             if result["status"] in {"NO_CHANGE", "COMPLETE"}:
                 self.onboarding.update(task["project_id"], active_cycle_id=None)
+            return result
+        if task["kind"] == "promote":
+            return await self.deployment.promote(
+                payload["case_id"], "owner_approval", payload["actor"]
+            )
+        if task["kind"] == "rollback":
+            result = await self.deployment.rollback(
+                task["project_id"], payload["expected_generation"]
+            )
+            self.onboarding.update(task["project_id"], maintenance_operation_id=None)
             return result
         raise DomainError("unsupported_task", "Task executor is not installed", 422)
 

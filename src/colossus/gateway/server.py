@@ -17,6 +17,7 @@ from colossus.contracts.core import Contract, DomainError
 from colossus.contracts.models import Enrollment
 from colossus.gateway.model import ModelGateway, load_provider_key
 from colossus.gateway.source import GitHubSource
+from colossus.intel.osv import ThreatFeeds
 
 
 class CompletionRequest(Contract):
@@ -25,6 +26,10 @@ class CompletionRequest(Contract):
     max_tokens: int = Field(default=4096, ge=1, le=8192)
     reasoning: str = "low"
     json_output: bool = True
+
+
+class InventoryRequest(Contract):
+    pins: list[tuple[str, str]] = Field(default_factory=list, max_length=100)
 
 
 def create_gateway(token: str, env_file: Path):
@@ -58,6 +63,10 @@ def create_gateway(token: str, env_file: Path):
             path: base64.b64encode(data).decode() for path, data in result["files"].items()
         }
         return result
+
+    @app.post("/intel")
+    async def intel(body: InventoryRequest):
+        return await ThreatFeeds(client).match(body.pins)
 
     @app.post("/complete")
     async def complete(body: CompletionRequest):

@@ -168,16 +168,21 @@ def receipt_lines(receipt: dict) -> list[str]:
     return lines
 
 
-def confirm(yes: bool, consequence: str) -> None:
-    """Ask once in a TTY; scripts must pass --yes. --yes never bypasses server checks."""
-    if yes:
-        return
-    if not render.is_tty():
+def require_interactive_or_yes(yes: bool) -> None:
+    """Fail before any request when a script would need a confirmation it cannot give."""
+    if not yes and not render.is_tty():
         raise CliError(
             EXIT_USAGE,
             "confirmation_required",
             "This command needs confirmation; rerun with --yes in non-interactive use.",
         )
+
+
+def confirm(yes: bool, consequence: str) -> None:
+    """Ask once in a TTY; scripts must pass --yes. --yes never bypasses server checks."""
+    if yes:
+        return
+    require_interactive_or_yes(yes)
     if not click.confirm(render.clean(consequence), default=False, err=True):
         raise CliError(EXIT_BLOCKED, "not_confirmed", "Not confirmed; nothing was sent.")
 
@@ -303,7 +308,11 @@ def doctor(ctx: typer.Context, profile: str = "standard", check_model: bool = Fa
 
     def preflight():
         if not shutil.which("docker"):
-            return {"ready": False, "context": settings.docker_context, "reason": "docker CLI missing"}
+            return {
+                "ready": False,
+                "context": settings.docker_context,
+                "reason": "docker CLI missing",
+            }
         return SandboxLauncher(settings.docker_context, settings.sandbox_runtime).preflight()
 
     found = run_checks(repo_root(), preflight)
@@ -599,18 +608,26 @@ def approve(
     """Authorize exact evidence for one destination; gates cannot be overridden."""
     if not SHA256.fullmatch(manifest_hash):
         raise CliError(EXIT_USAGE, "invalid_input", "MANIFEST_HASH must be 64 lowercase hex characters")
+    require_interactive_or_yes(yes)
     api = client(ctx)
-    api.require_route("approve", "POST", "/authorizations")
+    api.require_route("approve", "GET", "/evidence/{manifest_hash}/review")
+    api.require_route("approve", "POST", "/cases/{case_id}/approve")
+    review = api.request("GET", f"/evidence/{manifest_hash}/review")
+    if review.get("destination_id") != destination:
+        raise CliError(EXIT_BLOCKED, "destination_mismatch", "Destination differs from the verified candidate")
     confirm(
         yes,
-        f"Authorize evidence manifest {manifest_hash} for destination {destination}?",
+        f"Approve candidate {review.get('candidate_id')} (evidence {manifest_hash}) for "
+        f"{destination} at generation {review.get('expected_deployment_generation')}?",
     )
-    receipt = api.request(
-        "POST",
-        "/authorizations",
-        {"evidence_manifest_hash": manifest_hash, "destination_id": destination},
-    )
-    finish(ctx, receipt_result(ctx, receipt, message="Authorization submitted"), human=receipt_lines(receipt))
+    body = {
+        "candidate_id": review.get("candidate_id"),
+        "evidence_manifest_hash": manifest_hash,
+        "expected_deployment_generation": review.get("expected_deployment_generation"),
+        "expected_revision": review.get("revision"),
+    }
+    receipt = api.request("POST", f"/cases/{review['case_id']}/approve", body)
+    finish(ctx, receipt_result(ctx, receipt, message="Approval submitted"), human=receipt_lines(receipt))
 
 
 @app.command()
@@ -625,18 +642,12 @@ def reject(
     if not 1 <= len(reason.strip()) <= 2000:
         raise CliError(EXIT_USAGE, "invalid_input", "--reason must be 1 to 2000 characters")
     api = client(ctx)
-    api.require_route("reject", "POST", "/cases/{case_id}/decisions")
+    api.require_route("reject", "POST", "/cases/{case_id}/reject")
     current = api.request("GET", f"/cases/{case_id}")
     receipt = api.request(
         "POST",
-        f"/cases/{case_id}/decisions",
-        {
-            "case_id": case_id,
-            "candidate_id": candidate,
-            "expected_revision": current.get("revision"),
-            "decision": "reject",
-            "reason": reason,
-        },
+        f"/cases/{case_id}/reject",
+        {"candidate_id": candidate, "expected_revision": current.get("revision"), "reason": reason},
     )
     finish(ctx, receipt_result(ctx, receipt, message="Rejection recorded"), human=receipt_lines(receipt))
 
@@ -645,6 +656,7 @@ def reject(
 @command
 def rollback(ctx: typer.Context, deployment_id: str, yes: bool = False):
     """Request bounded recovery to the retained prior artifact."""
+    require_interactive_or_yes(yes)
     api = client(ctx)
     api.require_route("rollback", "GET", "/deployments/{deployment_id}")
     api.require_route("rollback", "POST", "/deployments/{deployment_id}/rollback")

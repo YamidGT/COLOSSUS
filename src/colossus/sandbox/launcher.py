@@ -98,9 +98,26 @@ def bounded_process(
 
 _FORBIDDEN_CREATE_FLAGS = frozenset(
     {
-        "--privileged", "--cap-add", "--device", "--pid", "--userns", "--uts", "--cgroupns",
-        "--volumes-from", "-v", "--volume", "--mount", "-p", "--publish", "-P", "--publish-all",
-        "--add-host", "--env-file", "--group-add", "--isolation", "--sysctl",
+        "--privileged",
+        "--cap-add",
+        "--device",
+        "--pid",
+        "--userns",
+        "--uts",
+        "--cgroupns",
+        "--volumes-from",
+        "-v",
+        "--volume",
+        "--mount",
+        "-p",
+        "--publish",
+        "-P",
+        "--publish-all",
+        "--add-host",
+        "--env-file",
+        "--group-add",
+        "--isolation",
+        "--sysctl",
     }
 )
 _REQUIRED_CREATE = {
@@ -125,9 +142,21 @@ def assert_safe_create(args: list[str], runtime: str = "runsc") -> None:
     if not args or args[0] != "create":
         deny("not a create command")
     takes_value = {
-        "--name", "--runtime", "--network", "--cap-drop", "--security-opt", "--ipc", "--user",
-        "--pids-limit", "--memory", "--memory-swap", "--cpus", "--stop-timeout", "--tmpfs",
-        "--workdir", "--label",
+        "--name",
+        "--runtime",
+        "--network",
+        "--cap-drop",
+        "--security-opt",
+        "--ipc",
+        "--user",
+        "--pids-limit",
+        "--memory",
+        "--memory-swap",
+        "--cpus",
+        "--stop-timeout",
+        "--tmpfs",
+        "--workdir",
+        "--label",
     }
     values: dict[str, list[str]] = {}
     seen: set[str] = set()
@@ -137,15 +166,25 @@ def assert_safe_create(args: list[str], runtime: str = "runsc") -> None:
         if flag in _FORBIDDEN_CREATE_FLAGS:
             deny(f"forbidden flag {flag}")
         if flag == "--read-only":
+            if eq or flag in seen:
+                deny("read-only must be enabled exactly once")
             seen.add(flag)
             i += 1
             continue
         if flag not in takes_value:
             deny(f"unexpected flag {flag}")
         value = inline if eq else (args[i + 1] if i + 1 < len(args) else "")
+        if not value or value.startswith("-"):
+            deny(f"missing value for {flag}")
+        if flag in seen and flag not in {"--tmpfs", "--label"}:
+            deny(f"duplicate flag {flag}")
         values.setdefault(flag, []).append(value)
         seen.add(flag)
         i += 1 if eq else 2
+    if i >= len(args) or not (
+        args[i] == PYTHON_IMAGE or re.fullmatch(r"sha256:[a-f0-9]{64}", args[i])
+    ):
+        deny("image must be pinned")
     if values.get("--runtime") != [runtime] or runtime != "runsc":
         deny("runtime must be runsc")
     net = values.get("--network", [])
@@ -155,12 +194,17 @@ def assert_safe_create(args: list[str], runtime: str = "runsc") -> None:
         if want is None:
             if flag not in seen:
                 deny(f"missing {flag}")
-        elif want not in values.get(flag, []):
+        elif values.get(flag) != [want]:
             deny(f"missing {flag} {want}")
     if any("unconfined" in v for v in values.get("--security-opt", [])):
         deny("unconfined security option")
     if values.get("--memory") != values.get("--memory-swap"):
         deny("memory-swap must equal memory")
+    memory = values.get("--memory", [""])[0]
+    if not re.fullmatch(r"[0-9]+m", memory) or not 64 <= int(memory[:-1]) <= 6144:
+        deny("memory must be bounded")
+    if values.get("--cpus") != ["2"] or values.get("--pids-limit") != ["128"]:
+        deny("CPU and PID limits are required")
     for tmpfs in values.get("--tmpfs", []):
         opts = tmpfs.split(":", 1)[1] if ":" in tmpfs else ""
         if "nosuid" not in opts or "nodev" not in opts or "size=" not in opts:
@@ -587,6 +631,28 @@ class SandboxLauncher:
             # runsc cannot kill a frozen sandbox ("PID is zombie"); thaw it first.
             self.checked("unpause", environment_id)
         self.checked("rm", "-f", environment_id)
+
+    def stop_target(self, project_id: str, environment_id: str, network_id: str):
+        if not environment_id.startswith("colossus-") or not network_id.startswith("colossus-net-"):
+            raise DomainError("invalid_environment", "Invalid managed target identity", 422)
+        result = self.docker("inspect", environment_id)
+        if result.exit_code == 0:
+            info = self.inspect(environment_id)
+            if info["Config"]["Labels"].get("org.colossus.project") != project_id:
+                raise DomainError("target_scope", "Target belongs to another project", 403)
+            self.destroy(environment_id)
+        elif "no such" not in result.stderr.lower():
+            raise DomainError(
+                "runtime_unavailable", "Cannot establish whether target is stopped", 503
+            )
+        result = self.docker("network", "inspect", network_id)
+        if result.exit_code == 0:
+            self.destroy_network(network_id, project_id)
+        elif "not found" not in result.stderr.lower() and "no such" not in result.stderr.lower():
+            raise DomainError(
+                "runtime_unavailable", "Cannot establish whether network is removed", 503
+            )
+        return {"stopped": True}
 
     def destroy_network(self, network_id: str, project_id: str):
         self._validate_network(network_id, project_id)

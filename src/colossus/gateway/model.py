@@ -154,8 +154,12 @@ class ModelGateway:
                 elapsed,
                 {"http_status": response.status_code},
             )
+        data, usage, actual = {}, {}, None
+        input_tokens = output_tokens = None
+        stage = "json_decode"
         try:
             data = response.json()
+            stage = "response_shape"
             usage = data.get("usage", {})
             input_tokens = usage.get("prompt_tokens")
             output_tokens = usage.get("completion_tokens")
@@ -181,7 +185,22 @@ class ModelGateway:
                     elapsed,
                     usage,
                 )
+            stage = "content_shape"
             content = message.get("content")
+            shape = {"content_type": type(content).__name__}
+            if isinstance(content, list):
+                shape["chunk_types"] = [c.get("type") for c in content if isinstance(c, dict)]
+                text_chunks = []
+                for chunk in content:
+                    if not isinstance(chunk, dict):
+                        raise ValueError("Invalid chunk")
+                    if chunk.get("type") in {"thinking", "reasoning"}:
+                        continue
+                    if chunk.get("type") != "text" or not isinstance(chunk.get("text"), str):
+                        raise ValueError("Unsupported content chunk")
+                    text_chunks.append(chunk["text"])
+                content = "".join(text_chunks)
+            usage = usage | {"response_shape": shape}
             if not isinstance(content, str) or len(content.encode()) > 128_000:
                 raise ValueError("Invalid content")
             # Never retain hidden reasoning content. Expected output is bounded task JSON.
@@ -209,16 +228,16 @@ class ModelGateway:
             )
         except (KeyError, IndexError, ValueError, TypeError):
             return Completion(
-                "uncertain",
+                "failed" if actual is not None else "uncertain",
                 None,
-                None,
+                data.get("model") if isinstance(data, dict) else None,
                 request_id,
-                None,
-                None,
-                None,
-                "invalid_response",
+                input_tokens if type(input_tokens) is int else None,
+                output_tokens if type(output_tokens) is int else None,
+                actual,
+                "invalid_response:" + stage,
                 elapsed,
-                {},
+                usage if isinstance(usage, dict) else {},
             )
 
     def metadata(self) -> dict:
