@@ -1,0 +1,840 @@
+{
+  "schema_version": "1.0",
+  "kind": "additional_fresh_dsvw_replication",
+  "run_revision": "992d45c9ac19f0496d0ef1851192ff2d3dd67d88",
+  "case": {
+    "allowed_actions": [],
+    "assurance_summary": {
+      "formal": "UNSUPPORTED",
+      "profile": "tested"
+    },
+    "authorization_id": "f0fe9369-0406-4e9f-9228-7dc8f0f0373d",
+    "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+    "candidate_source_id": "6cadc937ae32d3444cd57f1cc954ec95bf97846f52e1168306019c4763cb30b3",
+    "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+    "created_at": "2026-11-14T21:47:28.457675Z",
+    "cycle_id": "ed37752e-8046-442e-9e91-1adea5b4f7ae",
+    "deployment_evidence_id": "1639dc1ceb1729b0ae0973b093dd23c0e63c04d0bc4e5267acf1b72522dbd3de",
+    "destination_id": "local-web-v1",
+    "diff_ref": "5fa914409492c06972605d6d0fa2af7451b4fcbc6e8121f879f90f0b65816816",
+    "evidence_manifest_hash": "1aad44d37d872f489e92e629c3464d4923c1f3d28750fc57757022d15ff56d10",
+    "expected_deployment_generation": 0,
+    "finding_refs": [
+      "50381f0a-e685-4d20-9ca3-c97232ce9e30"
+    ],
+    "gate_results": [
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "policy",
+        "check_profile_id": "scope-base-v1",
+        "command_profile_hash": "288041d379528beb1c51ec4922a07161485e1eb02d9d5b8750e16a99a3d534f3",
+        "evidence_ids": [
+          "26ed8b515c02d22f265b2bd907aeaeff04184a0d14726df4b9f346f850bda3da"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:44.334362Z",
+        "gate_id": "3cc73ae2-c78c-49a3-860e-634271ddc5d4",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:47:44.334071Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "security",
+        "check_profile_id": "baseline-reproduction-v1",
+        "command_profile_hash": "6345b60de1a6849e58572d59c69e7e75270e8fc3c149641ec3ae718fdfbb6e55",
+        "evidence_ids": [
+          "56a342e10f08341f17ff90fb2bc1e2b01057da8dd4edd61174ef9287fe30d4c5"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:33.654333Z",
+        "gate_id": "25d941f5-4090-4ef8-86eb-e25c094a5e1a",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:47:29.932376Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "build",
+        "check_profile_id": "build-readiness-v1",
+        "command_profile_hash": "f73aa2614da726966004165e2413c3cbccc48c3ad53eb18357f6e67b4d7cb0f9",
+        "evidence_ids": [
+          "cf6e21aa4467c442f5f3ad361550a35d8ba9543b1e3459c7ec4ac15efd9774ac"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:48.770606Z",
+        "gate_id": "d0b47e85-ab4b-4eee-9faf-196ddd4a1641",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:47:44.334710Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "security",
+        "check_profile_id": "dsvw-security-v1",
+        "command_profile_hash": "1eed84dd0d4cf34affc7bdb6b7253ba123494b4fbf640382eccea41afe2002da",
+        "evidence_ids": [
+          "cf6e21aa4467c442f5f3ad361550a35d8ba9543b1e3459c7ec4ac15efd9774ac"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:48.770606Z",
+        "gate_id": "1b47e17b-8a17-4d0a-848e-8e9d8fee9fe6",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:47:44.938457Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "functional",
+        "check_profile_id": "dsvw-functional-v1",
+        "command_profile_hash": "73c37eeb3b77aefcf4998d9f4c4bedf8c1b9e2619cedb05bb9226afaad579ffa",
+        "evidence_ids": [
+          "cf6e21aa4467c442f5f3ad361550a35d8ba9543b1e3459c7ec4ac15efd9774ac"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:48.770606Z",
+        "gate_id": "76782529-f4c6-4db5-9931-0991f696508f",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:47:44.938457Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "static",
+        "check_profile_id": "static-regression-v1",
+        "command_profile_hash": "2c5db55fa024e0c358320e87fefce0d0ac3b1810a51a4fab9e42417f586e0652",
+        "evidence_ids": [
+          "655cb571ae05d4b0f1d38e211afa68446bb4a9c53aa5dbfa5643775a2c2e74f8"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:49.270853Z",
+        "gate_id": "f1d2650e-be50-4658-9098-b8f6d75d4541",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:47:48.771583Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "policy",
+        "check_profile_id": "artifact-binding-v1",
+        "command_profile_hash": "763b7e49919b4d6aa71d696871f51013beb83306768bd0bc3a0e2e4905ae8e80",
+        "evidence_ids": [
+          "d102ce074922eb9574454fda224c0ea93acdea1fced6b9ec871da26d2336b244"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:49.272337Z",
+        "gate_id": "3e2e191a-228a-46f7-883e-23589134d679",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:47:49.272337Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [
+          "No approved linked proof obligation for this component"
+        ],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+        "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+        "category": "formal",
+        "check_profile_id": "formal-coverage-v1",
+        "command_profile_hash": "36ef83f0add08ea589b324b44c67184c2a46b573b13ed5a2aec74a8d586021fd",
+        "evidence_ids": [
+          "4c1789e95422f48a2f0e7dfe8a75f5b0b6572b6d07942f704d4b29befb33f5b5"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:47:49.272337Z",
+        "gate_id": "821a9894-c2f4-43d6-8c80-ba264f35360d",
+        "proof_outcome": "UNSUPPORTED",
+        "reason": "No approved linked proof template matches this candidate component",
+        "scope": [
+          "Ordinary Python SQL adapter"
+        ],
+        "started_at": "2026-11-14T21:47:49.272337Z",
+        "status": "not_applicable",
+        "tool_version": "colossus-v1"
+      }
+    ],
+    "generation_mode": "fresh_inference",
+    "project_id": "93ef661e-a369-4cd2-a2d5-04218d9cf875",
+    "reason": "All required tested-profile gates passed; no formal proof claimed",
+    "refreshed_manifest_hash": "2ca6f0a8df351ecec22141be631e115cdc39e4b4cfcbf2e47b4ea6dae8227e6a",
+    "revision": 7,
+    "status": "COMPLETE",
+    "title": "SQL query construction repair",
+    "updated_at": "2026-11-14T21:53:04.745917Z"
+  },
+  "candidate": {
+    "artifact_digest": "sha256:f3c6c65d5f168fc3abc3d5058c6602a295bbacb237616a7e38552b8d489f2df2",
+    "build_evidence_ids": [
+      "d102ce074922eb9574454fda224c0ea93acdea1fced6b9ec871da26d2336b244",
+      "cf6e21aa4467c442f5f3ad361550a35d8ba9543b1e3459c7ec4ac15efd9774ac"
+    ],
+    "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+    "diff_hash": "5fa914409492c06972605d6d0fa2af7451b4fcbc6e8121f879f90f0b65816816",
+    "generated_code_hash": null,
+    "manifest_hash": "838b391674c1d466e6296124818c317cdc688d65c27075301ae473e12c1c3cb0",
+    "proposal_id": "e61c01d4-40bc-4bcf-9d2e-f1115d4811e3",
+    "revision": 1,
+    "source_tree_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda"
+  },
+  "certificate": {
+    "artifact_digest": "sha256:f3c6c65d5f168fc3abc3d5058c6602a295bbacb237616a7e38552b8d489f2df2",
+    "assurance_profile": "tested",
+    "baseline_hash": "da51a22aea8a66c3edafe11a0411fc8e119089104f618ee971cf4d7e8b0426f3",
+    "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+    "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+    "content_hash": "8443e55e1b5a793cb0b27b17deca0028e1f2ce0743e6492771a996675e12e4cf",
+    "diff_hash": "5fa914409492c06972605d6d0fa2af7451b4fcbc6e8121f879f90f0b65816816",
+    "exclusions": [
+      "No whole-repository security proof",
+      "Optional lxml is absent: XML/XPath routes are excluded from this runtime profile",
+      "Static coverage uses three AST rules; Semgrep/Bandit adapters are not installed",
+      "Other findings remain unresolved",
+      "Fresh inference used for this case"
+    ],
+    "gate_result_ids": [
+      "3cc73ae2-c78c-49a3-860e-634271ddc5d4",
+      "25d941f5-4090-4ef8-86eb-e25c094a5e1a",
+      "d0b47e85-ab4b-4eee-9faf-196ddd4a1641",
+      "1b47e17b-8a17-4d0a-848e-8e9d8fee9fe6",
+      "76782529-f4c6-4db5-9931-0991f696508f",
+      "f1d2650e-be50-4658-9098-b8f6d75d4541",
+      "3e2e191a-228a-46f7-883e-23589134d679",
+      "821a9894-c2f4-43d6-8c80-ba264f35360d"
+    ],
+    "harness_hashes": [
+      "a7c4d8af94e5ed32dd45a18b8481f6a649f32eef8a214f5593568f381301992c"
+    ],
+    "issued_at": "2026-11-14T21:47:49.275718Z",
+    "manifest_id": "c6ce1b09-5992-40b6-9669-4f5b9b478bb8",
+    "model_call_ids": [
+      "15cdf6f3-d3a2-4834-aeb5-ceed33ae6eec"
+    ],
+    "policy_hash": "63ba2ec063bb64a32f4365c2af75d20c3fc2213aa327d2f6775845c92e39f2b6",
+    "proof_summary": [
+      {
+        "outcome": "UNSUPPORTED",
+        "required": false,
+        "scope": "Python SQL adapter"
+      }
+    ],
+    "required_gate_ids": [
+      "3cc73ae2-c78c-49a3-860e-634271ddc5d4",
+      "25d941f5-4090-4ef8-86eb-e25c094a5e1a",
+      "d0b47e85-ab4b-4eee-9faf-196ddd4a1641",
+      "1b47e17b-8a17-4d0a-848e-8e9d8fee9fe6",
+      "76782529-f4c6-4db5-9931-0991f696508f",
+      "f1d2650e-be50-4658-9098-b8f6d75d4541",
+      "3e2e191a-228a-46f7-883e-23589134d679"
+    ],
+    "spec_hashes": [],
+    "target_manifest_hash": "838b391674c1d466e6296124818c317cdc688d65c27075301ae473e12c1c3cb0",
+    "test_hashes": [
+      "b5e131ab2ed36aaae0c39cc839e3002c06f4ce802f039570bbdca30b4a1c6a27"
+    ],
+    "total_cost_micro_usd": 2657
+  },
+  "target_manifest": {
+    "allowed_patch_paths": [
+      "dsvw.py",
+      "tests/fixture.py",
+      "tests/harness.py",
+      "tests/test_cases.py",
+      "tests/test_exploitability.py",
+      "tests/test_regressions.py"
+    ],
+    "artifact_digest": "sha256:4cae6f9e17e12aecf5e5858b8fb6b8e03dc95c7ec13c76f0074b72a23e19faf4",
+    "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+    "data_seed_id": "repository-default-v1",
+    "dependency_inventory_hash": "91f61c7f62e64e13556f9328b691c8457a09c80580aff009324ec57d0d10515a",
+    "dependency_inventory_id": "91f61c7f62e64e13556f9328b691c8457a09c80580aff009324ec57d0d10515a",
+    "deployment_profile_id": "local-web-v1",
+    "manifest_id": "2dae1e9f-2630-4f4c-a714-c4813fdd0c78",
+    "network_profile_id": "isolated-case-v1",
+    "obligation_ids": [],
+    "platform": "linux/arm64",
+    "policy_hash": "63ba2ec063bb64a32f4365c2af75d20c3fc2213aa327d2f6775845c92e39f2b6",
+    "project_id": "93ef661e-a369-4cd2-a2d5-04218d9cf875",
+    "protected_paths": [
+      "colossus-app.json"
+    ],
+    "readiness_profile_id": "dsvw-python-v1:health",
+    "recipe_hash": "3af1e4a3ebb2e68ecdc7769c29594ebf6c42b9bb443d119e0b739e143f3ba8e0",
+    "recipe_id": "dsvw-python-v1",
+    "repo_url": "https://github.com/stamparm/DSVW",
+    "revision": 1,
+    "services": [
+      {
+        "artifact_digest": "sha256:4cae6f9e17e12aecf5e5858b8fb6b8e03dc95c7ec13c76f0074b72a23e19faf4",
+        "command_profile_id": "dsvw-python-v1",
+        "dependency_service_ids": [],
+        "health_check_id": "dsvw-python-v1:health",
+        "internal_ports": [
+          65412
+        ],
+        "resource_profile_id": "standard",
+        "service_id": "app",
+        "writable_paths": []
+      }
+    ],
+    "setup_provenance": [
+      {
+        "dependency_evidence_id": "dfe003553eda398f030917b07eab33e1d7049845628e2e7f09a2c8aede324583",
+        "intake_source_id": "5f71e4fb16488d3bce9ed89db5e638bde0325429b8c0a44a69091c1adb76d2e0",
+        "limitations": [
+          "Optional lxml is absent: XML/XPath routes are excluded from this runtime profile"
+        ],
+        "readiness_evidence_id": "861f4e379d9eb1a003bfe9fb251a5ba2b546cf8befc605c4cffa5e78a08cb71b",
+        "runtime_tree_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "source_id": "dd6fdadab06392c0865e1e8e0b283ee002b0b71a23f0d0c738177822cc20f22b"
+      }
+    ],
+    "target_kind": "web",
+    "test_profile_ids": [
+      "dsvw-functional-v1",
+      "dsvw-security-v1"
+    ],
+    "toolchain_manifest_id": "78d720782810c3e21dc4d5447e4450fd7d5189dd64b205920773b75146fb5e54",
+    "tree_sha256": "da51a22aea8a66c3edafe11a0411fc8e119089104f618ee971cf4d7e8b0426f3"
+  },
+  "model_calls": [
+    {
+      "actual_cost_micro_usd": 1301,
+      "billing_usage": {
+        "completion_tokens": 109,
+        "completion_tokens_details": {
+          "reasoning_tokens": 8
+        },
+        "prompt_tokens": 8306,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "response_shape": {
+          "chunk_types": [
+            "thinking",
+            "text"
+          ],
+          "content_type": "list"
+        },
+        "total_tokens": 8415
+      },
+      "call_id": "15cdf6f3-d3a2-4834-aeb5-ceed33ae6eec",
+      "created_at": "2026-11-14T21:47:42.367708Z",
+      "elapsed_seconds": 1.962640083162114,
+      "endpoint_profile_id": "mistral-chat-v1",
+      "input_tokens": 8306,
+      "model_profile_hash": "1e423ea81e6b3aa7431bdcda0a000cdde99d483fe2caa8e155a658378227ffeb",
+      "model_requested": "zai-glm-5-3-flash",
+      "model_returned": "zai-glm-5-3-flash",
+      "output_tokens": 109,
+      "price_snapshot_id": "2026-11-14",
+      "provider": "mistral",
+      "provider_request_id": null,
+      "reason_code": null,
+      "reasoning_effort": "low",
+      "request_hash": "b8c2b406de5eb37610ad3788d7ae198b92f2e70058c8fa4a35c5fe5c70f451f3",
+      "reserved_cost_micro_usd": 6263,
+      "response_content_id": "e4edc104e0d7e477902b5ee2bebb983aecb57ed16c5455fb605031f0720db892",
+      "revision": 2,
+      "status": "succeeded",
+      "task_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "template_version": "1"
+    },
+    {
+      "actual_cost_micro_usd": 1356,
+      "billing_usage": {
+        "completion_tokens": 247,
+        "completion_tokens_details": {
+          "reasoning_tokens": 131
+        },
+        "prompt_tokens": 8213,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "response_shape": {
+          "chunk_types": [
+            "thinking",
+            "text"
+          ],
+          "content_type": "list"
+        },
+        "total_tokens": 8460
+      },
+      "call_id": "d21618ad-c04d-4789-a3b7-64b41b7f8131",
+      "created_at": "2026-11-14T21:47:33.656218Z",
+      "elapsed_seconds": 3.3057827081065625,
+      "endpoint_profile_id": "mistral-chat-v1",
+      "input_tokens": 8213,
+      "model_profile_hash": "1e423ea81e6b3aa7431bdcda0a000cdde99d483fe2caa8e155a658378227ffeb",
+      "model_requested": "zai-glm-5-3-flash",
+      "model_returned": "zai-glm-5-3-flash",
+      "output_tokens": 247,
+      "price_snapshot_id": "2026-11-14",
+      "provider": "mistral",
+      "provider_request_id": null,
+      "reason_code": null,
+      "reasoning_effort": "low",
+      "request_hash": "dad1e890291ff801ab9b4fd61eb2fc71f10d87621268eaabe2fb725b717d23e7",
+      "reserved_cost_micro_usd": 6214,
+      "response_content_id": "875318be6b814a943ba4d42eb60128562b906131a12aaa9a72bd87843cce024c",
+      "revision": 2,
+      "status": "succeeded",
+      "task_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "template_version": "1"
+    }
+  ],
+  "proposal_rejections": [],
+  "all_candidate_gates": [
+    {
+      "assumptions": [
+        "No approved linked proof obligation for this component"
+      ],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "formal",
+      "check_profile_id": "formal-coverage-v1",
+      "command_profile_hash": "36ef83f0add08ea589b324b44c67184c2a46b573b13ed5a2aec74a8d586021fd",
+      "evidence_ids": [
+        "4c1789e95422f48a2f0e7dfe8a75f5b0b6572b6d07942f704d4b29befb33f5b5"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:49.272337Z",
+      "gate_id": "821a9894-c2f4-43d6-8c80-ba264f35360d",
+      "proof_outcome": "UNSUPPORTED",
+      "reason": "No approved linked proof template matches this candidate component",
+      "revision": 1,
+      "scope": [
+        "Ordinary Python SQL adapter"
+      ],
+      "started_at": "2026-11-14T21:47:49.272337Z",
+      "status": "not_applicable",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "policy",
+      "check_profile_id": "artifact-binding-v1",
+      "command_profile_hash": "763b7e49919b4d6aa71d696871f51013beb83306768bd0bc3a0e2e4905ae8e80",
+      "evidence_ids": [
+        "d102ce074922eb9574454fda224c0ea93acdea1fced6b9ec871da26d2336b244"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:49.272337Z",
+      "gate_id": "3e2e191a-228a-46f7-883e-23589134d679",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:49.272337Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "static",
+      "check_profile_id": "static-regression-v1",
+      "command_profile_hash": "2c5db55fa024e0c358320e87fefce0d0ac3b1810a51a4fab9e42417f586e0652",
+      "evidence_ids": [
+        "655cb571ae05d4b0f1d38e211afa68446bb4a9c53aa5dbfa5643775a2c2e74f8"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:49.270853Z",
+      "gate_id": "f1d2650e-be50-4658-9098-b8f6d75d4541",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:48.771583Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "functional",
+      "check_profile_id": "dsvw-functional-v1",
+      "command_profile_hash": "73c37eeb3b77aefcf4998d9f4c4bedf8c1b9e2619cedb05bb9226afaad579ffa",
+      "evidence_ids": [
+        "cf6e21aa4467c442f5f3ad361550a35d8ba9543b1e3459c7ec4ac15efd9774ac"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:48.770606Z",
+      "gate_id": "76782529-f4c6-4db5-9931-0991f696508f",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:44.938457Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "security",
+      "check_profile_id": "dsvw-security-v1",
+      "command_profile_hash": "1eed84dd0d4cf34affc7bdb6b7253ba123494b4fbf640382eccea41afe2002da",
+      "evidence_ids": [
+        "cf6e21aa4467c442f5f3ad361550a35d8ba9543b1e3459c7ec4ac15efd9774ac"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:48.770606Z",
+      "gate_id": "1b47e17b-8a17-4d0a-848e-8e9d8fee9fe6",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:44.938457Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "build",
+      "check_profile_id": "build-readiness-v1",
+      "command_profile_hash": "f73aa2614da726966004165e2413c3cbccc48c3ad53eb18357f6e67b4d7cb0f9",
+      "evidence_ids": [
+        "cf6e21aa4467c442f5f3ad361550a35d8ba9543b1e3459c7ec4ac15efd9774ac"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:48.770606Z",
+      "gate_id": "d0b47e85-ab4b-4eee-9faf-196ddd4a1641",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:44.334710Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "security",
+      "check_profile_id": "baseline-reproduction-v1",
+      "command_profile_hash": "6345b60de1a6849e58572d59c69e7e75270e8fc3c149641ec3ae718fdfbb6e55",
+      "evidence_ids": [
+        "56a342e10f08341f17ff90fb2bc1e2b01057da8dd4edd61174ef9287fe30d4c5"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:33.654333Z",
+      "gate_id": "25d941f5-4090-4ef8-86eb-e25c094a5e1a",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:29.932376Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "policy",
+      "check_profile_id": "scope-base-v1",
+      "command_profile_hash": "288041d379528beb1c51ec4922a07161485e1eb02d9d5b8750e16a99a3d534f3",
+      "evidence_ids": [
+        "26ed8b515c02d22f265b2bd907aeaeff04184a0d14726df4b9f346f850bda3da"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:44.334362Z",
+      "gate_id": "3cc73ae2-c78c-49a3-860e-634271ddc5d4",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:44.334071Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [
+        "No approved linked proof obligation for this component"
+      ],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "formal",
+      "check_profile_id": "formal-coverage-v1",
+      "command_profile_hash": "36ef83f0add08ea589b324b44c67184c2a46b573b13ed5a2aec74a8d586021fd",
+      "evidence_ids": [
+        "4c1789e95422f48a2f0e7dfe8a75f5b0b6572b6d07942f704d4b29befb33f5b5"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:41.994928Z",
+      "gate_id": "2b27a1ac-a98f-4aee-8e71-93fe393d5b97",
+      "proof_outcome": "UNSUPPORTED",
+      "reason": "No approved linked proof template matches this candidate component",
+      "revision": 1,
+      "scope": [
+        "Ordinary Python SQL adapter"
+      ],
+      "started_at": "2026-11-14T21:47:41.994928Z",
+      "status": "not_applicable",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "policy",
+      "check_profile_id": "artifact-binding-v1",
+      "command_profile_hash": "763b7e49919b4d6aa71d696871f51013beb83306768bd0bc3a0e2e4905ae8e80",
+      "evidence_ids": [
+        "c546e6d4ba92c90edc408fcc333b5730592176a37f80838a0d42b2cb9c7ac1bb"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:41.994928Z",
+      "gate_id": "15a0cc09-0aef-48fb-82fe-496e61fd48a9",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:41.994928Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "static",
+      "check_profile_id": "static-regression-v1",
+      "command_profile_hash": "2c5db55fa024e0c358320e87fefce0d0ac3b1810a51a4fab9e42417f586e0652",
+      "evidence_ids": [
+        "655cb571ae05d4b0f1d38e211afa68446bb4a9c53aa5dbfa5643775a2c2e74f8"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:41.992979Z",
+      "gate_id": "6b994d63-98bb-49ab-a3b6-9c4684dd42d8",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:41.461230Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "functional",
+      "check_profile_id": "dsvw-functional-v1",
+      "command_profile_hash": "73c37eeb3b77aefcf4998d9f4c4bedf8c1b9e2619cedb05bb9226afaad579ffa",
+      "evidence_ids": [
+        "767591ad32ef4e5a5ffd3d89e84a9c5f2499060faf487a2783bee84d5d460216"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:41.460477Z",
+      "gate_id": "cd445259-15ae-4ec1-995b-7b03cfeec9f0",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:37.825337Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "security",
+      "check_profile_id": "dsvw-security-v1",
+      "command_profile_hash": "1eed84dd0d4cf34affc7bdb6b7253ba123494b4fbf640382eccea41afe2002da",
+      "evidence_ids": [
+        "767591ad32ef4e5a5ffd3d89e84a9c5f2499060faf487a2783bee84d5d460216"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:41.460477Z",
+      "gate_id": "0d80b315-964b-4455-8a05-f2316674e230",
+      "proof_outcome": null,
+      "reason": "Protected check failed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:37.825337Z",
+      "status": "fail",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "build",
+      "check_profile_id": "build-readiness-v1",
+      "command_profile_hash": "f73aa2614da726966004165e2413c3cbccc48c3ad53eb18357f6e67b4d7cb0f9",
+      "evidence_ids": [
+        "767591ad32ef4e5a5ffd3d89e84a9c5f2499060faf487a2783bee84d5d460216"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:41.460477Z",
+      "gate_id": "ff79dfc0-4a99-456e-af70-93db3e3d0457",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:36.970474Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "security",
+      "check_profile_id": "baseline-reproduction-v1",
+      "command_profile_hash": "6345b60de1a6849e58572d59c69e7e75270e8fc3c149641ec3ae718fdfbb6e55",
+      "evidence_ids": [
+        "56a342e10f08341f17ff90fb2bc1e2b01057da8dd4edd61174ef9287fe30d4c5"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:33.654333Z",
+      "gate_id": "c778aa9d-614c-46fa-b5e3-bf267024a18e",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:29.932376Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    },
+    {
+      "assumptions": [],
+      "candidate_hash": "d91803d52dbec1cd919252b3513925b7375bd23bf3e0f8ca268e4e2966eb4986",
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "category": "policy",
+      "check_profile_id": "scope-base-v1",
+      "command_profile_hash": "288041d379528beb1c51ec4922a07161485e1eb02d9d5b8750e16a99a3d534f3",
+      "evidence_ids": [
+        "a39ce2d01b6d9fb4097724e82848f67222bc6acbb5e533ccc24d81d23004420e"
+      ],
+      "exit_code": null,
+      "finished_at": "2026-11-14T21:47:36.970012Z",
+      "gate_id": "1d49a71d-2230-4d71-a2f3-f2322495031c",
+      "proof_outcome": null,
+      "reason": "Protected check passed",
+      "revision": 1,
+      "scope": [
+        "DSVW id-query repair"
+      ],
+      "started_at": "2026-11-14T21:47:36.969680Z",
+      "status": "pass",
+      "tool_version": "colossus-v1"
+    }
+  ],
+  "audit_chain_valid_at_export": true,
+  "notes": [
+    "Additional fresh-model run requested after primary submission was pushed",
+    "All failed proposal/gate attempts retained",
+    "Calibration runtime retired after successful rollback",
+    "Formal outcome remains UNSUPPORTED for this SQL adapter"
+  ]
+}

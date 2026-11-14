@@ -1,0 +1,40 @@
+{
+  "repo": "stamparm/DSVW",
+  "generation_mode": "fresh_inference",
+  "replayed_case_id": null,
+  "project_id": "93ef661e-a369-4cd2-a2d5-04218d9cf875",
+  "cycle_id": "ed37752e-8046-442e-9e91-1adea5b4f7ae",
+  "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+  "promoted": {
+    "status": "COMPLETE",
+    "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+    "generation": 1,
+    "manifest_hash": "2ca6f0a8df351ecec22141be631e115cdc39e4b4cfcbf2e47b4ea6dae8227e6a"
+  },
+  "first_cycle_seconds": 341.00221658311784,
+  "second_cycle": {
+    "status": "NO_CHANGE",
+    "case_id": "cae3a405-d74b-4c4d-868c-4834c5594459"
+  },
+  "rollback": {
+    "status": "ROLLED_BACK",
+    "generation": 2,
+    "manifest_hash": "380fc8af68826dff518fbb59ef4fd26badde378c40470a1136bfb363bd769e12",
+    "known_vulnerable_baseline": true
+  },
+  "recovery_seconds": 7.883156749885529,
+  "cost": {
+    "committed_micro_usd": 2657,
+    "settled_micro_usd": 2657,
+    "calls": 2,
+    "uncertain_micro_usd": 0
+  },
+  "audit_valid": true,
+  "observation_seconds": 300,
+  "formal": "UNSUPPORTED for this Python component",
+  "deployment_evidence_id": "1639dc1ceb1729b0ae0973b093dd23c0e63c04d0bc4e5267acf1b72522dbd3de",
+  "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+  "artifact_digest": "sha256:f3c6c65d5f168fc3abc3d5058c6602a295bbacb237616a7e38552b8d489f2df2",
+  "evidence_file": "dsvw-repeat-evidence.json",
+  "run_revision": "992d45c9ac19f0496d0ef1851192ff2d3dd67d88"
+}

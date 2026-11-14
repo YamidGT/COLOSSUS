@@ -1,0 +1,501 @@
+{
+  "cycle": {
+    "repo": "stamparm/DSVW",
+    "generation_mode": "fresh_inference",
+    "replayed_case_id": null,
+    "project_id": "93ef661e-a369-4cd2-a2d5-04218d9cf875",
+    "cycle_id": "ed37752e-8046-442e-9e91-1adea5b4f7ae",
+    "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+    "promoted": {
+      "status": "COMPLETE",
+      "case_id": "2ad7bfd8-1487-4f06-b0a9-32d7baa003eb",
+      "generation": 1,
+      "manifest_hash": "2ca6f0a8df351ecec22141be631e115cdc39e4b4cfcbf2e47b4ea6dae8227e6a"
+    },
+    "first_cycle_seconds": 341.00221658311784,
+    "second_cycle": {
+      "status": "NO_CHANGE",
+      "case_id": "cae3a405-d74b-4c4d-868c-4834c5594459"
+    },
+    "rollback": {
+      "status": "ROLLED_BACK",
+      "generation": 2,
+      "manifest_hash": "380fc8af68826dff518fbb59ef4fd26badde378c40470a1136bfb363bd769e12",
+      "known_vulnerable_baseline": true
+    },
+    "recovery_seconds": 7.883156749885529,
+    "cost": {
+      "committed_micro_usd": 2657,
+      "settled_micro_usd": 2657,
+      "calls": 2,
+      "uncertain_micro_usd": 0
+    },
+    "audit_valid": true,
+    "observation_seconds": 300,
+    "formal": "UNSUPPORTED for this Python component",
+    "deployment_evidence_id": "1639dc1ceb1729b0ae0973b093dd23c0e63c04d0bc4e5267acf1b72522dbd3de",
+    "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+    "artifact_digest": "sha256:f3c6c65d5f168fc3abc3d5058c6602a295bbacb237616a7e38552b8d489f2df2",
+    "evidence_file": "dsvw-repeat-evidence.json",
+    "run_revision": "992d45c9ac19f0496d0ef1851192ff2d3dd67d88"
+  },
+  "gates": [
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "formal",
+      "check_profile_id": "formal-coverage-v1",
+      "status": "not_applicable",
+      "reason": "No approved linked proof template matches this candidate component",
+      "proof_outcome": "UNSUPPORTED",
+      "finished_at": "2026-11-14T21:47:49.272337Z"
+    },
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "policy",
+      "check_profile_id": "artifact-binding-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:49.272337Z"
+    },
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "static",
+      "check_profile_id": "static-regression-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:49.270853Z"
+    },
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "functional",
+      "check_profile_id": "dsvw-functional-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:48.770606Z"
+    },
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "security",
+      "check_profile_id": "dsvw-security-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:48.770606Z"
+    },
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "build",
+      "check_profile_id": "build-readiness-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:48.770606Z"
+    },
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "security",
+      "check_profile_id": "baseline-reproduction-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:33.654333Z"
+    },
+    {
+      "candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+      "category": "policy",
+      "check_profile_id": "scope-base-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:44.334362Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "formal",
+      "check_profile_id": "formal-coverage-v1",
+      "status": "not_applicable",
+      "reason": "No approved linked proof template matches this candidate component",
+      "proof_outcome": "UNSUPPORTED",
+      "finished_at": "2026-11-14T21:47:41.994928Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "policy",
+      "check_profile_id": "artifact-binding-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:41.994928Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "static",
+      "check_profile_id": "static-regression-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:41.992979Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "functional",
+      "check_profile_id": "dsvw-functional-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:41.460477Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "security",
+      "check_profile_id": "dsvw-security-v1",
+      "status": "fail",
+      "reason": "Protected check failed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:41.460477Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "build",
+      "check_profile_id": "build-readiness-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:41.460477Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "security",
+      "check_profile_id": "baseline-reproduction-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:33.654333Z"
+    },
+    {
+      "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+      "category": "policy",
+      "check_profile_id": "scope-base-v1",
+      "status": "pass",
+      "reason": "Protected check passed",
+      "proof_outcome": null,
+      "finished_at": "2026-11-14T21:47:36.970012Z"
+    }
+  ],
+  "accepted_candidate": "9b74da9f-6591-4f11-928b-b63089fc5cb3",
+  "formal": {
+    "status": "PROVED_COMPONENT",
+    "display": "5.50 s; 1 call; $0.000078",
+    "source": "evaluation/submission/formal-agent.json",
+    "sha256": "98fd706112f12317fb4c9ddb56271132a279e522e5d36dc50f3a0a4cd48d3be8",
+    "elapsed_seconds": 5.496,
+    "elapsed_scope": "model + verifier/compile RPC; excludes subsequent wrapper packaging",
+    "proof_outcome": "PROVED",
+    "target_proof_outcome": "UNSUPPORTED",
+    "scope": [
+      "Policy.MayChangePassword",
+      "Policy.MayReadBookSecret",
+      "Policy.PublicUserProjection",
+      "Policy.RegistrationRole"
+    ],
+    "attempts": 1,
+    "model_calls": 1,
+    "cost_micro_usd": 78,
+    "compiled": true,
+    "profile_id": "authorization-policy-calibration-v1",
+    "spec_hash": "90bb80b140a04fe0d8166cea2f8cbb92286d7aed68c0de1876c975fafcbff41c",
+    "fixture_runtime_linkage": true,
+    "audit_valid": true
+  },
+  "repositories": [
+    {
+      "id": "U01",
+      "name": "erev0s/VAmPI",
+      "url": "https://github.com/erev0s/VAmPI",
+      "source": "accepted",
+      "setup": {
+        "status": "ready",
+        "artifact_digest": "sha256:6a7fad2dde3a0613718724d3203ae58024944854dec7000334a9161135890502",
+        "recipe_id": "declared-python-v1",
+        "project_id": "0c00821b-29a3-4047-b90c-03ba8e596314"
+      },
+      "scope": null
+    },
+    {
+      "id": "U02",
+      "name": "fportantier/vulpy",
+      "url": "https://github.com/fportantier/vulpy",
+      "source": "rejected",
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U03",
+      "name": "stamparm/DSVW",
+      "url": "https://github.com/stamparm/DSVW",
+      "source": "accepted",
+      "setup": {
+        "status": "ready",
+        "evidence_origin": "separate_integration_run",
+        "project_id": "20803760-3020-4143-9b94-641698f17417"
+      },
+      "scope": null
+    },
+    {
+      "id": "U04",
+      "name": "we45/Vulnerable-Flask-App",
+      "url": "https://github.com/we45/Vulnerable-Flask-App",
+      "source": "accepted",
+      "setup": {
+        "status": "failed",
+        "reason_code": "readiness_failed",
+        "reason": "Application did not pass its positive readiness probe"
+      },
+      "scope": null
+    },
+    {
+      "id": "U05",
+      "name": "anxolerd/dvpwa",
+      "url": "https://github.com/anxolerd/dvpwa",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Python dependencies found but no supported application entrypoint was identified"
+      },
+      "scope": null
+    },
+    {
+      "id": "U06",
+      "name": "payatu/Tiredful-API",
+      "url": "https://github.com/payatu/Tiredful-API",
+      "source": "accepted",
+      "setup": {
+        "status": "failed",
+        "reason_code": "dependency_build_failed",
+        "reason": "Isolated wheel install failed: ERROR: Could not find a version that satisfies the requirement oauth==1.0.1 (from versions: none)\nERROR: No matching distribution found for oauth==1.0.1\n\noauth-toolkit==1.0.0 (from -r requirements.txt (line 2))\n  Downloading http://172.19.0.2:8080/files/packages/e2/f0/3bd6fb9f17c375ac0f3f4f8a4879d240a5a5508557b77e696a665fceeb23/django_oauth_toolkit-1.0.0-py2.py3-none-any.whl.metadata (1.1 kB)\nCollecting djangorestframework==3.7.3 (from -r requirements.txt (line 3))\n  Downloading http://172.19.0.2:8080/files/packages/f5/2c/3c3c81b8ecd60952c20ccd5fc1d19c0b22731c80c75649dd2e3fef361aaf/djangorestframework-3.7.3-py2.py3-none-any.whl.metadata (9.0 kB)\n"
+      },
+      "scope": null
+    },
+    {
+      "id": "U07",
+      "name": "mattvaldes/vulnerable-api",
+      "url": "https://github.com/mattvaldes/vulnerable-api",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    },
+    {
+      "id": "U08",
+      "name": "dolevf/Damn-Vulnerable-GraphQL-Application",
+      "url": "https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "dependency_policy",
+        "reason": "Unsupported requirement syntax"
+      },
+      "scope": null
+    },
+    {
+      "id": "U09",
+      "name": "adeyosemanputra/pygoat",
+      "url": "https://github.com/adeyosemanputra/pygoat",
+      "source": "accepted",
+      "setup": {
+        "status": "ready",
+        "artifact_digest": "sha256:6dd3f60d05d2fe054404b68faad5d98f3612e9340e59c986a78001c6d7e63fb8",
+        "recipe_id": "python-flask-v1",
+        "project_id": "9518d844-5e15-4187-b8d8-3faf835e6e6f"
+      },
+      "scope": null
+    },
+    {
+      "id": "U10",
+      "name": "digininja/DVWA",
+      "url": "https://github.com/digininja/DVWA",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    },
+    {
+      "id": "U11",
+      "name": "webpwnized/mutillidae-docker",
+      "url": "https://github.com/webpwnized/mutillidae-docker",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    },
+    {
+      "id": "U12",
+      "name": "juice-shop/juice-shop",
+      "url": "https://github.com/juice-shop/juice-shop",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U13",
+      "name": "appsecco/dvna",
+      "url": "https://github.com/appsecco/dvna",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U14",
+      "name": "OWASP/NodeGoat",
+      "url": "https://github.com/OWASP/NodeGoat",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U15",
+      "name": "OWASP/railsgoat",
+      "url": "https://github.com/OWASP/railsgoat",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    },
+    {
+      "id": "U16",
+      "name": "snyk-labs/nodejs-goof",
+      "url": "https://github.com/snyk-labs/nodejs-goof",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U17",
+      "name": "globocom/secDevLabs",
+      "url": "https://github.com/globocom/secDevLabs",
+      "source": "rejected",
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U18",
+      "name": "OWASP/crAPI",
+      "url": "https://github.com/OWASP/crAPI",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    },
+    {
+      "id": "U19",
+      "name": "bridgecrewio/terragoat",
+      "url": "https://github.com/bridgecrewio/terragoat",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    },
+    {
+      "id": "U20",
+      "name": "madhuakula/kubernetes-goat",
+      "url": "https://github.com/madhuakula/kubernetes-goat",
+      "source": "rejected",
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U21",
+      "name": "RhinoSecurityLabs/cloudgoat",
+      "url": "https://github.com/RhinoSecurityLabs/cloudgoat",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+      },
+      "scope": null
+    },
+    {
+      "id": "U22",
+      "name": "vulhub/vulhub",
+      "url": "https://github.com/vulhub/vulhub",
+      "source": "rejected",
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "scope": null
+    },
+    {
+      "id": "U23",
+      "name": "sudo-project/sudo",
+      "url": "https://github.com/sudo-project/sudo",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    },
+    {
+      "id": "U24",
+      "name": "tukaani-project/xz",
+      "url": "https://github.com/tukaani-project/xz",
+      "source": "accepted",
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "scope": null
+    }
+  ]
+}

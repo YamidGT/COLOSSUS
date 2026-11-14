@@ -1,0 +1,3561 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-14T21:45:15.032247Z",
+  "catalog_count": 24,
+  "recorded_count": 24,
+  "source_status_counts": {
+    "accepted": 20,
+    "rejected": 4
+  },
+  "setup_status_counts": {
+    "ready": 3,
+    "not_run": 4,
+    "failed": 2,
+    "unsupported": 15
+  },
+  "runtime_attempt_status_counts": {
+    "failed": 3,
+    "ready": 2
+  },
+  "runtime_attempt_count": 5,
+  "runtime_attempt_scope": "Catalog runner only; separate fresh DSVW lifecycle is additional and source intake is not execution",
+  "python_rule_covered_repositories": 11,
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "cost_scope": "Compatibility runner only; separate model-triage.json, vampi-setup-advice.json and dsvw-full-cycle.json report their own calls and cost",
+  "repositories": [
+    {
+      "repo_id": "U01",
+      "repository": "erev0s/VAmPI",
+      "repo_url": "https://github.com/erev0s/VAmPI",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:25.428632Z",
+      "source": {
+        "status": "accepted",
+        "commit": "f16052dce83f05847133ec98f01c5193a41de7d8",
+        "archive_sha256": "5380f830794433c3d1b84b0289521334309ee2c295f8b602c236e4b46e3556ec",
+        "tree_sha256": "299619054ff42328d09e81f753f49764894b52ac775b4940f61c3b9150c57eac",
+        "file_count": 22,
+        "total_bytes": 69582
+      },
+      "setup": {
+        "status": "ready",
+        "artifact_digest": "sha256:6a7fad2dde3a0613718724d3203ae58024944854dec7000334a9161135890502",
+        "recipe_id": "declared-python-v1",
+        "project_id": "0c00821b-29a3-4047-b90c-03ba8e596314"
+      },
+      "tests": {
+        "status": "bounded_http_checks",
+        "checks": [
+          {
+            "path": "/",
+            "status": 200,
+            "body_sha256": "609b2d0577029d5a06f95949b79e3bbdc75ab8ff7b2bbb88a318f34441a9ca53",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/createdb",
+            "status": 200,
+            "body_sha256": "b44ec92025e00638b52b5ab6bce1f4933718b53fdcbb2df4815a3cbe5821a845",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/users/v1",
+            "status": 200,
+            "body_sha256": "437f528cc68e43fb5fa41cbd78962305807081099f973fed1d0945681610f6a1",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/books/v1",
+            "status": 200,
+            "body_sha256": "d5c435a22bb643dd90f19144fe68d5cb43833d0f5854f462abf5802c09512662",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/books/v1/submission-missing",
+            "status": 401,
+            "body_sha256": "7b40c796674ea828be23cd0eb561afb7089865ee63729e7cf8070c3e68d5e206",
+            "expected_status": 401,
+            "passed": true
+          },
+          {
+            "path": "/missing-submission-route",
+            "status": 404,
+            "body_sha256": "013a8b307d5569d1d3bccea5f823d38266f9d7db8b6088cc9a6fb6f8eba4a99c",
+            "expected_status": 404,
+            "passed": true
+          }
+        ],
+        "outcome": "pass",
+        "passed": 6,
+        "total": 6,
+        "functional_suite": "Home, synthetic database initialization, user list, book list and unknown-route checks",
+        "security_suite": "Book detail rejects unauthenticated access (401); no authenticated BOLA or SQLi repair claim",
+        "command": "launcher /targets/request for six fixed local GET paths; /createdb resets only disposable lab data"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "unsupported",
+        "reason": "No approved repair/security oracle for generic runtime profile; no patch or promotion attempted"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 11,
+        "finding_count": 2,
+        "findings": [
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "app.py",
+            "line": 17,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "models/user_model.py",
+            "line": 87,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "unsupported_stack",
+        "reason": "Python dependencies found but no supported application entrypoint was identified"
+      },
+      "intake_seconds": 0.787,
+      "finished_at": "2026-11-14T21:44:18.437522Z",
+      "assisted_attempt": {
+        "changes": [
+          "Applied the source-bound GLM proposal MarkupSafe 2.1.2 -> 2.1.5; see evidence/U01-compatibility-input.json",
+          "Evaluator supplied a bounded Connexion startup recipe; application source logic preserved; separately recorded compatibility pin retained"
+        ],
+        "source_tree_sha256": "df9cc4a04da07c70baea2cd8d0cefc842d8f028bade413bcdf5cb8588915d2fa"
+      },
+      "automatic_discovery": {
+        "status": "unsupported_stack",
+        "reason": "Python dependencies found but no supported application entrypoint was identified"
+      },
+      "runtime_seconds": 42.994,
+      "cleanup": "completed",
+      "audit_evidence": "evidence/U01-attempt-2-audit.json",
+      "runtime_attempts": [
+        {
+          "attempt": 1,
+          "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+          "finished_at": "2026-11-14T21:40:49.986323Z",
+          "seconds": 6.043,
+          "setup": {
+            "status": "failed",
+            "reason_code": "dependency_build_failed",
+            "reason": "Isolated wheel install failed: ERROR: Could not find a version that satisfies the requirement markupsafe==2.1.2 (from versions: 2.1.3, 2.1.4, 2.1.5, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 3.0.4)\nERROR: No matching distribution found for markupsafe==2.1.2\n\n-py3-none-any.whl.metadata (3.4 kB)\nCollecting flask==2.2.2 (from -r requirements.txt (line 4))\n  Downloading http://172.19.0.2:8080/files/packages/0f/43/15f4f9ab225b0b25352412e8daa3d0e3d135fcf5e127070c74c3632c8b4c/Flask-2.2.2-py3-none-any.whl.metadata (3.9 kB)\nCollecting jsonschema==4.17.3 (from -r requirements.txt (line 5))\n  Downloading http://172.19.0.2:8080/files/packages/c1/97/c698bd9350f307daad79dd740806e1a59becd693bd11443a0f531e3229b3/jsonschema-4.17.3-py3-none-any.whl.metadata (7.9 kB)\n"
+          },
+          "tests": {
+            "status": "not_run",
+            "reason": "Application setup did not become ready"
+          },
+          "cleanup": "completed",
+          "assistance": [
+            "Evaluator supplied a bounded Connexion startup recipe; source logic and dependency pins unchanged"
+          ],
+          "source_tree_sha256": "b4a5deddbc0cdc6029781de7e5e8880c3dd20cef48312dcf08ec84fe999ada9f",
+          "manifest_evidence": null
+        },
+        {
+          "attempt": 2,
+          "runner_sha256": "aff4ed34e2c11fd521bbddc99d176257e4e39bf587e504da3ae6c773c278b94a",
+          "finished_at": "2026-11-14T21:44:18.437522Z",
+          "seconds": 42.994,
+          "setup": {
+            "status": "ready",
+            "artifact_digest": "sha256:6a7fad2dde3a0613718724d3203ae58024944854dec7000334a9161135890502",
+            "recipe_id": "declared-python-v1",
+            "project_id": "0c00821b-29a3-4047-b90c-03ba8e596314"
+          },
+          "tests": {
+            "status": "bounded_http_checks",
+            "checks": [
+              {
+                "path": "/",
+                "status": 200,
+                "body_sha256": "609b2d0577029d5a06f95949b79e3bbdc75ab8ff7b2bbb88a318f34441a9ca53",
+                "expected_status": 200,
+                "passed": true
+              },
+              {
+                "path": "/createdb",
+                "status": 200,
+                "body_sha256": "b44ec92025e00638b52b5ab6bce1f4933718b53fdcbb2df4815a3cbe5821a845",
+                "expected_status": 200,
+                "passed": true
+              },
+              {
+                "path": "/users/v1",
+                "status": 200,
+                "body_sha256": "437f528cc68e43fb5fa41cbd78962305807081099f973fed1d0945681610f6a1",
+                "expected_status": 200,
+                "passed": true
+              },
+              {
+                "path": "/books/v1",
+                "status": 200,
+                "body_sha256": "d5c435a22bb643dd90f19144fe68d5cb43833d0f5854f462abf5802c09512662",
+                "expected_status": 200,
+                "passed": true
+              },
+              {
+                "path": "/books/v1/submission-missing",
+                "status": 401,
+                "body_sha256": "7b40c796674ea828be23cd0eb561afb7089865ee63729e7cf8070c3e68d5e206",
+                "expected_status": 401,
+                "passed": true
+              },
+              {
+                "path": "/missing-submission-route",
+                "status": 404,
+                "body_sha256": "013a8b307d5569d1d3bccea5f823d38266f9d7db8b6088cc9a6fb6f8eba4a99c",
+                "expected_status": 404,
+                "passed": true
+              }
+            ],
+            "outcome": "pass",
+            "passed": 6,
+            "total": 6,
+            "functional_suite": "Home, synthetic database initialization, user list, book list and unknown-route checks",
+            "security_suite": "Book detail rejects unauthenticated access (401); no authenticated BOLA or SQLi repair claim",
+            "command": "launcher /targets/request for six fixed local GET paths; /createdb resets only disposable lab data"
+          },
+          "cleanup": "completed",
+          "assistance": [
+            "Applied the source-bound GLM proposal MarkupSafe 2.1.2 -> 2.1.5; see evidence/U01-compatibility-input.json",
+            "Evaluator supplied a bounded Connexion startup recipe; application source logic preserved; separately recorded compatibility pin retained"
+          ],
+          "source_tree_sha256": "df9cc4a04da07c70baea2cd8d0cefc842d8f028bade413bcdf5cb8588915d2fa",
+          "manifest_evidence": "evidence/U01-attempt-2-manifest.json"
+        }
+      ],
+      "manifest_evidence": "evidence/U01-attempt-2-manifest.json",
+      "dependency_evidence": "evidence/U01-attempt-2-dependencies.json",
+      "dependency_inventory": {
+        "machine": "aarch64",
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "attrs",
+            "version": "26.1.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "certifi",
+            "version": "2026.10.23"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "charset-normalizer",
+            "version": "3.5.2"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "click",
+            "version": "8.5.1"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "clickclick",
+            "version": "20.10.2"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "connexion",
+            "version": "2.14.2"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "Flask",
+            "version": "2.2.2"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "Flask-SQLAlchemy",
+            "version": "3.0.3"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "greenlet",
+            "version": "3.5.6"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "idna",
+            "version": "3.20"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "inflection",
+            "version": "0.5.1"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "itsdangerous",
+            "version": "2.2.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "Jinja2",
+            "version": "3.1.6"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "jsonschema",
+            "version": "4.17.3"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "MarkupSafe",
+            "version": "2.1.5"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "packaging",
+            "version": "26.3"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "PyJWT",
+            "version": "2.6.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "pyrsistent",
+            "version": "0.20.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "PyYAML",
+            "version": "6.0.3"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "requests",
+            "version": "2.34.2"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "SQLAlchemy",
+            "version": "2.0.2"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "swagger-ui-bundle",
+            "version": "0.0.9"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "typing_extensions",
+            "version": "4.16.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "urllib3",
+            "version": "2.8.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "Werkzeug",
+            "version": "2.2.3"
+          }
+        ],
+        "python": "3.12.16 (main, Nov  5 2026, 08:06:14) [GCC 14.2.0]",
+        "scope": "installed wheel inventory"
+      },
+      "investigation_cycle": {
+        "status": "NO_CHANGE",
+        "coverage": {
+          "recipe_id": "declared-python-v1",
+          "discovery": "completed",
+          "repair": "UNSUPPORTED",
+          "formal": "UNSUPPORTED",
+          "mandatory_tests": [
+            "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
+            "Reproduce the reported defect on the baseline; require the exploit attempt to fail on the patched candidate and the protected security regression test to pass.",
+            "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
+            "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
+            "Under tested policy, report the formal limitation; formal_required still blocks without linked proof."
+          ],
+          "reason": "No approved protected repair oracle is registered for this application",
+          "raw_count": 2,
+          "findings": 2,
+          "requests_sent": 0,
+          "model_diagnostics": [],
+          "excluded_tools": [
+            "Bandit: not installed in worker"
+          ]
+        },
+        "evidence_id": "6ffcbbc2579a8d303245db7f04ea0837a9eac0ad71ee8a5ce205ffd818aa4d6f"
+      }
+    },
+    {
+      "repo_id": "U02",
+      "repository": "fportantier/vulpy",
+      "repo_url": "https://github.com/fportantier/vulpy",
+      "subdir": "bad",
+      "started_at": "2026-11-14T21:34:25.440878Z",
+      "source": {
+        "status": "rejected",
+        "commit": "5249cc8b05a1c37f6b2f757b1cf16a509c327122",
+        "archive_sha256": "a0087359a38d52e977cbc6493bb949629add4038413b52af4372c7ad88f3a091",
+        "reason_code": "invalid_archive",
+        "reason": "Source links and special files are not supported"
+      },
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "tests": {
+        "status": "not_run"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "intake_seconds": 1.554,
+      "finished_at": "2026-11-14T21:34:26.995367Z"
+    },
+    {
+      "repo_id": "U03",
+      "repository": "stamparm/DSVW",
+      "repo_url": "https://github.com/stamparm/DSVW",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:25.441054Z",
+      "source": {
+        "status": "accepted",
+        "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+        "archive_sha256": "96690f62ac0fba8a4f0aeac22f2370853bc02b96fb3efd1b8fc3a39398bf302b",
+        "tree_sha256": "da51a22aea8a66c3edafe11a0411fc8e119089104f618ee971cf4d7e8b0426f3",
+        "file_count": 12,
+        "total_bytes": 80009
+      },
+      "setup": {
+        "status": "ready",
+        "evidence_origin": "separate_integration_run",
+        "project_id": "20803760-3020-4143-9b94-641698f17417"
+      },
+      "tests": {
+        "status": "protected_repair_gates_passed",
+        "evidence": "dsvw-full-cycle.json",
+        "scope": "Registered DSVW functionality/security/static and artifact gates; formal unsupported"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "COMPLETE",
+        "generation_mode": "fresh_inference",
+        "evidence": "dsvw-full-cycle.json",
+        "seconds": 330.69011249998584,
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "performed_by": "integration_lane",
+        "cost_micro_usd": 1287,
+        "model_calls": 1
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Run the discovered recipe in the existing isolated runtime.",
+        "Run bounded HTTP readiness; preserve HTTP status and body hash.",
+        "Run applicable protected functional/security tests when installed.",
+        "If no protected oracle exists, report test coverage unsupported; do not promote."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 1,
+        "finding_count": 14,
+        "findings": [
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "dsvw.py",
+            "line": 7,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-format",
+            "cwe": "CWE-89",
+            "title": "SQL built with string formatting",
+            "file": "dsvw.py",
+            "line": 10,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "dsvw.py",
+            "line": 10,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-format",
+            "cwe": "CWE-89",
+            "title": "SQL built with string formatting",
+            "file": "dsvw.py",
+            "line": 22,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "dsvw.py",
+            "line": 22,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "dsvw.py",
+            "line": 27,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "dsvw.py",
+            "line": 29,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "dsvw.py",
+            "line": 31,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "xxe",
+            "cwe": "CWE-611",
+            "title": "XML parsed with external entities possible",
+            "file": "dsvw.py",
+            "line": 33,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "xxe",
+            "cwe": "CWE-611",
+            "title": "XML parsed with external entities possible",
+            "file": "dsvw.py",
+            "line": 35,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "dsvw.py",
+            "line": 42,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "dsvw.py",
+            "line": 48,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-format",
+            "cwe": "CWE-89",
+            "title": "SQL built with string formatting",
+            "file": "dsvw.py",
+            "line": 61,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "dsvw.py",
+            "line": 61,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "supported_recipe",
+        "recipe": {
+          "recipe_id": "dsvw-python-v1",
+          "command": [
+            "python",
+            "dsvw.py",
+            "--host=0.0.0.0",
+            "--port=65412"
+          ],
+          "port": 65412,
+          "health_path": "/",
+          "expected_status": 200,
+          "required_body": "Damn Small Vulnerable Web",
+          "test_profile_ids": [
+            "dsvw-functional-v1",
+            "dsvw-security-v1"
+          ],
+          "limitations": [
+            "Optional lxml is absent: XML/XPath routes are excluded from this runtime profile"
+          ],
+          "requirements": [],
+          "dependency_inputs": [],
+          "runtime_mode": "direct"
+        }
+      },
+      "intake_seconds": 0.857,
+      "finished_at": "2026-11-14T21:34:26.298490Z"
+    },
+    {
+      "repo_id": "U04",
+      "repository": "we45/Vulnerable-Flask-App",
+      "repo_url": "https://github.com/we45/Vulnerable-Flask-App",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:25.441176Z",
+      "source": {
+        "status": "accepted",
+        "commit": "b6a4f97afd466e83e1f60781494252dec1c37039",
+        "archive_sha256": "78a0c42b5fc3a9631df16ccfbdb56d2dc2e9f8ace75572b2a18f01f1ab84b735",
+        "tree_sha256": "7fe42aef707bd5209cab8b72592e260d7c3c9b40ba84edc2c412d82576be182f",
+        "file_count": 19,
+        "total_bytes": 150833
+      },
+      "setup": {
+        "status": "failed",
+        "reason_code": "readiness_failed",
+        "reason": "Application did not pass its positive readiness probe"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "Application setup did not become ready"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Run the discovered recipe in the existing isolated runtime.",
+        "Run bounded HTTP readiness; preserve HTTP status and body hash.",
+        "Run applicable protected functional/security tests when installed.",
+        "If no protected oracle exists, report test coverage unsupported; do not promote."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 2,
+        "finding_count": 8,
+        "findings": [
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "app/app.py",
+            "line": 28,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "app/app.py",
+            "line": 63,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "app/app.py",
+            "line": 97,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "ssti",
+            "cwe": "CWE-1336",
+            "title": "Template rendered from string",
+            "file": "app/app.py",
+            "line": 114,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "app/app.py",
+            "line": 141,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "app/app.py",
+            "line": 261,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "ssti",
+            "cwe": "CWE-1336",
+            "title": "Template rendered from string",
+            "file": "app/app.py",
+            "line": 281,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "yaml-load",
+            "cwe": "CWE-502",
+            "title": "yaml.load without safe loader",
+            "file": "app/app.py",
+            "line": 329,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "supported_recipe",
+        "recipe": {
+          "recipe_id": "python-flask-v1",
+          "command": [
+            "python",
+            "-I",
+            "/app/_colossus_runtime/start.py",
+            "wsgi",
+            "app/app.py",
+            "app"
+          ],
+          "port": 5000,
+          "health_path": "/",
+          "expected_status": 200,
+          "required_body": null,
+          "test_profile_ids": [
+            "http-readiness-v1"
+          ],
+          "limitations": [
+            "Generic readiness is not a protected security or functional oracle",
+            "Synthetic data lives in a disposable scratch copy of the source"
+          ],
+          "requirements": [
+            "flask"
+          ],
+          "dependency_inputs": [],
+          "runtime_mode": "wsgi"
+        }
+      },
+      "intake_seconds": 0.888,
+      "finished_at": "2026-11-14T21:42:06.991666Z",
+      "runtime_seconds": 72.33,
+      "cleanup": "completed",
+      "audit_evidence": "evidence/U04-attempt-1-audit.json",
+      "runtime_attempts": [
+        {
+          "attempt": 1,
+          "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+          "finished_at": "2026-11-14T21:42:06.991666Z",
+          "seconds": 72.33,
+          "setup": {
+            "status": "failed",
+            "reason_code": "readiness_failed",
+            "reason": "Application did not pass its positive readiness probe"
+          },
+          "tests": {
+            "status": "not_run",
+            "reason": "Application setup did not become ready"
+          },
+          "cleanup": "completed",
+          "assistance": [],
+          "source_tree_sha256": "7fe42aef707bd5209cab8b72592e260d7c3c9b40ba84edc2c412d82576be182f",
+          "manifest_evidence": null
+        }
+      ]
+    },
+    {
+      "repo_id": "U05",
+      "repository": "anxolerd/dvpwa",
+      "repo_url": "https://github.com/anxolerd/dvpwa",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:26.216350Z",
+      "source": {
+        "status": "accepted",
+        "commit": "4a8f4a43fafcc1b304f1b97d0f0a8dea755a7756",
+        "archive_sha256": "4859437e71db674ee117616ac49204d618fa4b8c76188c4b293c20d895bc9401",
+        "tree_sha256": "88ccb77c41c237d1e4b7b91befbcf77ed56bf8ef73603a93c244a8cf4cc53a04",
+        "file_count": 58,
+        "total_bytes": 1778707
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Python dependencies found but no supported application entrypoint was identified"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 21,
+        "finding_count": 2,
+        "findings": [
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "sqli/app.py",
+            "line": 24,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "sqli/dao/student.py",
+            "line": 18,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "unsupported_stack",
+        "reason": "Python dependencies found but no supported application entrypoint was identified"
+      },
+      "intake_seconds": 1.174,
+      "finished_at": "2026-11-14T21:34:27.390696Z"
+    },
+    {
+      "repo_id": "U06",
+      "repository": "payatu/Tiredful-API",
+      "repo_url": "https://github.com/payatu/Tiredful-API",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:26.299026Z",
+      "source": {
+        "status": "accepted",
+        "commit": "0134124496b3c4f1b969e51a24fd8a059104fb98",
+        "archive_sha256": "2d19b1af73b7386bfa32c098d11efb78d30e6501db80fd56f42ee3cae9842601",
+        "tree_sha256": "512ec61283330334184d02ec72de1b7fc7977fd9aa10c43c47989eb3ec4bcffa",
+        "file_count": 130,
+        "total_bytes": 3892768
+      },
+      "setup": {
+        "status": "failed",
+        "reason_code": "dependency_build_failed",
+        "reason": "Isolated wheel install failed: ERROR: Could not find a version that satisfies the requirement oauth==1.0.1 (from versions: none)\nERROR: No matching distribution found for oauth==1.0.1\n\noauth-toolkit==1.0.0 (from -r requirements.txt (line 2))\n  Downloading http://172.19.0.2:8080/files/packages/e2/f0/3bd6fb9f17c375ac0f3f4f8a4879d240a5a5508557b77e696a665fceeb23/django_oauth_toolkit-1.0.0-py2.py3-none-any.whl.metadata (1.1 kB)\nCollecting djangorestframework==3.7.3 (from -r requirements.txt (line 3))\n  Downloading http://172.19.0.2:8080/files/packages/f5/2c/3c3c81b8ecd60952c20ccd5fc1d19c0b22731c80c75649dd2e3fef361aaf/djangorestframework-3.7.3-py2.py3-none-any.whl.metadata (9.0 kB)\n"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "Application setup did not become ready"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 48,
+        "finding_count": 4,
+        "findings": [
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "Tiredful-API/Tiredful_API/settings.py",
+            "line": 33,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "Tiredful-API/health/views.py",
+            "line": 47,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-format",
+            "cwe": "CWE-89",
+            "title": "SQL built with string formatting",
+            "file": "Tiredful-API/health/views.py",
+            "line": 57,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "Tiredful-API/health/views.py",
+            "line": 57,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "unsupported_stack",
+        "reason": "Python dependencies found but no supported application entrypoint was identified"
+      },
+      "intake_seconds": 1.527,
+      "finished_at": "2026-11-14T21:40:54.527812Z",
+      "assisted_attempt": {
+        "changes": [
+          "Evaluator selected Tiredful-API/ and carried root requirements into that view; dependency pins unchanged"
+        ],
+        "source_tree_sha256": "4704633064fa38addb787a6c867f6bdb2ad16f8ef7eb42f5088e4f8796fe8bc2"
+      },
+      "automatic_discovery": {
+        "status": "unsupported_stack",
+        "reason": "Python dependencies found but no supported application entrypoint was identified"
+      },
+      "runtime_seconds": 4.44,
+      "cleanup": "completed",
+      "audit_evidence": "evidence/U06-attempt-1-audit.json",
+      "runtime_attempts": [
+        {
+          "attempt": 1,
+          "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+          "finished_at": "2026-11-14T21:40:54.527812Z",
+          "seconds": 4.44,
+          "setup": {
+            "status": "failed",
+            "reason_code": "dependency_build_failed",
+            "reason": "Isolated wheel install failed: ERROR: Could not find a version that satisfies the requirement oauth==1.0.1 (from versions: none)\nERROR: No matching distribution found for oauth==1.0.1\n\noauth-toolkit==1.0.0 (from -r requirements.txt (line 2))\n  Downloading http://172.19.0.2:8080/files/packages/e2/f0/3bd6fb9f17c375ac0f3f4f8a4879d240a5a5508557b77e696a665fceeb23/django_oauth_toolkit-1.0.0-py2.py3-none-any.whl.metadata (1.1 kB)\nCollecting djangorestframework==3.7.3 (from -r requirements.txt (line 3))\n  Downloading http://172.19.0.2:8080/files/packages/f5/2c/3c3c81b8ecd60952c20ccd5fc1d19c0b22731c80c75649dd2e3fef361aaf/djangorestframework-3.7.3-py2.py3-none-any.whl.metadata (9.0 kB)\n"
+          },
+          "tests": {
+            "status": "not_run",
+            "reason": "Application setup did not become ready"
+          },
+          "cleanup": "completed",
+          "assistance": [
+            "Evaluator selected Tiredful-API/ and carried root requirements into that view; dependency pins unchanged"
+          ],
+          "source_tree_sha256": "4704633064fa38addb787a6c867f6bdb2ad16f8ef7eb42f5088e4f8796fe8bc2",
+          "manifest_evidence": null
+        }
+      ]
+    },
+    {
+      "repo_id": "U07",
+      "repository": "mattvaldes/vulnerable-api",
+      "repo_url": "https://github.com/mattvaldes/vulnerable-api",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:26.330199Z",
+      "source": {
+        "status": "accepted",
+        "commit": "4b050235e20bc272e646fa62e14cb8f015ec2592",
+        "archive_sha256": "1bac93d3f8294fec844c732bea1e445b21aa93c6bda2089a258cb5fdbe15aa4f",
+        "tree_sha256": "10813c32705ef1c806505b785fd42f40ef538451bc081ecbf3b6c38f57de87e7",
+        "file_count": 17,
+        "total_bytes": 899473
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 1,
+        "finding_count": 14,
+        "findings": [
+          {
+            "rule": "xxe",
+            "cwe": "CWE-611",
+            "title": "XML parsed with external entities possible",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 56,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "xxe",
+            "cwe": "CWE-611",
+            "title": "XML parsed with external entities possible",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 57,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 68,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 78,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 78,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 88,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 108,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 121,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 156,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 159,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 159,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 190,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 190,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "ansible/roles/api/files/vAPI.py",
+            "line": 203,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 1.188,
+      "finished_at": "2026-11-14T21:34:27.518415Z"
+    },
+    {
+      "repo_id": "U08",
+      "repository": "dolevf/Damn-Vulnerable-GraphQL-Application",
+      "repo_url": "https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:26.995969Z",
+      "source": {
+        "status": "accepted",
+        "commit": "a961308c02d1fb462b192681c336b0739e432da7",
+        "archive_sha256": "ce16094a23fffb5d9726a3b0684cabf1fda5888e1ba8bc8b105592c3c86604b8",
+        "tree_sha256": "aabaa88b9fb918cc396daa711fcc221824c468db32cee56bb3cf6907ff09b291",
+        "file_count": 129,
+        "total_bytes": 8418616
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "dependency_policy",
+        "reason": "Unsupported requirement syntax"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 20,
+        "finding_count": 3,
+        "findings": [
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "core/helpers.py",
+            "line": 21,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "core/helpers.py",
+            "line": 25,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "setup.py",
+            "line": 64,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "dependency_policy",
+        "reason": "Unsupported requirement syntax"
+      },
+      "intake_seconds": 2.031,
+      "finished_at": "2026-11-14T21:34:29.026651Z"
+    },
+    {
+      "repo_id": "U09",
+      "repository": "adeyosemanputra/pygoat",
+      "repo_url": "https://github.com/adeyosemanputra/pygoat",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:27.391034Z",
+      "source": {
+        "status": "accepted",
+        "commit": "2aa4cc14f251e4a780e94e200aed6b36a5b15c21",
+        "archive_sha256": "19db7dc2e4a1dfba72dacf15e8dbbfad092929604abf760ad3b9316457b88971",
+        "tree_sha256": "d25257beaca3aa6e3dcc3b7e835a54f03946647ad461726885619cb8a1998ea4",
+        "file_count": 463,
+        "total_bytes": 1743460
+      },
+      "setup": {
+        "status": "ready",
+        "artifact_digest": "sha256:6dd3f60d05d2fe054404b68faad5d98f3612e9340e59c986a78001c6d7e63fb8",
+        "recipe_id": "python-flask-v1",
+        "project_id": "9518d844-5e15-4187-b8d8-3faf835e6e6f"
+      },
+      "tests": {
+        "status": "bounded_http_checks",
+        "checks": [
+          {
+            "path": "/",
+            "status": 200,
+            "body_sha256": "9771f2c53cff07e2ad3c31cbb72c97e766846494de3e8cbb791c21703ba1450a",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/health",
+            "status": 200,
+            "body_sha256": "565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/login",
+            "status": 200,
+            "body_sha256": "f3f64b3a9d05a3619364489c597697d3dfba5148e1241439cd0bd94c5583b751",
+            "expected_status": 200,
+            "passed": true
+          },
+          {
+            "path": "/dashboard",
+            "status": 302,
+            "body_sha256": "5da82accbf2ff96f465a16f1cdcc2d40c70e57c66897bcdc06a6925f033102ee",
+            "expected_status": 302,
+            "passed": true
+          },
+          {
+            "path": "/api/project/1/details",
+            "status": 401,
+            "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+            "expected_status": 401,
+            "passed": true
+          },
+          {
+            "path": "/api/project/1/safe",
+            "status": 401,
+            "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+            "expected_status": 401,
+            "passed": true
+          },
+          {
+            "path": "/missing-submission-route",
+            "status": 404,
+            "body_sha256": "e9639e3c4681ce85f852fbac48e2eeee5ba51296dbfec57c200d59b76237ab80",
+            "expected_status": 404,
+            "passed": true
+          }
+        ],
+        "outcome": "pass",
+        "passed": 7,
+        "total": 7,
+        "functional_suite": "GET home/health/login; dashboard redirects before login; unknown route 404",
+        "security_suite": "Two project APIs deny unauthenticated reads (401); no authenticated property-disclosure test",
+        "command": "launcher /targets/request for seven fixed GET paths on the frozen BOPLA lab artifact"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "unsupported",
+        "reason": "No approved repair/security oracle for generic runtime profile; no patch or promotion attempted"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 116,
+        "finding_count": 40,
+        "findings": [
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "challenge/labs/bopla_lab/app.py",
+            "line": 152,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "challenge/labs/business_logic_lab/app.py",
+            "line": 5,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "challenge/labs/business_logic_lab/app.py",
+            "line": 200,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "challenge/labs/security_headers_lab/app.py",
+            "line": 15,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "challenge/labs/security_headers_lab/app.py",
+            "line": 233,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "yaml-load",
+            "cwe": "CWE-502",
+            "title": "yaml.load without safe loader",
+            "file": "dockerized_labs/a9_uckv_lab/app.py",
+            "line": 62,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/a9_uckv_lab/app.py",
+            "line": 124,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/auth_failure_lab/app.py",
+            "line": 44,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/auth_failure_lab/app.py",
+            "line": 238,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/broken_access_lab/main.py",
+            "line": 70,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/broken_auth_lab/app.py",
+            "line": 16,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "dockerized_labs/broken_auth_lab/app.py",
+            "line": 103,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/broken_auth_lab/app.py",
+            "line": 147,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/command_injection_lab/app.py",
+            "line": 60,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/crypto_failure_lab/app.py",
+            "line": 7,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "dockerized_labs/crypto_failure_lab/app.py",
+            "line": 25,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "dockerized_labs/crypto_failure_lab/app.py",
+            "line": 38,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/dependency_attack_lab/app.py",
+            "line": 198,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "dockerized_labs/insec_des_lab/main.py",
+            "line": 40,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/insecure_design_lab/app.py",
+            "line": 8,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/insecure_design_lab/app.py",
+            "line": 153,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/insufficient_logging_lab/app.py",
+            "line": 7,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/insufficient_logging_lab/app.py",
+            "line": 96,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/open_source_library_attack_lab/app.py",
+            "line": 259,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/package_injection_lab/app.py",
+            "line": 260,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/sde/app.py",
+            "line": 49,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/sec_misconfig/app.py",
+            "line": 8,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/sec_misconfig/app.py",
+            "line": 98,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/sec_misconfig/app.py",
+            "line": 115,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/sec_misconfig/app.py",
+            "line": 135,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py",
+            "line": 8,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "dockerized_labs/software_integrity_lab/app.py",
+            "line": 44,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/software_integrity_lab/app.py",
+            "line": 90,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/sql_injection_lab/app.py",
+            "line": 51,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/sql_injection_lab/app.py",
+            "line": 78,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "dockerized_labs/ssrf_lab/app.py",
+            "line": 6,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/template_injection_lab/app.py",
+            "line": 123,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "dockerized_labs/xxe_lab/app.py",
+            "line": 95,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "pygoat/settings.py",
+            "line": 23,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "pygoat/settings.py",
+            "line": 179,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+      },
+      "intake_seconds": 2.011,
+      "finished_at": "2026-11-14T21:40:43.853980Z",
+      "assisted_attempt": {
+        "changes": [
+          "Evaluator selected challenge/labs/bopla_lab/; this is one lab, not the full PyGoat application"
+        ],
+        "source_tree_sha256": "306d16742151bd8b35f4691dd7d8856919e9b52b08e515b39e0f895581f24b40"
+      },
+      "automatic_discovery": {
+        "status": "needs_configuration",
+        "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+      },
+      "manifest_evidence": "evidence/U09-attempt-1-manifest.json",
+      "dependency_evidence": "evidence/U09-attempt-1-dependencies.json",
+      "dependency_inventory": {
+        "machine": "aarch64",
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "blinker",
+            "version": "1.9.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "click",
+            "version": "8.5.1"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "Flask",
+            "version": "2.3.3"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "itsdangerous",
+            "version": "2.2.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "Jinja2",
+            "version": "3.1.6"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "MarkupSafe",
+            "version": "3.0.4"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "Werkzeug",
+            "version": "2.3.7"
+          }
+        ],
+        "python": "3.12.16 (main, Nov  5 2026, 08:06:14) [GCC 14.2.0]",
+        "scope": "installed wheel inventory"
+      },
+      "investigation_cycle": {
+        "status": "NO_CHANGE",
+        "coverage": {
+          "recipe_id": "python-flask-v1",
+          "discovery": "completed",
+          "repair": "UNSUPPORTED",
+          "formal": "UNSUPPORTED",
+          "mandatory_tests": [
+            "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
+            "Reproduce the reported defect on the baseline; require the exploit attempt to fail on the patched candidate and the protected security regression test to pass.",
+            "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
+            "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
+            "Under tested policy, report the formal limitation; formal_required still blocks without linked proof."
+          ],
+          "reason": "No approved protected repair oracle is registered for this application",
+          "raw_count": 1,
+          "findings": 1,
+          "requests_sent": 0,
+          "model_diagnostics": [],
+          "excluded_tools": [
+            "Bandit: not installed in worker"
+          ]
+        },
+        "evidence_id": "5a2e346dda8cefab4627dccdbc1db856c87c1db9e1eea202f5675809e1729d93"
+      },
+      "runtime_seconds": 18.932,
+      "cleanup": "completed",
+      "audit_evidence": "evidence/U09-attempt-1-audit.json",
+      "runtime_attempts": [
+        {
+          "attempt": 1,
+          "runner_sha256": "61f4867230a9be7e525f5bbed08635badcceb2c1b4ac6d67d91356621443db3c",
+          "finished_at": "2026-11-14T21:40:43.853980Z",
+          "seconds": 18.932,
+          "setup": {
+            "status": "ready",
+            "artifact_digest": "sha256:6dd3f60d05d2fe054404b68faad5d98f3612e9340e59c986a78001c6d7e63fb8",
+            "recipe_id": "python-flask-v1",
+            "project_id": "9518d844-5e15-4187-b8d8-3faf835e6e6f"
+          },
+          "tests": {
+            "status": "bounded_http_checks",
+            "checks": [
+              {
+                "path": "/",
+                "status": 200,
+                "body_sha256": "9771f2c53cff07e2ad3c31cbb72c97e766846494de3e8cbb791c21703ba1450a",
+                "expected_status": 200,
+                "passed": true
+              },
+              {
+                "path": "/health",
+                "status": 200,
+                "body_sha256": "565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3",
+                "expected_status": 200,
+                "passed": true
+              },
+              {
+                "path": "/login",
+                "status": 200,
+                "body_sha256": "f3f64b3a9d05a3619364489c597697d3dfba5148e1241439cd0bd94c5583b751",
+                "expected_status": 200,
+                "passed": true
+              },
+              {
+                "path": "/dashboard",
+                "status": 302,
+                "body_sha256": "5da82accbf2ff96f465a16f1cdcc2d40c70e57c66897bcdc06a6925f033102ee",
+                "expected_status": 302,
+                "passed": true
+              },
+              {
+                "path": "/api/project/1/details",
+                "status": 401,
+                "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+                "expected_status": 401,
+                "passed": true
+              },
+              {
+                "path": "/api/project/1/safe",
+                "status": 401,
+                "body_sha256": "f39b276ac5d639eed5759569c68389c85b2c222219d8c7f6abfb420f1013379c",
+                "expected_status": 401,
+                "passed": true
+              },
+              {
+                "path": "/missing-submission-route",
+                "status": 404,
+                "body_sha256": "e9639e3c4681ce85f852fbac48e2eeee5ba51296dbfec57c200d59b76237ab80",
+                "expected_status": 404,
+                "passed": true
+              }
+            ],
+            "outcome": "pass",
+            "passed": 7,
+            "total": 7,
+            "functional_suite": "GET home/health/login; dashboard redirects before login; unknown route 404",
+            "security_suite": "Two project APIs deny unauthenticated reads (401); no authenticated property-disclosure test",
+            "command": "launcher /targets/request for seven fixed GET paths on the frozen BOPLA lab artifact"
+          },
+          "cleanup": "completed",
+          "assistance": [
+            "Evaluator selected challenge/labs/bopla_lab/; this is one lab, not the full PyGoat application"
+          ],
+          "source_tree_sha256": "306d16742151bd8b35f4691dd7d8856919e9b52b08e515b39e0f895581f24b40",
+          "manifest_evidence": "evidence/U09-attempt-1-manifest.json"
+        }
+      ]
+    },
+    {
+      "repo_id": "U10",
+      "repository": "digininja/DVWA",
+      "repo_url": "https://github.com/digininja/DVWA",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:27.518885Z",
+      "source": {
+        "status": "accepted",
+        "commit": "a1978a2fed195acd093010af6395f86a281537ca",
+        "archive_sha256": "12320b78a03fa88f7d782ac3e8030baf966441c15c3aa26c4bac4687227fc9d0",
+        "tree_sha256": "7fca8a9288a2c9350e08c9924fdae599405352939bdf7bfc87e9ecafff7f3d5b",
+        "file_count": 250,
+        "total_bytes": 1791433
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 1.912,
+      "finished_at": "2026-11-14T21:34:29.430409Z"
+    },
+    {
+      "repo_id": "U11",
+      "repository": "webpwnized/mutillidae-docker",
+      "repo_url": "https://github.com/webpwnized/mutillidae-docker",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:27.828491Z",
+      "source": {
+        "status": "accepted",
+        "commit": "b5920113ad30dd92c893b2f44230fb5bf99f3601",
+        "archive_sha256": "ac9c27197f317fb4ea1771c3e200e54f26f8af543f5456e66273ebdae80b9352",
+        "tree_sha256": "0da42b2c09807b6dec71a459d9088a752259982e676dc1d8f5d587545ac37228",
+        "file_count": 37,
+        "total_bytes": 135682
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 1.668,
+      "finished_at": "2026-11-14T21:34:29.496102Z"
+    },
+    {
+      "repo_id": "U12",
+      "repository": "juice-shop/juice-shop",
+      "repo_url": "https://github.com/juice-shop/juice-shop",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:29.027537Z",
+      "source": {
+        "status": "accepted",
+        "commit": "266448aba68cd8ba5915f526a128da4fa7bc3f9f",
+        "archive_sha256": "f47f3dfe64d97256d437fb6d2e4fc096f4dd6d6d03cfeb9e75364a9ddb909156",
+        "tree_sha256": "b8df424562afc0d872a4e6488fff93af4c24281221edb78fd9b7a25457eeff36",
+        "file_count": 1498,
+        "total_bytes": 32238021
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "intake_seconds": 3.85,
+      "finished_at": "2026-11-14T21:34:32.877752Z"
+    },
+    {
+      "repo_id": "U13",
+      "repository": "appsecco/dvna",
+      "repo_url": "https://github.com/appsecco/dvna",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:29.403623Z",
+      "source": {
+        "status": "accepted",
+        "commit": "9ba473add536f66ac9007966acb2a775dd31277a",
+        "archive_sha256": "34936c8f3fbff44f60c691e7600e7fb109d11c49be308b04ad5b823e10e48944",
+        "tree_sha256": "0afb92453de26b461f46209acbd937b771e99296595d58f4c8477fa410e11f4c",
+        "file_count": 151,
+        "total_bytes": 3990018
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "intake_seconds": 2.611,
+      "finished_at": "2026-11-14T21:34:32.014253Z"
+    },
+    {
+      "repo_id": "U14",
+      "repository": "OWASP/NodeGoat",
+      "repo_url": "https://github.com/OWASP/NodeGoat",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:29.430909Z",
+      "source": {
+        "status": "accepted",
+        "commit": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "archive_sha256": "f9455e6c5c57471fcc213959f523d640d9454337cbdf870c731f1b588a19b5c3",
+        "tree_sha256": "60c89a0f94b16a70558da0a8834900b51bbfcf0741a50c4095c331f264a06b47",
+        "file_count": 111,
+        "total_bytes": 2976004
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "intake_seconds": 1.073,
+      "finished_at": "2026-11-14T21:34:30.503953Z"
+    },
+    {
+      "repo_id": "U15",
+      "repository": "OWASP/railsgoat",
+      "repo_url": "https://github.com/OWASP/railsgoat",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:29.496444Z",
+      "source": {
+        "status": "accepted",
+        "commit": "f5951f13089d85c979de09e7da3c8c0fb982f94a",
+        "archive_sha256": "6246634d11415e2178cbef40cbe8432bdff12c02011cbe7ba561fc586e1becb7",
+        "tree_sha256": "453cd6cb54e640817e7009225e12d02f3180c5aaba68cd7275823e6ddb86ee89",
+        "file_count": 276,
+        "total_bytes": 8524058
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 3.435,
+      "finished_at": "2026-11-14T21:34:32.931081Z"
+    },
+    {
+      "repo_id": "U16",
+      "repository": "snyk-labs/nodejs-goof",
+      "repo_url": "https://github.com/snyk-labs/nodejs-goof",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:30.504532Z",
+      "source": {
+        "status": "accepted",
+        "commit": "add14ba59e98240d9e00a235dd7d42cd61ae9912",
+        "archive_sha256": "154eab51d9394b6f87b62974f4c30523bafa2296be4cc5a7dd374c25c82d80ca",
+        "tree_sha256": "35c72cefe413bad4b719a8230b7d971e6173607eb24d3f854073e10852a429d4",
+        "file_count": 60,
+        "total_bytes": 1511463
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "unsupported_stack",
+        "reason": "Node runtime adapter is not installed"
+      },
+      "intake_seconds": 3.337,
+      "finished_at": "2026-11-14T21:34:33.841637Z"
+    },
+    {
+      "repo_id": "U17",
+      "repository": "globocom/secDevLabs",
+      "repo_url": "https://github.com/globocom/secDevLabs",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:32.015381Z",
+      "source": {
+        "status": "rejected",
+        "commit": "10be438496e928c66567749f0aaf0bb976052bc9",
+        "reason_code": "source_limit",
+        "reason": "Source response exceeds size limit"
+      },
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "tests": {
+        "status": "not_run"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Select one lab/CVE subdirectory and freeze its source and dependencies.",
+        "Run its build and tests in a separately admitted isolated profile.",
+        "A collection-wide static signal is not a reproduced lab vulnerability."
+      ],
+      "intake_seconds": 3.808,
+      "finished_at": "2026-11-14T21:34:35.822966Z"
+    },
+    {
+      "repo_id": "U18",
+      "repository": "OWASP/crAPI",
+      "repo_url": "https://github.com/OWASP/crAPI",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:32.878250Z",
+      "source": {
+        "status": "accepted",
+        "commit": "b5fc307f3e5f875809b095b771108ef342a33724",
+        "archive_sha256": "6fbdfdea6f1cdffeed9b9d1fa0d42e7ad46ca479c9f77966183195497ece637e",
+        "tree_sha256": "0aa34c34be693b2dc7c5a00f3956155675faa55f776396f6374b727289dedc69",
+        "file_count": 1043,
+        "total_bytes": 8840688
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 70,
+        "finding_count": 15,
+        "findings": [
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "services/chatbot/src/chatbot/app.py",
+            "line": 39,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+            "line": 74,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+            "line": 107,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/chatbot/src/mcpserver/server.py",
+            "line": 48,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/chatbot/src/mcpserver/server.py",
+            "line": 91,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/chatbot/src/mcpserver/server.py",
+            "line": 113,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/chatbot/src/mcpserver/server.py",
+            "line": 153,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/workshop/core/management/commands/seed_database.py",
+            "line": 220,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "services/workshop/crapi/mechanic/views.py",
+            "line": 428,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/workshop/crapi/merchant/views.py",
+            "line": 91,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/workshop/crapi/shop/views.py",
+            "line": 148,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "services/workshop/crapi_site/settings.py",
+            "line": 68,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/workshop/utils/jwt.py",
+            "line": 54,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "jwt-noverify",
+            "cwe": "CWE-347",
+            "title": "JWT decoded without verification",
+            "file": "services/workshop/utils/jwt.py",
+            "line": 61,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "services/workshop/utils/messages.py",
+            "line": 22,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 1.654,
+      "finished_at": "2026-11-14T21:34:34.532623Z"
+    },
+    {
+      "repo_id": "U19",
+      "repository": "bridgecrewio/terragoat",
+      "repo_url": "https://github.com/bridgecrewio/terragoat",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:32.931519Z",
+      "source": {
+        "status": "accepted",
+        "commit": "729f8da62c6a85ce4af5ad3d123de97776d954c4",
+        "archive_sha256": "b69155fb5a8a1bbcf99152896b1e1b13abc227a97fff133ece5ce798de05bfdb",
+        "tree_sha256": "e8bc53180c0bae9e272c7487b66564404b46f403618461f9e83fd002b84ead0e",
+        "file_count": 72,
+        "total_bytes": 1528323
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Use a dedicated IaC/cluster adapter and static policy checks.",
+        "Do not deploy cloud resources or grant cloud credentials for this submission.",
+        "No application functional or security suite was executed."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 1.138,
+      "finished_at": "2026-11-14T21:34:34.069469Z"
+    },
+    {
+      "repo_id": "U20",
+      "repository": "madhuakula/kubernetes-goat",
+      "repo_url": "https://github.com/madhuakula/kubernetes-goat",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:33.841914Z",
+      "source": {
+        "status": "rejected",
+        "commit": "723a0db478f050d173d23b4ce5044b65bce0bdd0",
+        "reason_code": "source_limit",
+        "reason": "Source response exceeds size limit"
+      },
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "tests": {
+        "status": "not_run"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Use a dedicated IaC/cluster adapter and static policy checks.",
+        "Do not deploy cloud resources or grant cloud credentials for this submission.",
+        "No application functional or security suite was executed."
+      ],
+      "intake_seconds": 9.791,
+      "finished_at": "2026-11-14T21:34:43.633229Z"
+    },
+    {
+      "repo_id": "U21",
+      "repository": "RhinoSecurityLabs/cloudgoat",
+      "repo_url": "https://github.com/RhinoSecurityLabs/cloudgoat",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:34.070614Z",
+      "source": {
+        "status": "accepted",
+        "commit": "63c65bd26edc6919499adfa20b176c450e35c33c",
+        "archive_sha256": "747a80fea6de64f402070a0274ce7137485a2e7424ccdbad6851b11ae0ea25dd",
+        "tree_sha256": "484172ddb7f73d5fd8946f05b64fa0b8c0cf85c9a7d9a42b2723070d41b59a53",
+        "file_count": 1954,
+        "total_bytes": 9721659
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Use a dedicated IaC/cluster adapter and static policy checks.",
+        "Do not deploy cloud resources or grant cloud credentials for this submission.",
+        "No application functional or security suite was executed."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 137,
+        "finding_count": 96,
+        "findings": [
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/cloudgoat.py",
+            "line": 89,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+            "line": 116,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py",
+            "line": 147,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/db.py",
+            "line": 8,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+            "line": 30,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+            "line": 45,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+            "line": 50,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+            "line": 66,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "debug",
+            "cwe": "CWE-489",
+            "title": "Debug mode enabled",
+            "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py",
+            "line": 112,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/db.py",
+            "line": 8,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+            "line": 366,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+            "line": 438,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+            "line": 476,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+            "line": 491,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py",
+            "line": 570,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click_default_group.py",
+            "line": 135,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/dateutil/zoneinfo/rebuild.py",
+            "line": 33,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/dateutils/dateadd.py",
+            "line": 42,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/dateutils/datediff.py",
+            "line": 39,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/pytz/__init__.py",
+            "line": 283,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/pytz/__init__.py",
+            "line": 486,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/pytz/__init__.py",
+            "line": 488,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+            "line": 1043,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+            "line": 1102,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+            "line": 1306,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+            "line": 1495,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+            "line": 1900,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py",
+            "line": 2192,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 471,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 559,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-format",
+            "cwe": "CWE-89",
+            "title": "SQL built with string formatting",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 887,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 924,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 966,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 994,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 1400,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 1469,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 1482,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 1794,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 1899,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2051,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2064,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2107,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2184,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2291,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2300,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2562,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2834,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2837,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2840,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2846,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2853,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2866,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/db.py",
+            "line": 2926,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+            "line": 366,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+            "line": 438,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+            "line": 476,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "cmd-injection",
+            "cwe": "CWE-78",
+            "title": "OS command built from input",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+            "line": 491,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click/_termui_impl.py",
+            "line": 570,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/click_default_group.py",
+            "line": 135,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/dateutil/zoneinfo/rebuild.py",
+            "line": 33,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/dateutils/dateadd.py",
+            "line": 42,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "path-join",
+            "cwe": "CWE-22",
+            "title": "File path built from request data",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/dateutils/datediff.py",
+            "line": 39,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/pytz/__init__.py",
+            "line": 283,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/pytz/__init__.py",
+            "line": 486,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "pickle",
+            "cwe": "CWE-502",
+            "title": "Unsafe deserialization (pickle)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/pytz/__init__.py",
+            "line": 488,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+            "line": 1043,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+            "line": 1102,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+            "line": 1306,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+            "line": 1495,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+            "line": 1900,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/cli.py",
+            "line": 2192,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 471,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 559,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-format",
+            "cwe": "CWE-89",
+            "title": "SQL built with string formatting",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 887,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 924,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 966,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 994,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 1400,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 1469,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 1482,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 1794,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 1899,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2051,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2064,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2107,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2184,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2291,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2300,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2562,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2834,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2837,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2840,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2846,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2853,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "sqli-concat",
+            "cwe": "CWE-89",
+            "title": "SQL built with string concatenation",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2866,
+            "status": "unconfirmed"
+          },
+          {
+            "rule": "md5",
+            "cwe": "CWE-327",
+            "title": "Weak hash (MD5/SHA1)",
+            "file": "cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda2_src/sqlite_utils/db.py",
+            "line": 2926,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "Multiple Python applications found; select a subdirectory or provide an explicit recipe"
+      },
+      "intake_seconds": 2.519,
+      "finished_at": "2026-11-14T21:34:36.589672Z"
+    },
+    {
+      "repo_id": "U22",
+      "repository": "vulhub/vulhub",
+      "repo_url": "https://github.com/vulhub/vulhub",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:34.535751Z",
+      "source": {
+        "status": "rejected",
+        "commit": "9b90d4276f84feed6333286afeb7e1250379a1da",
+        "reason_code": "source_limit",
+        "reason": "Source response exceeds size limit"
+      },
+      "setup": {
+        "status": "not_run",
+        "reason": "Source intake rejected; execution boundary not bypassed"
+      },
+      "tests": {
+        "status": "not_run"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Select one lab/CVE subdirectory and freeze its source and dependencies.",
+        "Run its build and tests in a separately admitted isolated profile.",
+        "A collection-wide static signal is not a reproduced lab vulnerability."
+      ],
+      "intake_seconds": 6.963,
+      "finished_at": "2026-11-14T21:34:41.498779Z"
+    },
+    {
+      "repo_id": "U23",
+      "repository": "sudo-project/sudo",
+      "repo_url": "https://github.com/sudo-project/sudo",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:35.823341Z",
+      "source": {
+        "status": "accepted",
+        "commit": "284836c012052dfa204c4f8bc449f0d05e33f271",
+        "archive_sha256": "22e3d183ad6e43fb6f1a198d49de3a049c783074d9f5a18e4b04812d03a3eb51",
+        "tree_sha256": "36ad593b4448e1a141e2c6339456dc49b470c37cd1328eca05869cded90864fd",
+        "file_count": 1391,
+        "total_bytes": 21334779
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "completed",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 10,
+        "finding_count": 1,
+        "findings": [
+          {
+            "rule": "hardcoded-secret",
+            "cwe": "CWE-798",
+            "title": "Hard-coded secret",
+            "file": "plugins/python/example_policy_plugin.py",
+            "line": 44,
+            "status": "unconfirmed"
+          }
+        ],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 2.176,
+      "finished_at": "2026-11-14T21:34:37.999461Z"
+    },
+    {
+      "repo_id": "U24",
+      "repository": "tukaani-project/xz",
+      "repo_url": "https://github.com/tukaani-project/xz",
+      "subdir": null,
+      "started_at": "2026-11-14T21:34:36.590689Z",
+      "source": {
+        "status": "accepted",
+        "commit": "f54febc540607b3bdee0a0e6793355df2a7e9f61",
+        "archive_sha256": "ba9015d70fd478711f09124697c59eec155e87af02efa965e6a3875e04306a24",
+        "tree_sha256": "fb2f5128e9b3b7460f54c875d064c6bb00d50df3a537da0c2af4dabe2a1608fa",
+        "file_count": 515,
+        "total_bytes": 7350097
+      },
+      "setup": {
+        "status": "unsupported",
+        "reason_code": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "tests": {
+        "status": "not_run",
+        "reason": "No supported runtime recipe"
+      },
+      "formal": {
+        "outcome": "UNSUPPORTED",
+        "reason": "No approved linked requirement for this catalog preflight"
+      },
+      "full_cycle": {
+        "status": "not_run"
+      },
+      "model_calls": 0,
+      "cost_micro_usd": 0,
+      "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+      "fallback_instructions": [
+        "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+        "Build and run the application and its tests only inside that sandbox.",
+        "Separate attack-preserving training tests from legitimate positive tests.",
+        "No formal proof or security guarantee follows from source-pattern results."
+      ],
+      "static": {
+        "status": "unsupported",
+        "tool": "colossus-rules-v1",
+        "files_scanned": 0,
+        "finding_count": 0,
+        "findings": [],
+        "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+        "precision": null,
+        "recall": null
+      },
+      "discovery": {
+        "status": "needs_configuration",
+        "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+      },
+      "intake_seconds": 1.571,
+      "finished_at": "2026-11-14T21:34:38.162122Z"
+    }
+  ],
+  "limitations": [
+    "One source preflight per repository, with explicitly retained assisted runtime attempts; no gold adjudication or security score.",
+    "Runner instrumentation evolved during this exploratory campaign; this is not a frozen performance benchmark. Source commits and per-attempt input hashes are retained.",
+    "Python text-pattern signals are unconfirmed, not distinct proven vulnerabilities.",
+    "No CTIBench, CyberSecEval or DafnyBench benchmark score is produced by this campaign.",
+    "Fresh-inference DSVW full-cycle evidence is a separate integration run, linked in dsvw-full-cycle.json; other rows are compatibility preflights."
+  ]
+}

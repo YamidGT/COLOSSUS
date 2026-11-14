@@ -13,4 +13,6 @@ artifacts/
 .colossus/
 node_modules/
 frontend/dist/
+frontend/dist-demo/
+.netlify/
 frontend/.test-build/
