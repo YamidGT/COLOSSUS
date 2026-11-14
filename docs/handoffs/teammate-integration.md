@@ -53,3 +53,11 @@ The doctor still reports incomplete full-product acceptance honestly.
 Validation: `uv run pytest -q`: 211 passed; Ruff passed. These are platform and
 mock/API boundary checks, not public-repository benchmark results. Actual campaign
 and fresh lifecycle evidence are recorded separately in `evaluation/submission/`.
+
+Final submission branch watch: `kiro/colossus` advanced to `908850e`, which
+primarily merges earlier formal/red-team work already integrated here.
+`lane-b/redteam-metrics` at `a6f6eeb` adds a Windows/WSL probe backend and direct
+provider evaluator. These are not imported into this release: the runtime is
+macOS/Colima/gVisor, and that evaluator reads provider keys outside the shared
+broker, uses an independent spend counter and does not enforce source/CWE-bound
+scoring. The existing source-bound evaluator and shared gateway remain authoritative.
