@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-14T21:45:00Z",
+  "checked_at": "2026-11-14T21:45:44.142527+00:00",
   "context": "colima-colossus",
   "scope": "all managed containers after catalog runtime attempts",
   "remaining": [
