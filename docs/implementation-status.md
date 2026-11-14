@@ -82,3 +82,12 @@ An earlier replay exposed a deployment/authorization ID collision after the obse
 The React/Tailwind action center uses generated OpenAPI types and real controller data. Browser inspection verified local code exchange, repository navigation, project findings and case gate/replay/unsupported-proof labels. It found operator evidence visibility metadata missing; the fix explicitly publishes check/diff evidence while source archives remain internal. Backend tests cover project isolation and private evidence denial. Browser mobile/keyboard/decision-flow acceptance is still pending. Initial apparent blank rendering resolved before login; no application JavaScript error was observed beyond the expected unauthenticated session 401.
 
 Current validation: **74 backend tests pass**; TypeScript/Vite production build passes, initial JavaScript **89.17 kB gzip**. Pause does not block queued rollback recovery. These are platform tests, not a benchmark score or a run against additional repositories.
+
+
+## Integrated runtime hardening checkpoint
+
+`origin/kiro/integracion-fs` merged into the implementation branch with its doctor and Docker-create safety guard, while preserving the stricter existing recipe validator. The doctor reads credential-file metadata only. Combined backend suite: **113 passed**; Ruff passes. A fresh real gVisor isolation check also passed after private IPC and create-flag validation were enabled. No extra target repository was run.
+
+The six finished DSVW calibration enrollments now show **RETIRED** deployment summaries. Cleanup discovered Docker 29 reports missing objects in lowercase; idempotent teardown now handles both message cases while still failing on daemon errors. Existing diff/gate artifact publication metadata was corrected through audited store writes; source archives remain private. Follow-up browser inspection successfully loaded the actual source diff and verified the case layout at 375px. Broader UI acceptance remains pending.
+
+Checkpoint pushed to `origin/implementation/full-system`; `origin/main` remains unchanged. Remaining full-scope work includes scheduled feed refresh/recurrence, broader setup and patch adapters, linked formal verification, benchmark runners, failure/restart acceptance, final interface acceptance and the template-based technical sheet.
