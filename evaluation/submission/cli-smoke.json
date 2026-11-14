@@ -1,0 +1,51 @@
+{
+  "kind": "live_cli_against_operator_api_and_existing_runtime_evidence",
+  "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+  "project_id": "20803760-3020-4143-9b94-641698f17417",
+  "commands": [
+    {
+      "command": "projects",
+      "exit_code": 0,
+      "status": "completed",
+      "one_json_envelope": true
+    },
+    {
+      "command": "status",
+      "exit_code": 0,
+      "status": "READY",
+      "one_json_envelope": true
+    },
+    {
+      "command": "actions",
+      "exit_code": 0,
+      "status": "completed",
+      "one_json_envelope": true
+    },
+    {
+      "command": "case",
+      "exit_code": 0,
+      "status": "PROMOTING",
+      "one_json_envelope": true
+    },
+    {
+      "command": "report",
+      "exit_code": 0,
+      "status": "exported",
+      "one_json_envelope": true
+    },
+    {
+      "command": "ui",
+      "exit_code": 0,
+      "status": "login_code_created",
+      "one_json_envelope": true
+    }
+  ],
+  "artifact_binding": true,
+  "report_binding": true,
+  "target_jobs_started": 0,
+  "model_calls": 0,
+  "limitations": [
+    "API dispatch disabled in this check; lifecycle execution is measured separately",
+    "One-use browser code deliberately omitted from evidence"
+  ]
+}
