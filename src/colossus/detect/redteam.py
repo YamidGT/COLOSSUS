@@ -93,6 +93,48 @@ def triage(broker: Broker, root: Path, groups: list[list[RawFinding]], routes: s
     return verdicts
 
 
+def hypothesize(broker: Broker, root: Path, known: list[RawFinding],
+                max_files: int = 12, max_chars: int = 14000) -> list[RawFinding]:
+    """T2: ask the model for issues the tools missed (authorization, logic, data exposure).
+    Output is validated against the real file; invalid or out-of-range lines are dropped."""
+    out: list[RawFinding] = []
+    files = [p for p in sorted(root.rglob("*.py"))
+             if not any(x in {".git", "tests", "test", "__pycache__"} for x in p.parts)][:max_files]
+    for p in files:
+        rel = p.relative_to(root).as_posix()
+        text = p.read_text(encoding="utf-8", errors="replace")
+        lines = text.splitlines()
+        numbered = "\n".join(f"{n}: {ln[:200]}" for n, ln in enumerate(lines, 1))[:max_chars]
+        seen = sorted({f.line for f in known if f.file == rel})
+        user = (
+            f"File {rel}. Lines already flagged by tools: {seen}. List ADDITIONAL security flaws "
+            "visible in this file only (broken authorization/BOLA/IDOR, mass assignment, excessive "
+            "data exposure, user enumeration, weak crypto/secrets, ReDoS, XSS, redirects, injection, "
+            'DoS). Return {"issues":[{"line":int,"cwe":"CWE-n","title":str<=100,"reason":str<=200}]}'
+            ". Empty list if none. Do not invent issues.\n<data>" + numbered + "</data>")
+        try:
+            res = broker.complete(
+                [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}],
+                json_mode=True, task="hypothesize-T2")
+            issues = json.loads(res["text"]).get("issues", [])
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError):
+            continue
+        except Exception:
+            break  # budget/model failure: stop hypothesising, keep what we have
+        for it in issues[:10]:
+            try:
+                ln = int(it["line"])
+            except (KeyError, ValueError, TypeError):
+                continue
+            cwe = str(it.get("cwe", ""))
+            if not (1 <= ln <= len(lines)) or not re.fullmatch(r"CWE-[0-9]+", cwe):
+                continue
+            out.append(RawFinding("model", "hypothesis", cwe, str(it.get("title", ""))[:300], rel,
+                                  ln, lines[ln - 1].strip()[:300],
+                                  {"reason": str(it.get("reason", ""))[:300]}))
+    return out
+
+
 def discover_routes(root: Path) -> str:
     rx = re.compile(r"""(@\w+\.route\(\s*["']([^"']+)["']|["'](/[A-Za-z0-9_/\-]*)["'])""")
     seen: list[str] = []
@@ -110,6 +152,8 @@ def investigate(root: Path, *, tier: str = "T1", broker: Broker | None = None,
     root = root.resolve()
     manifest_hash = manifest_hash or content_hash({"root": root.name})
     raw = scan(root)
+    if tier == "T2" and broker:
+        raw += hypothesize(broker, root, raw)
     groups = dedupe(raw)
     injections = [
         {"file": p.relative_to(root).as_posix(), "line": i}
@@ -152,6 +196,8 @@ def investigate(root: Path, *, tier: str = "T1", broker: Broker | None = None,
                                  "requests": res.requests}
                 except ProbeRefused as exc:
                     probe_log = {"refused": str(exc)}
+        if f.tool == "model" and status != "confirmed" and disposition == "retain":
+            disposition, reason = "needs_review", "model hypothesis, not independently confirmed"
         evidence = {"raw": [x.__dict__ for x in g], "verdict": v, "probe": probe_log,
                     "tier": tier}
         blob = json.dumps(evidence, sort_keys=True, default=str).encode()
