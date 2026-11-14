@@ -7,3 +7,9 @@ __pycache__/
 tmp/
 artifacts/
 *.sqlite*
+
+.pytest_cache/
+.ruff_cache/
+.colossus/
+node_modules/
+frontend/dist/
