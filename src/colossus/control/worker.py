@@ -8,6 +8,7 @@ from colossus.contracts.core import DomainError, new_id, utcnow
 from colossus.control.broker import Broker
 from colossus.control.cycle import CycleEngine
 from colossus.control.deployment import DeploymentCoordinator
+from colossus.control.scheduler import Scheduler
 from colossus.onboarding.service import Onboarding
 
 
@@ -18,6 +19,9 @@ class Worker:
             services,
             controller,
             runtime,
+        )
+        self.scheduler = Scheduler(
+            store, artifacts, services.clients["gateway"], controller, runtime
         )
         self.owner = new_id()
         self.onboarding = Onboarding(
@@ -234,17 +238,42 @@ class Worker:
 
     async def run(self):
         await self.reconcile()
-        last_reap = 0
-        while not self.stop_event.is_set():
-            if time.monotonic() - last_reap >= self.runtime.reaper_seconds:
-                await self.services.clients["launcher"].call("/reap", {})
-                last_reap = time.monotonic()
-            task = self.store.claim(self.owner)
-            if task:
-                await self.process(task)
-            else:
-                try:
-                    await asyncio.wait_for(self.stop_event.wait(), timeout=0.5)
-                except TimeoutError:
-                    pass
-        self.state = "stopped"
+        monitoring = asyncio.create_task(
+            self.scheduler.run(self.stop_event), name="colossus-scheduler"
+        )
+        try:
+            last_reap = 0
+            while not self.stop_event.is_set():
+                if time.monotonic() - last_reap >= self.runtime.reaper_seconds:
+                    destinations = await self.services.clients["deployer"].call("/destinations")
+                    keep = {
+                        p["mirror"]["environment_id"]
+                        for p in self.store.list("project", limit=1000)
+                        if p.get("mirror", {}).get("state") == "READY"
+                        and p["mirror"].get("environment_id")
+                    }
+                    for destination in destinations:
+                        for slot in (
+                            destination.get("current"),
+                            destination.get("previous"),
+                            (destination.get("intent") or {}).get("target"),
+                        ):
+                            if slot:
+                                keep.add(slot["environment_id"])
+                    await self.services.clients["launcher"].call("/reap", {"keep": sorted(keep)})
+                    last_reap = time.monotonic()
+                task = self.store.claim(self.owner)
+                if task:
+                    await self.process(task)
+                else:
+                    try:
+                        await asyncio.wait_for(self.stop_event.wait(), timeout=0.5)
+                    except TimeoutError:
+                        pass
+            self.state = "stopped"
+        finally:
+            monitoring.cancel()
+            try:
+                await monitoring
+            except asyncio.CancelledError:
+                pass

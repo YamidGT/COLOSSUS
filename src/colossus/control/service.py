@@ -70,7 +70,11 @@ class Controller:
             raise DomainError("not_found", "Project not found", 404)
         return json.loads(row[0])
 
-    def run(self, project_id: str, key: str, actor: str, trigger: str = "manual"):
+    def run(
+        self, project_id: str, key: str, actor: str, trigger: str = "manual", *, tier: str = "T0"
+    ):
+        if tier not in {"T0", "T1", "T2"}:
+            raise DomainError("invalid_tier", "Unknown investigation tier", 422)
         if trigger not in {"manual", "schedule", "source", "advisory", "post_promotion"}:
             raise DomainError("invalid_trigger", "Unknown cycle trigger", 422)
 
@@ -96,6 +100,7 @@ class Controller:
                 project_id=project_id,
                 status="QUEUED",
                 trigger=trigger,
+                tier=tier,
                 created_at=utcnow(),
                 started_at=None,
                 finished_at=None,
@@ -125,7 +130,7 @@ class Controller:
             return {"project_id": project_id, "cycle_id": cycle_id, "task_id": task_id}
 
         return self.store.mutate(
-            actor, key, "run", {"project_id": project_id, "trigger": trigger}, action
+            actor, key, "run", {"project_id": project_id, "trigger": trigger, "tier": tier}, action
         )
 
     def admission(self, project_id: str, paused: bool, key: str, actor: str):
@@ -382,12 +387,21 @@ class Controller:
                 "scope": "platform",
                 "ceiling": self.runtime.automatic_ceiling_micro_usd,
             },
-            feed_freshness=self.store.list("feed", limit=20),
+            feed_freshness=self.feed_freshness(project_id),
             allowed_actions=self._project_actions(p),
             owner_policy_id=p["owner_policy_id"],
             assurance_profile=p["assurance_profile"],
             reason=p.get("reason"),
         )
+
+    def feed_freshness(self, project_id):
+        values = self.store.list("feed", project_id, limit=20)
+        for value in values:
+            last = value.get("last_success_epoch")
+            value["age_seconds"] = max(0, time.time() - last) if last is not None else None
+            if last is not None and value["age_seconds"] > 2 * self.runtime.feed_poll_seconds:
+                value["status"] = "stale"
+        return values
 
     def _project_actions(self, p):
         ready = (

@@ -49,6 +49,10 @@ class TerminateWork(Contract):
     keep: list[str] = Field(default_factory=list, max_length=4)
 
 
+class ReapRequest(Contract):
+    keep: list[str] = Field(default_factory=list, max_length=5000)
+
+
 class StopTarget(Contract):
     project_id: Identifier
     environment_id: str
@@ -136,8 +140,8 @@ def create_launcher(token: str, context: str, deploy_token: str | None = None):
         return launcher.terminate_project_work(body.project_id, body.keep)
 
     @app.post("/reap")
-    def reap():
-        return {"removed": launcher.reap()}
+    def reap(body: ReapRequest):
+        return {"removed": launcher.reap(body.keep)}
 
     return app
 

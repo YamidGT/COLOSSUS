@@ -1,5 +1,6 @@
 """Fixed-origin vulnerability fetcher. Construct only inside the credential gateway."""
 
+import base64
 import json
 import re
 from dataclasses import asdict, dataclass
@@ -41,6 +42,7 @@ class FeedResult:
     raw_content_hash: str | None
     data: dict | None
     error: str | None = None
+    raw_base64: str | None = None
 
 
 class ThreatFeeds:
@@ -68,7 +70,15 @@ class ThreatFeeds:
             data = json.loads(raw)
             if not isinstance(data, dict):
                 raise ValueError()
-            return FeedResult(source, url, utcnow(), "fresh", digest(bytes(raw)), data)
+            return FeedResult(
+                source,
+                url,
+                utcnow(),
+                "fresh",
+                digest(bytes(raw)),
+                data,
+                raw_base64=base64.b64encode(raw).decode(),
+            )
         except (httpx.HTTPError, DomainError, ValueError) as exc:
             return FeedResult(
                 source,
@@ -127,9 +137,15 @@ class ThreatFeeds:
             }
         fetched = {}
         for (name, version), match in zip(pins, batch.data["results"], strict=True):
+            if not isinstance(match, dict) or not isinstance(match.get("vulns", []), list):
+                incomplete.append("invalid_batch_entry:" + name)
+                continue
             if match.get("next_page_token"):
                 incomplete.append("osv_pagination_required:" + name)
             for item in match.get("vulns", []):
+                if not isinstance(item, dict):
+                    incomplete.append("invalid_advisory_entry")
+                    continue
                 advisory_id = item.get("id", "")
                 if not re.fullmatch(r"[A-Za-z0-9_-]{1,100}", advisory_id):
                     incomplete.append("invalid_advisory_id")
@@ -145,6 +161,25 @@ class ThreatFeeds:
                     incomplete.append(advisory_id)
                     continue
                 aliases = full.data.get("aliases", [])
+                affected = full.data.get("affected", [])
+                if (
+                    full.data.get("id") != advisory_id
+                    or not isinstance(aliases, list)
+                    or any(not isinstance(a, str) for a in aliases)
+                    or not isinstance(affected, list)
+                ):
+                    incomplete.append("invalid_advisory_schema:" + advisory_id)
+                    continue
+                normalized = re.sub(r"[-_.]+", "-", name).lower()
+                relevant = [
+                    a
+                    for a in affected
+                    if isinstance(a, dict)
+                    and isinstance(a.get("package"), dict)
+                    and a["package"].get("ecosystem") == "PyPI"
+                    and re.sub(r"[-_.]+", "-", str(a["package"].get("name", ""))).lower()
+                    == normalized
+                ]
                 events.append(
                     {
                         "advisory_id": advisory_id,
@@ -153,7 +188,11 @@ class ThreatFeeds:
                         "version": version,
                         "ecosystem": "PyPI",
                         "summary": str(full.data.get("summary", ""))[:500],
-                        "affected_status": "affected",
+                        "affected_status": "affected"
+                        if relevant and not full.data.get("withdrawn")
+                        else "unknown",
+                        "published_at": full.data.get("published"),
+                        "modified_at": full.data.get("modified"),
                         "reachability": "unknown",
                         "kev_status": any(a in known for a in [advisory_id, *aliases])
                         if known is not None
@@ -165,10 +204,12 @@ class ThreatFeeds:
                         "fixed_versions": sorted(
                             {
                                 e["fixed"]
-                                for affected in full.data.get("affected", [])
+                                for affected in relevant
                                 for r in affected.get("ranges", [])
+                                if isinstance(r, dict)
                                 for e in r.get("events", [])
-                                if "fixed" in e
+                                if isinstance(e, dict)
+                                if isinstance(e.get("fixed"), str)
                             }
                         ),
                     }

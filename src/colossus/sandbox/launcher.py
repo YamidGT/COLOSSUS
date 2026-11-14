@@ -619,7 +619,8 @@ class SandboxLauncher:
             )
         return {"terminated": removed, "preserved": remaining, "termination_confirmed": True}
 
-    def reap(self) -> list[str]:
+    def reap(self, keep: list[str] | None = None) -> list[str]:
+        retained = set(keep or [])
         names = self.checked(
             "ps", "-a", "--filter", "label=" + LABEL + "=true", "--format", "{{.Names}}"
         ).splitlines()
@@ -627,7 +628,7 @@ class SandboxLauncher:
         for name in names:
             info = self.inspect(name)
             expiry = int(info["Config"]["Labels"].get("org.colossus.expires", "0"))
-            if expiry <= time.time():
+            if expiry <= time.time() and name not in retained:
                 self.destroy(name)
                 removed.append(name)
         return removed

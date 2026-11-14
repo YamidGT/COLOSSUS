@@ -150,3 +150,35 @@ async def test_kev_failure_is_unknown_not_false_and_osv_match_is_not_reachabilit
     assert result["events"][0]["kev_status"] is None
     assert result["events"][0]["reachability"] == "unknown"
     assert parse_requirements("demo==1.0\nother>=2.0")["unresolved"] == ["other>=2.0"]
+
+
+@pytest.mark.asyncio
+async def test_osv_fixed_versions_are_scoped_to_the_matched_package():
+    async def respond(request):
+        if request.url.host == "www.cisa.gov":
+            return httpx.Response(200, json={"vulnerabilities": []})
+        if request.url.path.endswith("querybatch"):
+            return httpx.Response(200, json={"results": [{"vulns": [{"id": "TEST-2"}]}]})
+        return httpx.Response(
+            200,
+            json={
+                "id": "TEST-2",
+                "aliases": [],
+                "affected": [
+                    {
+                        "package": {"name": "demo", "ecosystem": "PyPI"},
+                        "ranges": [{"events": [{"fixed": "2.0"}]}],
+                    },
+                    {
+                        "package": {"name": "unrelated", "ecosystem": "PyPI"},
+                        "ranges": [{"events": [{"fixed": "99.0"}]}],
+                    },
+                ],
+            },
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
+        result = await ThreatFeeds(client).match([("demo", "1.0")])
+    assert result["events"][0]["fixed_versions"] == ["2.0"]
+    assert result["events"][0]["affected_status"] == "affected"
+    assert all(feed["raw_base64"] for feed in result["feeds"])
