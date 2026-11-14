@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import httpx
@@ -31,7 +32,8 @@ def fetch_kev() -> set[str]:
         return set()  # stale/unavailable: caller must report, never "no vulns"
 
 
-def match_dependencies(pins: list[tuple[str, str]], kev: set[str] | None = None) -> list[dict]:
+def match_dependencies(pins: list[tuple[str, str]], kev: set[str] | None = None,
+                       max_details: int = 60) -> list[dict]:
     """Exact pinned name/version -> OSV advisories. Reachability is NOT established here."""
     if not pins:
         return []
@@ -39,16 +41,31 @@ def match_dependencies(pins: list[tuple[str, str]], kev: set[str] | None = None)
     r = httpx.post(OSV_BATCH, json={"queries": queries}, timeout=60)
     r.raise_for_status()
     kev = kev or set()
-    events = []
-    for (name, ver), res in zip(pins, r.json().get("results", []), strict=False):
-        for v in res.get("vulns", []):
-            full = httpx.get(OSV_VULN.format(id=v["id"]), timeout=30).json()
-            aliases = full.get("aliases", [])
-            cwes = full.get("database_specific", {}).get("cwe_ids", [])
-            events.append({
-                "advisory_id": v["id"], "aliases": aliases, "package": name, "version": ver,
-                "summary": full.get("summary", "")[:300], "cwe_ids": cwes,
-                "kev": any(a in kev for a in aliases),
-                "affected_status": "affected", "source": "osv",
-            })
+    hits = [(name, ver, v["id"])
+            for (name, ver), res in zip(pins, r.json().get("results", []), strict=False)
+            for v in res.get("vulns", [])]
+
+    def fetch(h: tuple[str, str, str]) -> dict:
+        name, ver, vid = h
+        try:
+            full = httpx.get(OSV_VULN.format(id=vid), timeout=20).json()
+        except (httpx.HTTPError, ValueError):
+            full = {}  # keep the match visible even if the detail fetch failed
+        aliases = full.get("aliases", [])
+        return {
+            "advisory_id": vid, "aliases": aliases, "package": name, "version": ver,
+            "summary": full.get("summary", "")[:300],
+            "cwe_ids": full.get("database_specific", {}).get("cwe_ids", []),
+            "kev": any(a in kev for a in aliases), "affected_status": "affected",
+            "source": "osv", "detail_fetched": bool(full),
+        }
+
+    # Cap detail fetches (a pinned-old stack can have hundreds of advisories); the rest are
+    # reported as matches without detail, never silently dropped.
+    head, tail = hits[:max_details], hits[max_details:]
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        events = list(pool.map(fetch, head))
+    events += [{"advisory_id": vid, "aliases": [], "package": n, "version": v, "summary": "",
+                "cwe_ids": [], "kev": False, "affected_status": "affected", "source": "osv",
+                "detail_fetched": False} for n, v, vid in tail]
     return events

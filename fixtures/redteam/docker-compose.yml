@@ -1,0 +1,33 @@
+# Red-team lab (lane B). Targets are built from tmp/targets/* (cloned snapshots, git-ignored).
+# Isolation: bridge network WITHOUT masquerade => containers have no route to the internet;
+# ports are published on 127.0.0.1 only; no privileges, read-only root, resource limits.
+# Run from this directory: docker compose up -d --build
+name: colossus-redteam-lab
+
+x-hardening: &hardening
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  mem_limit: 512m
+  pids_limit: 128
+  restart: "no"
+  tmpfs: ["/tmp"]
+
+networks:
+  lab:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+
+services:
+  dsvw:
+    build: ../../tmp/targets/DSVW
+    <<: *hardening
+    networks: [lab]
+    ports: ["127.0.0.1:65412:65412"]
+  vampi:
+    build: ../../tmp/targets/VAmPI
+    <<: *hardening
+    networks: [lab]
+    environment: { vulnerable: "1", tokentimetolive: "60" }
+    ports: ["127.0.0.1:5000:5000"]

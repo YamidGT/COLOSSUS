@@ -162,7 +162,7 @@ def investigate(root: Path, *, tier: str = "T1", broker: Broker | None = None,
         if INJECTION_RX.search(ln)
     ]
     intel = []
-    for req in root.rglob("requirements*.txt"):
+    for req in (root.rglob("requirements*.txt") if use_intel else []):
         try:
             intel += match_dependencies(parse_requirements(req), fetch_kev() if use_intel else set())
         except Exception as exc:  # feed failure is reported, never "no vulnerabilities"
