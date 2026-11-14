@@ -19,7 +19,7 @@ Inspected the formal result adapter, normal DSVW gate construction, required-gat
 - A cancelled broker request is now recorded as uncertain with its reservation retained. The new cancellation regression passed; no cancelled request is silently charged zero.
 - Repository campaign rows explicitly distinguish source intake, unconfirmed Python patterns, readiness-only checks, unsupported functional/security suites and full-cycle evidence. Do not present those rows as 24 repaired applications or an official public benchmark score.
 - Two campaign provenance corrections were sent to its owner: retain the selected subdirectory in enrollment metadata, and validate cached source commit/tree against the frozen report before execution. Raw setup/build evidence should be exported before temporary campaign storage is removed. The owner acknowledged these changes; this review does not claim they were revalidated yet.
-- CLI `--watch` waits through `REVIEW_READY` until the deadline unless the case progresses. It is safe to detach, inspect and approve/reject separately, but this is not ideal review-policy usability. Automatic lab-cycle watching is unaffected.
+- CLI review waiting was corrected after review: `--watch` now ends with an explicit `awaiting_review` envelope only when the server reports `review-v1`. It says no deployment is claimed and retains operation/project/cycle IDs. Automatic lab policy continues watching through transient REVIEW_READY to deployment completion. Two regression tests cover both branches; the CLI suite passed (56 tests).
 
 ## Claims still excluded
 

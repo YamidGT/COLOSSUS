@@ -425,3 +425,40 @@ def test_ui_json_is_one_envelope(serve):
     assert result.exit_code == 0
     assert json.loads(result.stdout)["data"]["code"] == "one-use-code"
     assert result.stdout.count("\n") == 1
+
+
+def test_review_policy_watch_returns_pending_review_without_deployment_claim(serve):
+    def handler(request):
+        if request.method == "POST":
+            return httpx.Response(202, json=receipt(project_id="p1", cycle_id="c1"))
+        if request.url.path.endswith("/status"):
+            return httpx.Response(200, json={"owner_policy_id": "review-v1"})
+        return httpx.Response(200, json=cycle("REVIEW_READY"))
+
+    server = serve(handler)
+    result = invoke("--json", "run", "p1", "--watch")
+    assert result.exit_code == 0
+    body = json.loads(result.stdout)
+    assert body["status"] == "awaiting_review" and body["ok"]
+    assert body["cycle_id"] == "c1" and body["operation_id"] == "op-1"
+    assert body["message"] == "Waiting for operator review; no deployment claimed."
+    assert result.stdout.count("\n") == 1
+    assert len(server.calls("POST")) == 1
+
+
+def test_automatic_policy_watch_continues_past_transient_review_ready(serve):
+    states = iter(["REVIEW_READY", "OBSERVING", "COMPLETE"])
+
+    def handler(request):
+        if request.method == "POST":
+            return httpx.Response(202, json=receipt(project_id="p1", cycle_id="c1"))
+        if request.url.path.endswith("/status"):
+            return httpx.Response(200, json={"owner_policy_id": "lab-auto-v1"})
+        return httpx.Response(200, json=cycle(next(states)))
+
+    server = serve(handler)
+    result = invoke("--json", "run", "p1", "--watch")
+    assert result.exit_code == 0
+    assert json.loads(result.stdout)["status"] == "COMPLETE"
+    assert "OBSERVING" in result.stderr
+    assert len(server.calls("POST")) == 1

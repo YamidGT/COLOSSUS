@@ -219,11 +219,21 @@ def poll(ctx, fetch, describe, done, deadline: int):
 
 def watch_cycle(ctx, cycle_id: str, project_id: str | None, deadline: int, operation_id=None):
     api = client(ctx)
+
+    def done(cycle):
+        if cycle.get("status") in TERMINAL_CYCLES:
+            return True
+        current_project = project_id or cycle.get("project_id")
+        if cycle.get("status") == "REVIEW_READY" and current_project:
+            snapshot = api.request("GET", f"/projects/{current_project}/status")
+            return snapshot.get("owner_policy_id") == "review-v1"
+        return False
+
     value = poll(
         ctx,
         lambda: api.request("GET", f"/cycles/{cycle_id}"),
         lambda c: str(c.get("status")) + (f" / {c['stage']}" if c.get("stage") else ""),
-        lambda c: c.get("status") in TERMINAL_CYCLES,
+        done,
         deadline,
     )
     base = dict(operation_id=operation_id, project_id=project_id, cycle_id=cycle_id)
@@ -255,6 +265,20 @@ def watch_cycle(ctx, cycle_id: str, project_id: str | None, deadline: int, opera
             EXIT_WATCH_DEADLINE,
         )
     project_id = project_id or value.get("project_id")
+    if value["status"] == "REVIEW_READY":
+        finish(
+            ctx,
+            render.envelope(
+                ok=True,
+                status="awaiting_review",
+                reason_code="operator_review_required",
+                message="Waiting for operator review; no deployment claimed.",
+                action_url=project_url(ctx, project_id),
+                data=value,
+                **(base | {"project_id": project_id}),
+            ),
+        )
+        return
     succeeded = value["status"] in SUCCESSFUL_CYCLES
     finish(
         ctx,
