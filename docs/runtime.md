@@ -90,3 +90,19 @@ Instrument every stage with queue/start/end times. Run DSVW, VAmPI and the guide
 ## Operator client refresh
 
 Visible active-project UI and CLI watch poll every 2 seconds; idle/list views every 10 seconds. Hidden browser tabs pause polling; transient read failures back off to 30 seconds and show stale state. These are read refreshes, not new investigation cycles and incur no model calls. Server timestamps/deadlines remain authoritative. Small static frontend assets share the controller's existing process/resource reserve; no extra Node server runs in the deployed stack.
+
+## Measured submission calibration (14 November 2026)
+
+On the local dedicated 4-CPU/8-GiB ARM64 Colima runtime, the fresh DSVW lifecycle
+from URL intake through a newly generated patch, verification, lab promotion and
+mirror refresh took **330.690 seconds (5 minutes 31 seconds)**. This includes the
+full **300-second health observation**. Tools/base images were already available;
+this is not a clean-host bootstrap measurement. A second cycle returned NO_CHANGE;
+rollback to the explicitly known-vulnerable retained baseline took **8.166 seconds**.
+One model call cost $0.001287. Formal coverage of this SQL repair was UNSUPPORTED.
+
+The owned GLM/Dafny component loop took **5.496 seconds**, excluding subsequent
+wrapper packaging tests, and cost $0.000078. Assisted application setup is measured
+separately in the [submission campaign](../evaluation/submission/README.md); a
+readiness result or a few HTTP checks is not a complete remediation cycle. The
+planning ranges above remain estimates for other workloads, not measured promises.
