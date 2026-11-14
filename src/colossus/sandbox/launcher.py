@@ -705,18 +705,22 @@ class SandboxLauncher:
             )
         return {"terminated": removed, "preserved": remaining, "termination_confirmed": True}
 
-    def reap(self) -> list[str]:
+    def reap(self, keep: list[str] | None = None) -> list[str]:
         """Remove expired COLOSSUS containers, then expired empty COLOSSUS networks.
 
         Only resources carrying org.colossus.managed=true are listed, and each is
-        re-inspected before removal. Quarantined (paused) workers are kept.
+        re-inspected before removal. Quarantined (paused) workers and names in
+        `keep` (live leases) are kept.
         """
+        retained = set(keep or [])
         names = self.checked(
             "ps", "-a", "--filter", "label=" + LABEL + "=true", "--format", "{{.Names}}"
         ).splitlines()
         removed = []
         now = time.time()
         for name in names:
+            if name in retained:
+                continue
             try:
                 info = self.inspect(name)
             except DomainError:

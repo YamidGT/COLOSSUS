@@ -205,6 +205,7 @@ def test_reaper_removes_only_expired_managed(fake):
         }
 
     fake.containers = {"colossus-old": managed(now - 5), "colossus-new": managed(now + 600)}
+    assert SandboxLauncher("ctx").reap(keep=["colossus-old"]) == []
     assert SandboxLauncher("ctx").reap() == ["colossus-old"]
     removed = [c for c in fake.calls if c[:2] == ["rm", "-f"]]
     assert removed == [["rm", "-f", "colossus-old"]]

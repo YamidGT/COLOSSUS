@@ -95,7 +95,8 @@ class CycleEngine:
                 manifest_hash=project["source"]["manifest_hash"],
                 launcher=self.launcher,
                 evidence=evidence,
-                tier="T0",
+                tier=cycle.get("tier", "T0"),
+                broker=self.broker,
             )
             for additional_finding in additional["findings"]:
                 self.store.put(

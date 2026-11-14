@@ -23,7 +23,7 @@ Active implementation branch: `implementation/full-system`. This file records ob
 | Source URL resolution and safe archive handling | Validated immutable DSVW snapshot and hostile archive rejection; broader GitHub error/size scenarios remain |
 | Isolated build/target/worker execution | gVisor jobs and COPY-only immutable target packaging validated; broader lifecycle/network challenges pending |
 | Stack setup and manifests | DSVW URL-to-ready manifest validated; additional stack adapters remain implementation work; do not run other repos yet |
-| OSV/KEV/advisory intelligence | Gateway adapters integrated from lane B; controller polling, cache/replay and recurrence pending |
+| OSV/KEV/advisory intelligence | Gateway adapters and durable per-project polling/snapshots/replay integrated; live CISA read validated; source polling and wider feed coverage pending |
 | Static/LLM triage and scoped reproduction | DSVW AST/rule detection and protected reproduction validated; generic triage/probe adapters integrated but broader coverage unmeasured |
 | Broker and global model accounting | Separate gateway and actual Mistral capability/accounting validated; refusal/retry scenarios need broader coverage |
 | Upstream and generated patch routes | Generated exact-span DSVW repair validated; upstream-update route remains pending |
@@ -91,3 +91,14 @@ Current validation: **74 backend tests pass**; TypeScript/Vite production build 
 The six finished DSVW calibration enrollments now show **RETIRED** deployment summaries. Cleanup discovered Docker 29 reports missing objects in lowercase; idempotent teardown now handles both message cases while still failing on daemon errors. Existing diff/gate artifact publication metadata was corrected through audited store writes; source archives remain private. Follow-up browser inspection successfully loaded the actual source diff and verified the case layout at 375px. Broader UI acceptance remains pending.
 
 Checkpoint pushed to `origin/implementation/full-system`; `origin/main` remains unchanged. Remaining full-scope work includes scheduled feed refresh/recurrence, broader setup and patch adapters, linked formal verification, benchmark runners, failure/restart acceptance, final interface acceptance and the template-based technical sheet.
+
+
+## Recurring intelligence implementation
+
+Added a durable per-project scheduler: T1/T2 due times survive restarts, relevant advisory triggers coalesce while a cycle is active, paused projects admit no new scheduled work, and automatic reviews retain the shared broker's cost limits. The worker runs the watcher separately from the single heavy task. Source revision polling and priority aging remain unfinished. There is no claim that waiting six hours on the live host has been validated; fixed-clock tests cover due-time behavior.
+
+Intel refresh retains exact response bytes and validates their hashes, stores replayable snapshots, scopes aliases to package/version, fetches full OSV advisories, and takes fixed versions only from the matched package. Failures retain last successful snapshots with explicit stale/unavailable status. Replay does not mutate live feed state or trigger cycles. Project views show only their own feed status. Active mirrors and retained destination images are exempted from the running controller's work-container reaper; independent host-level cleanup after controller loss remains pending.
+
+`uv run python scripts/check_intel.py` fetched live CISA KEV successfully and replayed the retained snapshot against an existing DSVW manifest. No target started and no model called. The stdlib-only installed inventory was empty, so there was no live OSV package-match claim. Evidence: `artifacts/bootstrap/intel.json`. Focused platform suite: **119 passed**; Ruff passes. OSV behavior was checked against the primary [batch API](https://google.github.io/osv.dev/post-v1-querybatch/) and [full advisory API](https://google.github.io/osv.dev/get-v1-vulns/) documentation.
+
+New Kiro commits through `7883b87` were inspected. Their formal helpers only classify supplied output, their evaluation command only validates a lock, and their deploy policy does not execute a rollout; they are not completion evidence. Integrate useful pieces with the existing real runtime, preserving its contracts and existing action center.
