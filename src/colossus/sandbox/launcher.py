@@ -20,6 +20,10 @@ from colossus.sandbox.packaging import package_context
 PYTHON_IMAGE = "python@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b"
 LABEL = "org.colossus.managed"
 MAX_LOG = 1024 * 1024
+INHIBIT_IPV4 = "com.docker.network.bridge.inhibit_ipv4"
+# Environments whose evidence export failed are paused, not destroyed. Each one holds
+# its scratch tmpfs in memory, so the count is bounded; at the cap no new work starts.
+MAX_QUARANTINE = 4
 
 
 @dataclass(frozen=True)
@@ -213,16 +217,23 @@ class SandboxLauncher:
         if result.exit_code:
             self.checked("pull", image, timeout=300)
 
-    def network(self, project_id: str) -> str:
+    def network(self, project_id: str, ttl_seconds: int = 14400) -> str:
+        if not 1 <= ttl_seconds <= 14400:
+            raise DomainError("invalid_limits", "Sandbox limit is outside allowed range", 422)
         name = "colossus-net-" + new_id()
         self.checked(
             "network",
             "create",
             "--internal",
+            # No host address on the bridge: jobs cannot reach host listeners via the gateway.
+            "--opt",
+            INHIBIT_IPV4 + "=true",
             "--label",
             LABEL + "=true",
             "--label",
             "org.colossus.project=" + project_id,
+            "--label",
+            "org.colossus.expires=" + str(int(time.time()) + ttl_seconds),
             name,
         )
         return name
@@ -235,6 +246,7 @@ class SandboxLauncher:
         data = json.loads(self.checked("network", "inspect", network))[0]
         if (
             not data.get("Internal")
+            or (data.get("Options") or {}).get(INHIBIT_IPV4) != "true"
             or data.get("Labels", {}).get("org.colossus.project") != project_id
         ):
             raise DomainError(
@@ -256,6 +268,7 @@ class SandboxLauncher:
         if not 64 <= memory_mb <= 6144 or not 1 <= ttl_seconds <= 14400:
             raise DomainError("invalid_limits", "Sandbox limit is outside allowed range", 422)
         self._validate_network(network, project_id)
+        self._admit()
         self.ensure_image(image)
         name = "colossus-" + new_id()
         self.checked(
@@ -343,7 +356,7 @@ class SandboxLauncher:
             }
 
     def start_target(self, project_id: str, artifact_digest: str, ttl_seconds: int = 7200) -> dict:
-        network = self.network(project_id)
+        network = self.network(project_id, ttl_seconds=ttl_seconds)
         try:
             name = self.create(
                 project_id,
@@ -453,6 +466,14 @@ class SandboxLauncher:
     def execute(
         self, environment_id: str, argv: list[str], timeout: int = 60, workdir: str = "/work/source"
     ) -> ProcessResult:
+        result = self._exec(environment_id, argv, timeout, workdir)
+        if result.timed_out:
+            self.destroy(environment_id)
+        return result
+
+    def _exec(
+        self, environment_id: str, argv: list[str], timeout: int, workdir: str
+    ) -> ProcessResult:
         self.inspect(environment_id)
         if (
             not argv
@@ -473,7 +494,8 @@ class SandboxLauncher:
             timeout=timeout,
         )
         if result.timed_out:
-            self.destroy(environment_id)
+            # Killing the docker CLI does not stop the in-sandbox process; freeze it.
+            self.docker("kill", environment_id)
         return result
 
     def run(
@@ -493,13 +515,77 @@ class SandboxLauncher:
             finally:
                 self.destroy(environment_id)
 
+    def run_collect(
+        self,
+        project_id: str,
+        role: str,
+        files: dict[str, bytes],
+        argv: list[str],
+        timeout: int = 60,
+        network: str = "none",
+        results_dir: str = "/work/results",
+        max_bytes: int = 25 * 1024 * 1024,
+    ) -> dict:
+        """Run a job and export its results BEFORE the worker is destroyed.
+
+        If the export fails the worker is paused and kept (quarantined) with its
+        scratch intact, and the failure is reported instead of losing evidence.
+        """
+        with self._lock:
+            environment_id = self.create(project_id, role, network, ttl_seconds=timeout + 60)
+            try:
+                self.copy_source(environment_id, files)
+                result = self._exec(environment_id, argv, timeout, "/work/source")
+            except BaseException:
+                self.destroy(environment_id)
+                raise
+            if result.timed_out:
+                # The job was killed; its tmpfs scratch died with it.
+                self.destroy(environment_id)
+                return {"result": result, "files": {}, "evidence": "lost_timeout"}
+            try:
+                exported = self.export_files(environment_id, results_dir, max_bytes)
+            except DomainError as error:
+                self.quarantine(environment_id)
+                return {
+                    "result": result,
+                    "files": {},
+                    "evidence": "quarantined",
+                    "environment_id": environment_id,
+                    "error": error.code,
+                }
+            self.destroy(environment_id)
+            return {"result": result, "files": exported, "evidence": "exported"}
+
+    def quarantine(self, environment_id: str):
+        """Freeze a worker whose evidence could not be exported; the reaper skips it."""
+        self.inspect(environment_id)
+        self.checked("pause", environment_id)
+
+    def quarantined(self) -> list[str]:
+        return self.checked(
+            "ps", "-a", "--filter", "label=" + LABEL + "=true", "--filter", "status=paused",
+            "--format", "{{.Names}}",
+        ).splitlines()
+
+    def _admit(self):
+        if len(self.quarantined()) >= MAX_QUARANTINE:
+            raise DomainError(
+                "quarantine_full",
+                "Evidence quarantine is full; no new sandbox work is admitted",
+                507,
+            )
+
     def destroy(self, environment_id: str):
         if not environment_id.startswith("colossus-"):
             raise DomainError("invalid_environment", "Unknown sandbox identity", 422)
         check = self.docker("inspect", environment_id)
         if check.exit_code and "no such" in check.stderr.lower():
             return  # already gone (Docker wording differs by version: "No such" / "no such")
-        self.inspect(environment_id)
+        info = self.inspect(environment_id)
+        if info.get("State", {}).get("Paused"):
+            # runsc cannot kill a frozen sandbox ("PID is zombie"); thaw it first.
+            self.checked("unpause", environment_id)
         self.checked("rm", "-f", environment_id)
 
     def destroy_network(self, network_id: str, project_id: str):
@@ -554,16 +640,42 @@ class SandboxLauncher:
         return {"terminated": removed, "preserved": remaining, "termination_confirmed": True}
 
     def reap(self) -> list[str]:
+        """Remove expired COLOSSUS containers, then expired empty COLOSSUS networks.
+
+        Only resources carrying org.colossus.managed=true are listed, and each is
+        re-inspected before removal. Quarantined (paused) workers are kept.
+        """
         names = self.checked(
             "ps", "-a", "--filter", "label=" + LABEL + "=true", "--format", "{{.Names}}"
         ).splitlines()
         removed = []
+        now = time.time()
         for name in names:
-            info = self.inspect(name)
-            expiry = int(info["Config"]["Labels"].get("org.colossus.expires", "0"))
-            if expiry <= time.time():
+            try:
+                info = self.inspect(name)
+            except DomainError:
+                continue  # vanished or not ours
+            if info.get("State", {}).get("Paused"):
+                continue
+            if _expiry(info["Config"]["Labels"]) <= now:
                 self.destroy(name)
                 removed.append(name)
+        networks = self.checked(
+            "network", "ls", "--filter", "label=" + LABEL + "=true", "--format", "{{.Name}}"
+        ).splitlines()
+        for name in networks:
+            if not name.startswith("colossus-net-"):
+                continue
+            result = self.docker("network", "inspect", name)
+            if result.exit_code:
+                continue
+            info = json.loads(result.stdout)[0]
+            labels = info.get("Labels") or {}
+            if labels.get(LABEL) != "true" or info.get("Containers"):
+                continue
+            if "org.colossus.expires" in labels and _expiry(labels) <= now:
+                if self.docker("network", "rm", name).exit_code == 0:
+                    removed.append(name)
         return removed
 
     def export_files(
@@ -626,3 +738,10 @@ class SandboxLauncher:
                 stream = archive.extractfile(item)
                 files[name] = stream.read()
         return files
+
+
+def _expiry(labels: dict) -> int:
+    try:
+        return int(labels.get("org.colossus.expires", "0"))
+    except ValueError:
+        return 0
