@@ -51,6 +51,8 @@ Every gate/authority change -> unsampled audit event + retained evidence
 
 These boxes describe responsibilities. Process decisions are fixed in [the documentation map](README.md). The controller owns state and authorization, the gateway owns model credentials, the launcher owns runtime access, the deployment service owns destination credentials. Models propose actions; deterministic code controls effects.
 
+The Python build phase additionally uses a temporary credential-free registry proxy: the isolated builder reaches it on an internal network, and only that proxy reaches the two fixed PyPI origins. It is removed before target startup; runtime targets never inherit registry egress. See [Python setup](python-setup.md) for the implemented path and its limits.
+
 ## Data and authority boundaries
 
 1. The controller receives an enrolled URL and owner policy. It fetches source through the gateway and never executes source locally.

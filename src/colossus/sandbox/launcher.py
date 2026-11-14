@@ -306,8 +306,9 @@ class SandboxLauncher:
         ttl_seconds: int = 1200,
         image: str = PYTHON_IMAGE,
         application: bool = False,
+        start: bool = True,
     ) -> str:
-        if role not in {"build", "target", "candidate", "probe", "verify", "scan"}:
+        if role not in {"build", "target", "candidate", "probe", "verify", "scan", "registry"}:
             raise DomainError("invalid_role", "Unknown sandbox role", 422)
         if not 64 <= memory_mb <= 6144 or not 1 <= ttl_seconds <= 14400:
             raise DomainError("invalid_limits", "Sandbox limit is outside allowed range", 422)
@@ -359,11 +360,12 @@ class SandboxLauncher:
             image,
             *([] if application else ["python", "-c", "import time; time.sleep(14400)"]),
         )
-        try:
-            self.checked("start", name)
-        except BaseException:
-            self.docker("rm", "-f", name)
-            raise
+        if start:
+            try:
+                self.checked("start", name)
+            except BaseException:
+                self.docker("rm", "-f", name)
+                raise
         return name
 
     def package(self, files: dict[str, bytes], argv: list[str]) -> dict:
@@ -655,9 +657,24 @@ class SandboxLauncher:
         return {"stopped": True}
 
     def destroy_network(self, network_id: str, project_id: str):
-        self._validate_network(network_id, project_id)
-        if network_id != "none":
-            self.checked("network", "rm", network_id)
+        if network_id == "none":
+            return
+        if not network_id.startswith(("colossus-net-", "colossus-egress-")):
+            raise DomainError("network_not_allowed", "Unknown managed network", 422)
+        result = self.docker("network", "inspect", network_id)
+        if result.exit_code:
+            if "not found" in result.stderr.lower() or "no such" in result.stderr.lower():
+                return
+            raise DomainError("runtime_unavailable", "Cannot establish network teardown state", 503)
+        info = json.loads(result.stdout)[0]
+        if (
+            info.get("Labels", {}).get(LABEL) != "true"
+            or info.get("Labels", {}).get("org.colossus.project") != project_id
+            or info.get("Containers")
+            or (network_id.startswith("colossus-net-") and not info.get("Internal"))
+        ):
+            raise DomainError("network_not_allowed", "Network is not empty and owned", 422)
+        self.checked("network", "rm", network_id)
 
     def terminate_project_work(self, project_id: str, keep: list[str]) -> dict:
         names = self.checked(

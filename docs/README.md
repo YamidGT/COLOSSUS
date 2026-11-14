@@ -16,6 +16,7 @@ Version 1.2 is the implementer handoff. All implementation and duration statemen
 | architecture.md | Components, topology, lifecycle and trust boundaries | All; A integrates |
 | contracts.md | Object fields, statuses, API semantics, persistence | A |
 | onboarding-sandbox.md | URL intake, recipes, target environments and isolation | B with A runtime support |
+| python-setup.md | Implemented Python discovery, registry proxy, immutable dependencies and coverage limits | B with A runtime |
 | agents-intelligence.md | Intelligence, investigation and patch-generation behavior | B and C |
 | verification.md | Specifications, proof adapters and acceptance rules | D |
 | formal-toolchain.md | Isolated Dafny bootstrap, calibrated policy profile and linkage limits | D with A runtime |
