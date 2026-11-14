@@ -154,8 +154,13 @@ finally:
         p.kill()
 """
     res = launcher.run(project, "verify", {"f.py": program}, ["python", "f.py"], 60)
-    assert res.stdout.startswith("limited"), res.stdout
-    assert int(res.stdout.split()[1]) < 128
+    # The limit may stop the script (it prints "limited N") or kill the exec itself
+    # (gVisor reports a WaitPID failure). Either way 400 processes are never reached.
+    assert "spawned" not in res.stdout, res.stdout
+    if res.stdout.startswith("limited"):
+        assert int(res.stdout.split()[1]) < 128
+    else:
+        assert res.exit_code != 0
 
 
 def test_source_upload_cannot_escape_work_dir(launcher, project):
