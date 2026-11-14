@@ -1,0 +1,214 @@
+{
+  "$defs": {
+    "ModelCallStatus": {
+      "enum": [
+        "reserved",
+        "in_flight",
+        "succeeded",
+        "failed",
+        "uncertain"
+      ],
+      "title": "ModelCallStatus",
+      "type": "string"
+    },
+    "ModelReasonCode": {
+      "enum": [
+        "refused",
+        "provider_policy_block",
+        "rate_limited",
+        "unsupported_parameter",
+        "invalid_output",
+        "transport_error",
+        "timeout"
+      ],
+      "title": "ModelReasonCode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actual_cost_micro_usd": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Actual Cost Micro Usd"
+    },
+    "billing_usage": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "propertyNames": {
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "title": "Billing Usage",
+      "type": "object"
+    },
+    "call_id": {
+      "title": "Call Id",
+      "type": "string"
+    },
+    "endpoint_profile_id": {
+      "title": "Endpoint Profile Id",
+      "type": "string"
+    },
+    "input_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Input Tokens"
+    },
+    "model_profile_hash": {
+      "title": "Model Profile Hash",
+      "type": "string"
+    },
+    "model_requested": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Model Requested",
+      "type": "string"
+    },
+    "model_returned": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Model Returned"
+    },
+    "output_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Output Tokens"
+    },
+    "price_snapshot_id": {
+      "title": "Price Snapshot Id",
+      "type": "string"
+    },
+    "provider": {
+      "enum": [
+        "mistral",
+        "groq"
+      ],
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_request_id": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Provider Request Id"
+    },
+    "reason_code": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelReasonCode"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reasoning_effort": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Reasoning Effort"
+    },
+    "request_hash": {
+      "title": "Request Hash",
+      "type": "string"
+    },
+    "reserved_cost_micro_usd": {
+      "minimum": 0,
+      "title": "Reserved Cost Micro Usd",
+      "type": "integer"
+    },
+    "response_content_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Response Content Id"
+    },
+    "status": {
+      "$ref": "#/$defs/ModelCallStatus"
+    },
+    "task_id": {
+      "title": "Task Id",
+      "type": "string"
+    },
+    "template_version": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Template Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "call_id",
+    "task_id",
+    "provider",
+    "endpoint_profile_id",
+    "model_profile_hash",
+    "model_requested",
+    "model_returned",
+    "reasoning_effort",
+    "template_version",
+    "request_hash",
+    "response_content_id",
+    "input_tokens",
+    "output_tokens",
+    "reserved_cost_micro_usd",
+    "actual_cost_micro_usd",
+    "status",
+    "reason_code",
+    "provider_request_id",
+    "price_snapshot_id"
+  ],
+  "title": "ModelCall",
+  "type": "object"
+}

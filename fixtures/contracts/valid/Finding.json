@@ -1,0 +1,22 @@
+{
+  "advisory_ids": [],
+  "cvss_vector": null,
+  "cwe": "CWE-89",
+  "disposition": "retain",
+  "disposition_reason": "unconfirmed static finding",
+  "evidence_ids": [],
+  "finding_id": "00000000-0000-4000-8000-000000000006",
+  "fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "location": {
+    "file": "app.py",
+    "route": "/login",
+    "symbol": "login"
+  },
+  "manifest_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "severity_origin": "heuristic",
+  "source_tools": [
+    "semgrep"
+  ],
+  "status": "suspected",
+  "title": "SQL injection in login route"
+}

@@ -1,0 +1,8 @@
+{
+  "action": "approve",
+  "disabled_reason": "required formal gate is UNKNOWN",
+  "eligible": false,
+  "expected_revision": 3,
+  "required_confirmation": true,
+  "resource_id": "00000000-0000-4000-8000-000000000014"
+}

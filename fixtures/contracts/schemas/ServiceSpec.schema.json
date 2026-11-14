@@ -1,0 +1,64 @@
+{
+  "additionalProperties": false,
+  "description": "Never host mounts or credentials: there are deliberately no such fields.",
+  "properties": {
+    "artifact_digest": {
+      "title": "Artifact Digest",
+      "type": "string"
+    },
+    "command_profile_id": {
+      "title": "Command Profile Id",
+      "type": "string"
+    },
+    "dependency_service_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 16,
+      "title": "Dependency Service Ids",
+      "type": "array"
+    },
+    "health_check_id": {
+      "title": "Health Check Id",
+      "type": "string"
+    },
+    "internal_ports": {
+      "items": {
+        "maximum": 65535,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "maxItems": 16,
+      "title": "Internal Ports",
+      "type": "array"
+    },
+    "resource_profile_id": {
+      "title": "Resource Profile Id",
+      "type": "string"
+    },
+    "service_id": {
+      "title": "Service Id",
+      "type": "string"
+    },
+    "writable_paths": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 16,
+      "title": "Writable Paths",
+      "type": "array"
+    }
+  },
+  "required": [
+    "service_id",
+    "artifact_digest",
+    "command_profile_id",
+    "internal_ports",
+    "resource_profile_id",
+    "dependency_service_ids",
+    "health_check_id",
+    "writable_paths"
+  ],
+  "title": "ServiceSpec",
+  "type": "object"
+}

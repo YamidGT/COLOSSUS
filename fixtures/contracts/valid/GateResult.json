@@ -1,0 +1,23 @@
+{
+  "assumptions": [],
+  "candidate_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "candidate_id": "00000000-0000-4000-8000-000000000009",
+  "case_id": "00000000-0000-4000-8000-000000000012",
+  "category": "formal",
+  "check_profile_id": "dafny-verify-v1",
+  "command_profile_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "evidence_ids": [
+    "00000000-0000-4000-8000-000000000013"
+  ],
+  "exit_code": 4,
+  "finished_at": "2026-11-14T12:05:00Z",
+  "gate_id": "00000000-0000-4000-8000-000000000011",
+  "proof_outcome": "UNKNOWN",
+  "reason": "solver timeout; UNKNOWN is not a pass",
+  "scope": [
+    "vampi-req-1"
+  ],
+  "started_at": "2026-11-14T12:00:00Z",
+  "status": "fail",
+  "tool_version": "dafny 4.x (fixture)"
+}

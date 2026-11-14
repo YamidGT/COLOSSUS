@@ -1,0 +1,31 @@
+{
+  "_invalid_because": "required gate without result",
+  "payload": {
+    "artifact_digest": "registry.local/colossus/fixture@sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "assurance_profile": "tested",
+    "baseline_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "candidate_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "case_id": "00000000-0000-4000-8000-000000000012",
+    "content_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "diff_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "exclusions": [],
+    "gate_result_ids": [],
+    "harness_hashes": [],
+    "issued_at": "2026-11-14T12:05:00Z",
+    "manifest_id": "00000000-0000-4000-8000-000000000014",
+    "model_call_ids": [
+      "00000000-0000-4000-8000-000000000008"
+    ],
+    "policy_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "proof_summary": [],
+    "required_gate_ids": [
+      "00000000-0000-4000-8000-000000000011"
+    ],
+    "spec_hashes": [],
+    "target_manifest_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "test_hashes": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ],
+    "total_cost_micro_usd": 30000
+  }
+}

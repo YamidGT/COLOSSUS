@@ -1,0 +1,38 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": {
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "decision": {
+      "pattern": "^reject$",
+      "title": "Decision",
+      "type": "string"
+    },
+    "expected_revision": {
+      "minimum": 1,
+      "title": "Expected Revision",
+      "type": "integer"
+    },
+    "reason": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "candidate_id",
+    "expected_revision",
+    "decision",
+    "reason"
+  ],
+  "title": "ReviewDecision",
+  "type": "object"
+}

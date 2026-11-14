@@ -1,0 +1,60 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "artifact_digest": {
+      "title": "Artifact Digest",
+      "type": "string"
+    },
+    "build_evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Build Evidence Ids",
+      "type": "array"
+    },
+    "candidate_id": {
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "diff_hash": {
+      "title": "Diff Hash",
+      "type": "string"
+    },
+    "generated_code_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Generated Code Hash"
+    },
+    "manifest_hash": {
+      "title": "Manifest Hash",
+      "type": "string"
+    },
+    "proposal_id": {
+      "title": "Proposal Id",
+      "type": "string"
+    },
+    "source_tree_hash": {
+      "title": "Source Tree Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "candidate_id",
+    "proposal_id",
+    "source_tree_hash",
+    "diff_hash",
+    "artifact_digest",
+    "generated_code_hash",
+    "manifest_hash",
+    "build_evidence_ids"
+  ],
+  "title": "Candidate",
+  "type": "object"
+}

@@ -1,0 +1,20 @@
+{
+  "advisory_id": "GHSA-xxxx-xxxx-xxxx",
+  "affected_status": "unknown",
+  "aliases": [],
+  "ecosystem": "PyPI",
+  "fetched_at": "2026-11-14T12:00:00Z",
+  "fixed_versions": [],
+  "kev_status": null,
+  "modified_at": null,
+  "package": "flask",
+  "published_at": null,
+  "raw_content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "raw_content_id": "00000000-0000-4000-8000-000000000005",
+  "replay": true,
+  "severity_source": "none",
+  "severity_vector": null,
+  "source": "osv",
+  "source_url": "https://osv.dev/vulnerability/GHSA-xxxx-xxxx-xxxx",
+  "version": "0.12"
+}

@@ -1,0 +1,66 @@
+{
+  "$defs": {
+    "ActionKind": {
+      "enum": [
+        "approve",
+        "reject",
+        "rollback",
+        "pause",
+        "resume",
+        "cancel",
+        "retry_setup",
+        "configure",
+        "run"
+      ],
+      "title": "ActionKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "UI hint only; the server rechecks every action.",
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/ActionKind"
+    },
+    "disabled_reason": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Disabled Reason"
+    },
+    "eligible": {
+      "title": "Eligible",
+      "type": "boolean"
+    },
+    "expected_revision": {
+      "minimum": 0,
+      "title": "Expected Revision",
+      "type": "integer"
+    },
+    "required_confirmation": {
+      "title": "Required Confirmation",
+      "type": "boolean"
+    },
+    "resource_id": {
+      "title": "Resource Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "action",
+    "resource_id",
+    "expected_revision",
+    "eligible",
+    "disabled_reason",
+    "required_confirmation"
+  ],
+  "title": "AllowedAction",
+  "type": "object"
+}

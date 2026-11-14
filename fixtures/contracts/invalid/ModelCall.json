@@ -1,0 +1,25 @@
+{
+  "_invalid_because": "failed without reason",
+  "payload": {
+    "actual_cost_micro_usd": null,
+    "billing_usage": {},
+    "call_id": "00000000-0000-4000-8000-000000000008",
+    "endpoint_profile_id": "mistral-chat",
+    "input_tokens": null,
+    "model_profile_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "model_requested": "fixture-model",
+    "model_returned": null,
+    "output_tokens": null,
+    "price_snapshot_id": "fixture-prices",
+    "provider": "mistral",
+    "provider_request_id": null,
+    "reason_code": null,
+    "reasoning_effort": null,
+    "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "reserved_cost_micro_usd": 5000,
+    "response_content_id": null,
+    "status": "failed",
+    "task_id": "00000000-0000-4000-8000-000000000020",
+    "template_version": "patch-v1"
+  }
+}

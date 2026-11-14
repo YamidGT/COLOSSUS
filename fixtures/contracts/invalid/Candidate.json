@@ -1,0 +1,15 @@
+{
+  "_invalid_because": "uppercase hash",
+  "payload": {
+    "artifact_digest": "registry.local/colossus/fixture@sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "build_evidence_ids": [
+      "00000000-0000-4000-8000-000000000010"
+    ],
+    "candidate_id": "00000000-0000-4000-8000-000000000009",
+    "diff_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "generated_code_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "manifest_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "proposal_id": "00000000-0000-4000-8000-000000000007",
+    "source_tree_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  }
+}
