@@ -1,0 +1,25 @@
+{
+  "status": "NO_CHANGE",
+  "coverage": {
+    "recipe_id": "declared-python-v1",
+    "discovery": "completed",
+    "repair": "UNSUPPORTED",
+    "formal": "UNSUPPORTED",
+    "mandatory_tests": [
+      "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
+      "Reproduce the reported defect on the baseline; require the exploit attempt to fail on the patched candidate and the protected security regression test to pass.",
+      "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
+      "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
+      "Under tested policy, report the formal limitation; formal_required still blocks without linked proof."
+    ],
+    "reason": "No approved protected repair oracle is registered for this application",
+    "raw_count": 2,
+    "findings": 2,
+    "requests_sent": 0,
+    "model_diagnostics": [],
+    "excluded_tools": [
+      "Bandit: not installed in worker"
+    ]
+  },
+  "evidence_id": "6ffcbbc2579a8d303245db7f04ea0837a9eac0ad71ee8a5ce205ffd818aa4d6f"
+}

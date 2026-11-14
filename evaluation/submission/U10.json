@@ -1,0 +1,56 @@
+{
+  "repo_id": "U10",
+  "repository": "digininja/DVWA",
+  "repo_url": "https://github.com/digininja/DVWA",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:27.518885Z",
+  "source": {
+    "status": "accepted",
+    "commit": "a1978a2fed195acd093010af6395f86a281537ca",
+    "archive_sha256": "12320b78a03fa88f7d782ac3e8030baf966441c15c3aa26c4bac4687227fc9d0",
+    "tree_sha256": "7fca8a9288a2c9350e08c9924fdae599405352939bdf7bfc87e9ecafff7f3d5b",
+    "file_count": 250,
+    "total_bytes": 1791433
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 1.912,
+  "finished_at": "2026-11-14T21:34:29.430409Z"
+}

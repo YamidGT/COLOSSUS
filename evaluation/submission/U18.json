@@ -1,0 +1,177 @@
+{
+  "repo_id": "U18",
+  "repository": "OWASP/crAPI",
+  "repo_url": "https://github.com/OWASP/crAPI",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:32.878250Z",
+  "source": {
+    "status": "accepted",
+    "commit": "b5fc307f3e5f875809b095b771108ef342a33724",
+    "archive_sha256": "6fbdfdea6f1cdffeed9b9d1fa0d42e7ad46ca479c9f77966183195497ece637e",
+    "tree_sha256": "0aa34c34be693b2dc7c5a00f3956155675faa55f776396f6374b727289dedc69",
+    "file_count": 1043,
+    "total_bytes": 8840688
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 70,
+    "finding_count": 15,
+    "findings": [
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "services/chatbot/src/chatbot/app.py",
+        "line": 39,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+        "line": 74,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/chatbot/src/mcpserver/auth/middleware.py",
+        "line": 107,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/chatbot/src/mcpserver/server.py",
+        "line": 48,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/chatbot/src/mcpserver/server.py",
+        "line": 91,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/chatbot/src/mcpserver/server.py",
+        "line": 113,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/chatbot/src/mcpserver/server.py",
+        "line": 153,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/workshop/core/management/commands/seed_database.py",
+        "line": 220,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "path-join",
+        "cwe": "CWE-22",
+        "title": "File path built from request data",
+        "file": "services/workshop/crapi/mechanic/views.py",
+        "line": 428,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/workshop/crapi/merchant/views.py",
+        "line": 91,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/workshop/crapi/shop/views.py",
+        "line": 148,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "services/workshop/crapi_site/settings.py",
+        "line": 68,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/workshop/utils/jwt.py",
+        "line": 54,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "jwt-noverify",
+        "cwe": "CWE-347",
+        "title": "JWT decoded without verification",
+        "file": "services/workshop/utils/jwt.py",
+        "line": 61,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "services/workshop/utils/messages.py",
+        "line": 22,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 1.654,
+  "finished_at": "2026-11-14T21:34:34.532623Z"
+}

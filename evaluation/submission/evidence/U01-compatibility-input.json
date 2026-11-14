@@ -1,0 +1,15 @@
+{
+  "kind": "model_advised_assisted_compatibility_variant",
+  "advice_evidence": "vampi-setup-advice.json",
+  "call_id": "ebedac78-7dad-4ddc-a720-0fe936fa3777",
+  "change": {
+    "package": "MarkupSafe",
+    "old_version": "2.1.2",
+    "new_version": "2.1.5"
+  },
+  "original_requirements": "connexion[swagger-ui]==2.14.2\nflask==2.2.2\nflask-sqlalchemy==3.0.3\njsonschema==4.17.3\nsqlalchemy==2.0.2\nswagger-ui-bundle\nPyJWT==2.6.0\nmarkupsafe==2.1.2\n",
+  "modified_requirements": "connexion[swagger-ui]==2.14.2\nflask==2.2.2\nflask-sqlalchemy==3.0.3\njsonschema==4.17.3\nsqlalchemy==2.0.2\nswagger-ui-bundle\nPyJWT==2.6.0\nmarkupsafe==2.1.5\n",
+  "original_requirements_sha256": "c748738940589a5c431281c8ad983942dec24080450d733c69038121a93e8aca",
+  "modified_requirements_sha256": "e5670ce9ea8837f9029142e7c01e28b1ef3615d321d190d75bcd5d3141810cdc",
+  "scope": "Compatibility experiment only; not a security fix or original-source onboarding success"
+}

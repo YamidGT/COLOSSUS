@@ -1,0 +1,56 @@
+{
+  "repo_id": "U11",
+  "repository": "webpwnized/mutillidae-docker",
+  "repo_url": "https://github.com/webpwnized/mutillidae-docker",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:27.828491Z",
+  "source": {
+    "status": "accepted",
+    "commit": "b5920113ad30dd92c893b2f44230fb5bf99f3601",
+    "archive_sha256": "ac9c27197f317fb4ea1771c3e200e54f26f8af543f5456e66273ebdae80b9352",
+    "tree_sha256": "0da42b2c09807b6dec71a459d9088a752259982e676dc1d8f5d587545ac37228",
+    "file_count": 37,
+    "total_bytes": 135682
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 1.668,
+  "finished_at": "2026-11-14T21:34:29.496102Z"
+}

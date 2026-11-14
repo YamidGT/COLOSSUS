@@ -1,0 +1,56 @@
+{
+  "repo_id": "U16",
+  "repository": "snyk-labs/nodejs-goof",
+  "repo_url": "https://github.com/snyk-labs/nodejs-goof",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:30.504532Z",
+  "source": {
+    "status": "accepted",
+    "commit": "add14ba59e98240d9e00a235dd7d42cd61ae9912",
+    "archive_sha256": "154eab51d9394b6f87b62974f4c30523bafa2296be4cc5a7dd374c25c82d80ca",
+    "tree_sha256": "35c72cefe413bad4b719a8230b7d971e6173607eb24d3f854073e10852a429d4",
+    "file_count": 60,
+    "total_bytes": 1511463
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "intake_seconds": 3.337,
+  "finished_at": "2026-11-14T21:34:33.841637Z"
+}

@@ -1,0 +1,65 @@
+{
+  "repo_id": "U23",
+  "repository": "sudo-project/sudo",
+  "repo_url": "https://github.com/sudo-project/sudo",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:35.823341Z",
+  "source": {
+    "status": "accepted",
+    "commit": "284836c012052dfa204c4f8bc449f0d05e33f271",
+    "archive_sha256": "22e3d183ad6e43fb6f1a198d49de3a049c783074d9f5a18e4b04812d03a3eb51",
+    "tree_sha256": "36ad593b4448e1a141e2c6339456dc49b470c37cd1328eca05869cded90864fd",
+    "file_count": 1391,
+    "total_bytes": 21334779
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 10,
+    "finding_count": 1,
+    "findings": [
+      {
+        "rule": "hardcoded-secret",
+        "cwe": "CWE-798",
+        "title": "Hard-coded secret",
+        "file": "plugins/python/example_policy_plugin.py",
+        "line": 44,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 2.176,
+  "finished_at": "2026-11-14T21:34:37.999461Z"
+}

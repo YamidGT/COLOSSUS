@@ -1,0 +1,37 @@
+{
+  "repo_id": "U22",
+  "repository": "vulhub/vulhub",
+  "repo_url": "https://github.com/vulhub/vulhub",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:34.535751Z",
+  "source": {
+    "status": "rejected",
+    "commit": "9b90d4276f84feed6333286afeb7e1250379a1da",
+    "reason_code": "source_limit",
+    "reason": "Source response exceeds size limit"
+  },
+  "setup": {
+    "status": "not_run",
+    "reason": "Source intake rejected; execution boundary not bypassed"
+  },
+  "tests": {
+    "status": "not_run"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Select one lab/CVE subdirectory and freeze its source and dependencies.",
+    "Run its build and tests in a separately admitted isolated profile.",
+    "A collection-wide static signal is not a reproduced lab vulnerability."
+  ],
+  "intake_seconds": 6.963,
+  "finished_at": "2026-11-14T21:34:41.498779Z"
+}

@@ -1,0 +1,69 @@
+{
+  "allowed_patch_paths": [
+    "api_views/__init__.py",
+    "api_views/books.py",
+    "api_views/json_schemas.py",
+    "api_views/main.py",
+    "api_views/users.py",
+    "app.py",
+    "config.py",
+    "database/__init__.py",
+    "models/__init__.py",
+    "models/books_model.py",
+    "models/user_model.py",
+    "_submission_start.py"
+  ],
+  "artifact_digest": "sha256:6a7fad2dde3a0613718724d3203ae58024944854dec7000334a9161135890502",
+  "commit": "f16052dce83f05847133ec98f01c5193a41de7d8",
+  "data_seed_id": "repository-default-v1",
+  "dependency_inventory_hash": "5b32dc03b5d48c97a600c0849ead9c8664c9e250e3231ec8d2c184a0d62d71e6",
+  "dependency_inventory_id": "5b32dc03b5d48c97a600c0849ead9c8664c9e250e3231ec8d2c184a0d62d71e6",
+  "deployment_profile_id": "local-web-v1",
+  "manifest_id": "2045ddb4-b49a-4905-80b0-5774fe6680c7",
+  "network_profile_id": "isolated-case-v1",
+  "obligation_ids": [],
+  "platform": "linux/arm64",
+  "policy_hash": "63ba2ec063bb64a32f4365c2af75d20c3fc2213aa327d2f6775845c92e39f2b6",
+  "project_id": "0c00821b-29a3-4047-b90c-03ba8e596314",
+  "protected_paths": [
+    "colossus-app.json",
+    "requirements.txt"
+  ],
+  "readiness_profile_id": "declared-python-v1:health",
+  "recipe_hash": "ab71cb3b953a2594eb8b24c15f8ec645ecd6d449e4389681d3c74627b2e147dc",
+  "recipe_id": "declared-python-v1",
+  "repo_url": "https://github.com/erev0s/VAmPI",
+  "revision": 1,
+  "services": [
+    {
+      "artifact_digest": "sha256:6a7fad2dde3a0613718724d3203ae58024944854dec7000334a9161135890502",
+      "command_profile_id": "declared-python-v1",
+      "dependency_service_ids": [],
+      "health_check_id": "declared-python-v1:health",
+      "internal_ports": [
+        5000
+      ],
+      "resource_profile_id": "standard",
+      "service_id": "app",
+      "writable_paths": []
+    }
+  ],
+  "setup_provenance": [
+    {
+      "dependency_evidence_id": "784f69c2a8e9c4c172c1e5116c554b2de9aa52b2637815a735e53018778124a0",
+      "intake_source_id": "7466c711100e2624e7f49dcf215a10c64613377fcda11358539acef6fe39cc69",
+      "limitations": [
+        "Assisted entrypoint selection for existing Connexion application"
+      ],
+      "readiness_evidence_id": "f7a5c2185bf9b645e3b9ed9cf22a307bb5c8d166fc130d8f988954cda8cd3170",
+      "runtime_tree_sha256": "13d15249b548daa7de6c0a3c269d3a39a49e9fa60b8a463943bcbad0969c6016",
+      "source_id": "01cbd8c3278ed3107d487cfd9f738eecf784b1e711b106b09ff0c226c2316180"
+    }
+  ],
+  "target_kind": "web",
+  "test_profile_ids": [
+    "http-readiness-v1"
+  ],
+  "toolchain_manifest_id": "78d720782810c3e21dc4d5447e4450fd7d5189dd64b205920773b75146fb5e54",
+  "tree_sha256": "df9cc4a04da07c70baea2cd8d0cefc842d8f028bade413bcdf5cb8588915d2fa"
+}

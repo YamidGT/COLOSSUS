@@ -1,0 +1,73 @@
+{
+  "repo_id": "U05",
+  "repository": "anxolerd/dvpwa",
+  "repo_url": "https://github.com/anxolerd/dvpwa",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:26.216350Z",
+  "source": {
+    "status": "accepted",
+    "commit": "4a8f4a43fafcc1b304f1b97d0f0a8dea755a7756",
+    "archive_sha256": "4859437e71db674ee117616ac49204d618fa4b8c76188c4b293c20d895bc9401",
+    "tree_sha256": "88ccb77c41c237d1e4b7b91befbcf77ed56bf8ef73603a93c244a8cf4cc53a04",
+    "file_count": 58,
+    "total_bytes": 1778707
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "unsupported_stack",
+    "reason": "Python dependencies found but no supported application entrypoint was identified"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "completed",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 21,
+    "finding_count": 2,
+    "findings": [
+      {
+        "rule": "debug",
+        "cwe": "CWE-489",
+        "title": "Debug mode enabled",
+        "file": "sqli/app.py",
+        "line": 24,
+        "status": "unconfirmed"
+      },
+      {
+        "rule": "sqli-concat",
+        "cwe": "CWE-89",
+        "title": "SQL built with string concatenation",
+        "file": "sqli/dao/student.py",
+        "line": 18,
+        "status": "unconfirmed"
+      }
+    ],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "unsupported_stack",
+    "reason": "Python dependencies found but no supported application entrypoint was identified"
+  },
+  "intake_seconds": 1.174,
+  "finished_at": "2026-11-14T21:34:27.390696Z"
+}

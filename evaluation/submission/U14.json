@@ -1,0 +1,56 @@
+{
+  "repo_id": "U14",
+  "repository": "OWASP/NodeGoat",
+  "repo_url": "https://github.com/OWASP/NodeGoat",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:29.430909Z",
+  "source": {
+    "status": "accepted",
+    "commit": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+    "archive_sha256": "f9455e6c5c57471fcc213959f523d640d9454337cbdf870c731f1b588a19b5c3",
+    "tree_sha256": "60c89a0f94b16a70558da0a8834900b51bbfcf0741a50c4095c331f264a06b47",
+    "file_count": 111,
+    "total_bytes": 2976004
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "unsupported_stack",
+    "reason": "Node runtime adapter is not installed"
+  },
+  "intake_seconds": 1.073,
+  "finished_at": "2026-11-14T21:34:30.503953Z"
+}

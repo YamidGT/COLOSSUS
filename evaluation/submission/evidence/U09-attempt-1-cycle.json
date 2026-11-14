@@ -1,0 +1,25 @@
+{
+  "status": "NO_CHANGE",
+  "coverage": {
+    "recipe_id": "python-flask-v1",
+    "discovery": "completed",
+    "repair": "UNSUPPORTED",
+    "formal": "UNSUPPORTED",
+    "mandatory_tests": [
+      "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
+      "Reproduce the reported defect on the baseline; require the exploit attempt to fail on the patched candidate and the protected security regression test to pass.",
+      "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
+      "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
+      "Under tested policy, report the formal limitation; formal_required still blocks without linked proof."
+    ],
+    "reason": "No approved protected repair oracle is registered for this application",
+    "raw_count": 1,
+    "findings": 1,
+    "requests_sent": 0,
+    "model_diagnostics": [],
+    "excluded_tools": [
+      "Bandit: not installed in worker"
+    ]
+  },
+  "evidence_id": "5a2e346dda8cefab4627dccdbc1db856c87c1db9e1eea202f5675809e1729d93"
+}

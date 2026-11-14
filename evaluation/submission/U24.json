@@ -1,0 +1,56 @@
+{
+  "repo_id": "U24",
+  "repository": "tukaani-project/xz",
+  "repo_url": "https://github.com/tukaani-project/xz",
+  "subdir": null,
+  "started_at": "2026-11-14T21:34:36.590689Z",
+  "source": {
+    "status": "accepted",
+    "commit": "f54febc540607b3bdee0a0e6793355df2a7e9f61",
+    "archive_sha256": "ba9015d70fd478711f09124697c59eec155e87af02efa965e6a3875e04306a24",
+    "tree_sha256": "fb2f5128e9b3b7460f54c875d064c6bb00d50df3a537da0c2af4dabe2a1608fa",
+    "file_count": 515,
+    "total_bytes": 7350097
+  },
+  "setup": {
+    "status": "unsupported",
+    "reason_code": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "tests": {
+    "status": "not_run",
+    "reason": "No supported runtime recipe"
+  },
+  "formal": {
+    "outcome": "UNSUPPORTED",
+    "reason": "No approved linked requirement for this catalog preflight"
+  },
+  "full_cycle": {
+    "status": "not_run"
+  },
+  "model_calls": 0,
+  "cost_micro_usd": 0,
+  "evaluation_kind": "compatibility_and_static_preflight; not a scored security benchmark",
+  "fallback_instructions": [
+    "Install an appropriate isolated stack adapter or provide an approved explicit recipe.",
+    "Build and run the application and its tests only inside that sandbox.",
+    "Separate attack-preserving training tests from legitimate positive tests.",
+    "No formal proof or security guarantee follows from source-pattern results."
+  ],
+  "static": {
+    "status": "unsupported",
+    "tool": "colossus-rules-v1",
+    "files_scanned": 0,
+    "finding_count": 0,
+    "findings": [],
+    "scope": "Python text patterns only; no execution, dataflow proof, or confirmation",
+    "precision": null,
+    "recall": null
+  },
+  "discovery": {
+    "status": "needs_configuration",
+    "reason": "No unambiguous supported runtime recipe; supply colossus-app.json or install an adapter"
+  },
+  "intake_seconds": 1.571,
+  "finished_at": "2026-11-14T21:34:38.162122Z"
+}
