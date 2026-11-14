@@ -1,12 +1,13 @@
 """DSVW-only lifecycle calibration with the standard five-minute canary window."""
 
+import argparse
 import asyncio
 import json
 import time
 from pathlib import Path
 
 from colossus.contracts.core import new_id
-from colossus.contracts.models import Enrollment
+from colossus.contracts.models import Enrollment, PatchProposal
 from colossus.control.artifacts import ArtifactStore
 from colossus.control.broker import Broker
 from colossus.control.config import Settings
@@ -18,7 +19,7 @@ from colossus.control.store import Store
 from colossus.onboarding.service import Onboarding
 
 
-async def main():
+async def main(replay_case=None):
     settings = Settings.from_environment()
     settings.prepare()
     services = ServiceSupervisor(settings)
@@ -59,7 +60,15 @@ async def main():
         receipt = controller.run(project_id, new_id(), "calibration")
         receipts.append(receipt)
         cycle_id = receipt["resource_ids"]["cycle_id"]
-        verified = await engine.run(cycle_id)
+        replay = None
+        if replay_case:
+            old_case = store.get("case", replay_case)
+            old_candidate = store.get("candidate", old_case["candidate_id"])
+            old_proposal = store.get("proposal", old_candidate["proposal_id"])
+            replay = PatchProposal.model_validate(
+                {k: v for k, v in old_proposal.items() if k != "revision"}
+            )
+        verified = await engine.run(cycle_id, replay_proposal=replay)
         print("Candidate verified; standard 300-second canary starting", flush=True)
         promotion = asyncio.create_task(coordinator.promote(verified["case_id"]))
         while not promotion.done():
@@ -95,6 +104,8 @@ async def main():
         case = store.get("case", verified["case_id"])
         report = {
             "repo": "stamparm/DSVW",
+            "generation_mode": "replayed_proposal" if replay_case else "fresh_inference",
+            "replayed_case_id": replay_case,
             "project_id": project_id,
             "cycle_id": cycle_id,
             "case_id": verified["case_id"],
@@ -145,4 +156,7 @@ async def main():
         store.close()
 
 
-asyncio.run(main())
+parser = argparse.ArgumentParser()
+parser.add_argument("--replay-case")
+args = parser.parse_args()
+asyncio.run(main(args.replay_case))
