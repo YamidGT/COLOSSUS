@@ -33,12 +33,11 @@ export default function Repositories() {
       </div>)}
       {state.data.next_cursor && <Notice>Showing the first 100 repositories. Use the CLI for the remaining pages.</Notice>}
     </>}
-    <Dialog open={open} title="Add a repository" onClose={() => { if (!busy) setOpen(false) }}><form onSubmit={enroll}>
-      <p className="meta mt-4">Create a local isolated copy. Automatic promotion applies only to your lab environment.</p>
+    <Dialog open={open} title="Add a repository" onClose={() => { if (!busy) setOpen(false) }} descriptionClassName="meta mt-4" description="Create a local isolated copy. Automatic promotion applies only to your lab environment."><form onSubmit={enroll}>
       <label className="field">Public GitHub URL<input required type="url" autoFocus placeholder="https://github.com/owner/repository" value={url} onChange={e => setUrl(e.target.value)} autoComplete="off" /></label>
       <label className="field">Promotion policy<select value={policy} onChange={e => setPolicy(e.target.value)}><option value="lab-auto-v1">Automatically promote passing repairs to the lab</option><option value="review-v1">Ask me to review each patch</option></select></label>
       <label className="flex gap-3 mt-5 items-start text-sm"><input className="mt-1" type="checkbox" checked={start} onChange={e => setStart(e.target.checked)} /><span>Run one cycle after setup completes</span></label>
-      {error && <Notice error>{error}</Notice>}<div className="flex justify-end gap-3 mt-6"><Button type="button" onClick={() => setOpen(false)} disabled={busy}>Cancel</Button><Button primary type="submit" disabled={busy}>{busy ? 'Adding repository…' : start ? 'Add and run' : 'Add repository'}</Button></div>
+      {error && <Notice error>{error}</Notice>}<div className="flex flex-wrap justify-end gap-3 mt-6"><Button type="button" onClick={() => setOpen(false)} disabled={busy}>Cancel</Button><Button primary type="submit" disabled={busy}>{busy ? 'Adding repository…' : start ? 'Add and run' : 'Add repository'}</Button></div>
     </form></Dialog>
     {state.updated && <p className="meta mt-6">Updated {state.updated.toLocaleTimeString()} · {state.fresh ? 'Connected' : label('stale')}</p>}
   </>
