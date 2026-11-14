@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "kind": "submission_evidence_summary",
-  "updated_at": "2026-11-14T21:46:21.343846+00:00",
+  "updated_at": "2026-11-14T21:54:17.889370+00:00",
   "scope": "Observed development/calibration evidence. No heldout accuracy or public benchmark score.",
   "repository": "https://github.com/YamidGT/COLOSSUS",
   "host": {
@@ -269,6 +269,41 @@
       "model_calls": 1,
       "settled_micro_usd": 145,
       "elapsed_seconds": 3.985
+    },
+    "dsvw_fresh_repetition": {
+      "status": "COMPLETE",
+      "source": "evaluation/submission/dsvw-repeat-cycle.json",
+      "sha256": "ce8684da232b20771ba04d1739d82c5e1f5ae24f1be60c21631672ec4af94970",
+      "detailed_evidence": "evaluation/submission/dsvw-repeat-evidence.json",
+      "detailed_evidence_sha256": "4867c70ef3cd776799ef3de5f9a9ef75097a389b7e3b809eccbd6fe9be8d56d3",
+      "run_revision": "992d45c9ac19f0496d0ef1851192ff2d3dd67d88",
+      "target_commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+      "artifact_digest": "sha256:f3c6c65d5f168fc3abc3d5058c6602a295bbacb237616a7e38552b8d489f2df2",
+      "elapsed_seconds": 341.00221658311784,
+      "generation_mode": "fresh_inference",
+      "model_calls": 2,
+      "settled_micro_usd": 2657,
+      "uncertain_micro_usd": 0,
+      "observation_seconds": 300,
+      "second_cycle": {
+        "status": "NO_CHANGE",
+        "case_id": "cae3a405-d74b-4c4d-868c-4834c5594459"
+      },
+      "rollback": {
+        "status": "ROLLED_BACK",
+        "generation": 2,
+        "manifest_hash": "380fc8af68826dff518fbb59ef4fd26badde378c40470a1136bfb363bd769e12",
+        "known_vulnerable_baseline": true
+      },
+      "rollback_seconds": 7.883156749885529,
+      "audit_valid": true,
+      "formal": "UNSUPPORTED for this Python component",
+      "failed_first_candidate": {
+        "candidate_id": "22fd4176-f709-44b2-b9a2-649d7484d511",
+        "check_profile_id": "dsvw-security-v1",
+        "status": "fail"
+      },
+      "accepted_candidate_id": "9b74da9f-6591-4f11-928b-b63089fc5cb3"
     }
   },
   "public_benchmarks": {

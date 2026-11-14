@@ -190,7 +190,7 @@ build = (
     "Credentials remain outside target containers."
 )
 evaluation = (
-    "We evaluated one DSVW SQL-query repair through protected tests, deployment, recurrence and rollback. "
+    "We evaluated two fresh runs of one DSVW SQL-query repair through protected tests, deployment, recurrence and rollback. "
     "An owned four-method policy fixture exercises proof, compilation and wrong implementations. "
     "A 24-repository compatibility pilot accepted 20 archives; five additional runtime attempts yielded two assisted starts and three failures. "
     "GLM triaged Python snippets in 11 repositories; judgments remain unconfirmed. "
@@ -205,6 +205,13 @@ if fresh_ok:
     results_text = (
         "The fresh DSVW cycle demonstrates repair through healthy lab deployment and mirror refresh. "
         "Component proofs remain separate evidence. Earlier attempts stopped on invalid model output and HTTP 429; one successful run does not establish reliability across repositories."
+    )
+repeat = NEW.get("dsvw_fresh_repetition", {})
+if repeat.get("status") == "COMPLETE":
+    results_text = (
+        "Two fresh DSVW cycles completed deployment and mirror refresh. In the repetition, the security gate blocked the first generated patch; "
+        "GLM used failure feedback and the second candidate passed. Both next cycles returned NO_CHANGE. "
+        "Component proofs remain separate; earlier provider errors and narrow scope prevent general reliability claims."
     )
 limits = (
     "This is a constrained lab prototype, not a production security guarantee. Generic repair coverage and stack compatibility remain limited. "
@@ -262,6 +269,12 @@ if fresh_ok:
         "Repeat / recovery",
         "Second cycle; retained training image",
         f"NO_CHANGE; rollback {fresh['rollback_seconds']:.1f} s",
+    ]
+if repeat.get("status") == "COMPLETE":
+    rows[3] = [
+        "Fresh repetition",
+        "2 calls; first candidate blocked",
+        f"{repeat['elapsed_seconds']:.1f} s; ${repeat['settled_micro_usd'] / 1_000_000:.6f}",
     ]
 if formal_agent.get("status") not in (None, "pending"):
     rows[4] = [

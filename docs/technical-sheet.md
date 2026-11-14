@@ -30,7 +30,7 @@ Figure 1. Models propose; deterministic gates control effects.
 
 ## 3. How we evaluated
 
-We evaluated one DSVW SQL-query repair through protected tests, deployment, recurrence and rollback. An owned four-method policy fixture exercises proof, compilation and wrong implementations. A 24-repository compatibility pilot accepted 20 archives; five additional runtime attempts yielded two assisted starts and three failures. GLM triaged Python snippets in 11 repositories; judgments remain unconfirmed. Metrics are scope, completion, latency and cost, not security accuracy. CTIBench, CyberSecEval and DafnyBench remain unrun [3-5].
+We evaluated two fresh runs of one DSVW SQL-query repair through protected tests, deployment, recurrence and rollback. An owned four-method policy fixture exercises proof, compilation and wrong implementations. A 24-repository compatibility pilot accepted 20 archives; five additional runtime attempts yielded two assisted starts and three failures. GLM triaged Python snippets in 11 repositories; judgments remain unconfirmed. Metrics are scope, completion, latency and cost, not security accuracy. CTIBench, CyberSecEval and DafnyBench remain unrun [3-5].
 
 ## 4. Results
 
@@ -38,14 +38,14 @@ We evaluated one DSVW SQL-query repair through protected tests, deployment, recu
 |---|---|---|
 | DSVW repair checks | One original vs patched query | 7 required gates passed; formal unsupported |
 | Fresh full cycle | 1 new call; 300 s observation | 330.7 s; $0.001287 |
-| Repeat / recovery | Second cycle; retained training image | NO_CHANGE; rollback 8.2 s |
+| Fresh repetition | 2 calls; first candidate blocked | 341.0 s; $0.002657 |
 | GLM formal component | Owned: 4 methods; 39 wrapper checks | 5.50 s; 1 call; $0.000078 |
 | Incorrect controls | 4 policy mutants + wrapper bypass | All rejected; substituted files rejected |
 | GLM signal triage | 11 repos; unconfirmed judgments | 57 / 59 returned; $0.004014 |
 | Application smoke tests | VAmPI modified pin; PyGoat sub-lab | 6/6 + 7/7 HTTP checks; no repair |
 | Repository campaign | 24 requested; mixed coverage | 20 / 24 archives admitted |
 
-The fresh DSVW cycle demonstrates repair through healthy lab deployment and mirror refresh. Component proofs remain separate evidence. Earlier attempts stopped on invalid model output and HTTP 429; one successful run does not establish reliability across repositories.
+Two fresh DSVW cycles completed deployment and mirror refresh. In the repetition, the security gate blocked the first generated patch; GLM used failure feedback and the second candidate passed. Both next cycles returned NO_CHANGE. Component proofs remain separate; earlier provider errors and narrow scope prevent general reliability claims.
 
 ## 5. Limits and dual-use risk
 
