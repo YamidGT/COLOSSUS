@@ -1,0 +1,32 @@
+[
+ {
+  "test_ID": "000",
+  "test_file": "synthetic_0.dfy",
+  "ground_truth": "// SYNTHETIC fixture program 0, not from DafnyBench\nmethod Abs0(x: int) returns (y: int)\n  ensures y >= 0\n  ensures y == x || y == -x\n{\n  if x < 0 { y := -x; } else { y := x; }\n}\n",
+  "hints_removed": "// SYNTHETIC fixture program 0, not from DafnyBench\nmethod Abs0(x: int) returns (y: int)\n  ensures y >= 0\n  ensures y == x || y == -x\n{\n  if x < 0 { y := -x; } else { y := x; }\n}\n"
+ },
+ {
+  "test_ID": "001",
+  "test_file": "synthetic_1.dfy",
+  "ground_truth": "// SYNTHETIC fixture program 1, not from DafnyBench\nmethod Count1(n: nat) returns (c: nat)\n  ensures c == n\n{\n  c := 0;\n  while c < n\n    invariant c <= n\n  {\n    c := c + 1;\n  }\n}\n",
+  "hints_removed": "// SYNTHETIC fixture program 1, not from DafnyBench\nmethod Count1(n: nat) returns (c: nat)\n  ensures c == n\n{\n  c := 0;\n  while c < n\n  {\n    c := c + 1;\n  }\n}\n"
+ },
+ {
+  "test_ID": "002",
+  "test_file": "synthetic_2.dfy",
+  "ground_truth": "// SYNTHETIC fixture program 2, not from DafnyBench\nmethod Abs2(x: int) returns (y: int)\n  ensures y >= 0\n  ensures y == x || y == -x\n{\n  if x < 0 { y := -x; } else { y := x; }\n}\n",
+  "hints_removed": "// SYNTHETIC fixture program 2, not from DafnyBench\nmethod Abs2(x: int) returns (y: int)\n  ensures y >= 0\n  ensures y == x || y == -x\n{\n  if x < 0 { y := -x; } else { y := x; }\n}\n"
+ },
+ {
+  "test_ID": "003",
+  "test_file": "synthetic_3.dfy",
+  "ground_truth": "// SYNTHETIC fixture program 3, not from DafnyBench\nmethod Count3(n: nat) returns (c: nat)\n  ensures c == n\n{\n  c := 0;\n  while c < n\n    invariant c <= n\n  {\n    c := c + 1;\n  }\n}\n",
+  "hints_removed": "// SYNTHETIC fixture program 3, not from DafnyBench\nmethod Count3(n: nat) returns (c: nat)\n  ensures c == n\n{\n  c := 0;\n  while c < n\n  {\n    c := c + 1;\n  }\n}\n"
+ },
+ {
+  "test_ID": "004",
+  "test_file": "synthetic_4.dfy",
+  "ground_truth": "// SYNTHETIC fixture program 4, not from DafnyBench\nmethod Abs4(x: int) returns (y: int)\n  ensures y >= 0\n  ensures y == x || y == -x\n{\n  if x < 0 { y := -x; } else { y := x; }\n}\n",
+  "hints_removed": "// SYNTHETIC fixture program 4, not from DafnyBench\nmethod Abs4(x: int) returns (y: int)\n  ensures y >= 0\n  ensures y == x || y == -x\n{\n  if x < 0 { y := -x; } else { y := x; }\n}\n"
+ }
+]
