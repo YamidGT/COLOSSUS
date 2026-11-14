@@ -90,3 +90,32 @@ Important limits:
 - Docker here is not rootless (`dockerd` runs as user `nobody` inside a user namespace). Rootless Docker is still a preflight item.
 - Job outputs are created by uid 65534, which the host process cannot delete. The launcher wipes `/out` in a second sandbox run as the job user; paths it cannot remove go to `launcher.orphans`.
 - Builds, dependency proxy, image packaging and the reaper loop are not implemented.
+
+## A-M0-04 `colossus doctor`
+
+Branch `kiro/a-m0-04-doctor`.
+
+| Item | Path |
+|---|---|
+| Typer CLI entrypoint `colossus` | `src/colossus/cli/main.py` |
+| Host, runtime, tool, credential and repo checks | `src/colossus/cli/doctor.py` |
+| Tests with a fake host | `tests/contracts/test_doctor.py` |
+
+Behavior: states are `ok`, `warn`, `blocked`, `unknown`. Exit 3 when any check is `blocked`, as in cli.md. `--json` prints the cli.md envelope. Credentials show `configured`/`missing` by provider name; values are never printed (tested with a sentinel). `--check-model` makes no call yet and reports `unknown`.
+
+Observed on this host (`uv run --python 3.12 colossus doctor`, exit 3):
+
+| Check | State | Observed |
+|---|---|---|
+| architecture / kernel | ok | x86_64 / 7.2.11-arch1-1 |
+| cpus / memory / disk | ok | 12 / 30.2 GiB / 105 GiB free |
+| cgroup v2 | ok | cpu io memory pids |
+| docker | ok | server 29.9.2 |
+| gVisor `runsc` | blocked | not registered |
+| rootless | warn | daemon not rootless |
+| isolated build backend | blocked | none validated |
+| dafny / crosshair | warn | missing |
+| Mistral / Groq keys | warn | `.env` absent in this checkout |
+| `.env` ignored by git | ok | ignored |
+
+The build-backend check is blocked on purpose until a real isolated builder passes preflight.
