@@ -7,13 +7,16 @@ import os
 import time
 import webbrowser
 from pathlib import Path
+from typing import Annotated
 from uuid import uuid4
 
 import httpx
 import typer
 from rich.console import Console
 
+from colossus.contracts.core import DomainError
 from colossus.control.config import Settings
+from colossus.control.decisions import read_configuration
 
 app = typer.Typer(
     no_args_is_help=True, help="Recurring repository defence with inspectable evidence."
@@ -38,6 +41,14 @@ def options(
     )
     if no_color:
         console.no_color = True
+
+
+def require_confirmation(yes: bool, prompt: str) -> None:
+    if yes:
+        return
+    if not os.isatty(0):
+        raise typer.BadParameter("Use --yes for noninteractive confirmation")
+    typer.confirm(prompt, abort=True)
 
 
 def emit(ctx, data):
@@ -128,14 +139,14 @@ def doctor(ctx: typer.Context, profile: str = "standard", check_model: bool = Fa
         "runtime_preflight": overall(found),
         "profile": profile,
         "model_capability": "not_checked",
-        "pipeline": "under_construction",
+        "pipeline": "dsvw-lab",
         "checks": as_dicts(found),
     }
     if check_model:
         checks["model_capability"] = "gateway_not_connected"
     emit(ctx, checks)
-    # Exit 3 while any check blocks or the pipeline is still under construction.
-    raise typer.Exit(3)
+    if checks["runtime_preflight"] == "blocked":
+        raise typer.Exit(3)
 
 
 @app.command()
@@ -266,6 +277,79 @@ def cancel(ctx: typer.Context, cycle_id: str, yes: bool = False):
             raise typer.BadParameter("Use --yes for noninteractive cancellation")
         typer.confirm("Cancel this cycle and reconcile any staged changes?", abort=True)
     emit(ctx, request(ctx, "POST", f"/cycles/{cycle_id}/cancel"))
+
+
+@app.command()
+def approve(
+    ctx: typer.Context,
+    manifest_hash: str,
+    destination: str = typer.Option(..., "--destination"),
+    yes: bool = False,
+):
+    """Authorize one verified artifact and record it as the lab deployment."""
+    require_confirmation(
+        yes, f"Authorize evidence {manifest_hash} for destination {destination}?"
+    )
+    emit(
+        ctx,
+        request(
+            ctx,
+            "POST",
+            "/authorizations",
+            {"evidence_manifest_hash": manifest_hash, "destination_id": destination},
+        ),
+    )
+
+
+@app.command()
+def rollback(
+    ctx: typer.Context,
+    deployment_id: str,
+    generation: int = typer.Option(..., "--generation"),
+    yes: bool = False,
+):
+    """Request record-level recovery for one deployment generation."""
+    require_confirmation(
+        yes, f"Roll back deployment {deployment_id} at generation {generation}?"
+    )
+    emit(
+        ctx,
+        request(
+            ctx,
+            "POST",
+            f"/deployments/{deployment_id}/rollback",
+            {"expected_generation": generation},
+        ),
+    )
+
+
+@app.command()
+def configure(
+    ctx: typer.Context,
+    project_id: str,
+    file: Annotated[Path, typer.Option("--file")],
+):
+    """Submit a versioned project amendment. Credentials in the file are refused."""
+    try:
+        payload = read_configuration(file.read_text())
+    except DomainError as exc:
+        emit(ctx, exc.as_dict())
+        raise typer.Exit(2) from None
+    emit(ctx, request(ctx, "POST", f"/projects/{project_id}/configuration", payload))
+
+
+@app.command()
+def evaluate(ctx: typer.Context, manifest_path: Path, watch: bool = False):
+    """Validate a campaign lock. Scored execution is not started."""
+    try:
+        payload = json.loads(manifest_path.read_text())
+    except ValueError:
+        emit(ctx, {"code": "campaign_shape", "message": "Campaign manifest is not JSON"})
+        raise typer.Exit(2) from None
+    result = request(ctx, "POST", "/evaluations", payload)
+    if watch:
+        result = result | {"watch": "not_started"}
+    emit(ctx, result)
 
 
 @app.command()

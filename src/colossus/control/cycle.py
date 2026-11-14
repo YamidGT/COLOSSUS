@@ -7,6 +7,11 @@ from importlib.resources import files as resources
 
 from colossus.contracts.core import DomainError, content_hash, new_id, utcnow
 from colossus.contracts.models import Candidate, EvidenceManifest, GateResult
+from colossus.control.promotion import (
+    assert_runnable,
+    fixed_mirror_did_not_reproduce,
+    publication,
+)
 from colossus.detection.service import dsvw_checks, finding_from_signal, static_scan
 from colossus.gateway.source import tree_hash
 from colossus.repair.patch import apply_proposal
@@ -43,6 +48,7 @@ class CycleEngine:
         cycle = self.update_cycle(cycle_id, status="INVESTIGATING", started_at=utcnow())
         project_id = cycle["project_id"]
         project = self.store.get("project", project_id)
+        assert_runnable(project)
         manifest = json.loads(self.artifacts.get(project["source"]["manifest_hash"]))
         if manifest["recipe_id"] != "dsvw-python-v1":
             raise DomainError(
@@ -133,6 +139,21 @@ class CycleEngine:
                     503,
                 )
             if not baseline_checks["vulnerability_confirmed"]:
+                if fixed_mirror_did_not_reproduce(project, False):
+                    self.update_cycle(
+                        cycle_id,
+                        status="NO_CHANGE",
+                        finished_at=utcnow(),
+                        reason="Deployed mirror did not reproduce the previous issue",
+                    )
+                    self.store.put(
+                        "case",
+                        case_id,
+                        case | {"status": "NO_CHANGE", "reason": "Fixed mirror"},
+                        project_id,
+                    )
+                    self.onboarding.update(project_id, active_cycle_id=None)
+                    return {"status": "NO_CHANGE", "case_id": case_id}
                 raise DomainError(
                     "unconfirmed_finding",
                     "Bounded reproducer did not confirm the selected finding",
@@ -373,9 +394,48 @@ class CycleEngine:
                     "status": "REVIEW_READY",
                     "evidence_manifest_hash": certificate_id,
                     "candidate_source_id": source_candidate_id,
+                    "source_candidate_id": source_candidate_id,
+                    "candidate_digest": image["artifact_digest"],
+                    "candidate_hash": candidate_hash,
                     "reason": "All required tested-profile gates passed; no formal proof claimed",
                     "updated_at": utcnow(),
                 }
+                if project["owner_policy_id"] == "lab-auto-v1":
+                    published = publication(project, case)
+                    if published["authorization"] is not None:
+                        granted = published["authorization"]
+                        self.store.put(
+                            "authorization",
+                            granted.authorization_id,
+                            granted.model_dump(),
+                            project_id,
+                        )
+                        deployed = published["deployment"]
+                        self.store.put(
+                            "deployment",
+                            deployed["deployment_id"],
+                            deployed,
+                            project_id,
+                        )
+                    self.onboarding.update(project_id, **published["project_changes"])
+                    case |= {
+                        "status": "DEPLOYED",
+                        "deployment_id": published["deployment"]["deployment_id"],
+                        "reason": "Verified artifact recorded as the lab deployment",
+                    }
+                    self.store.put("case", case_id, case, project_id)
+                    self.update_cycle(
+                        cycle_id,
+                        status="COMPLETE",
+                        finished_at=utcnow(),
+                        reason="Lab policy recorded the verified artifact",
+                    )
+                    return {
+                        "status": "COMPLETE",
+                        "case_id": case_id,
+                        "evidence_manifest_hash": certificate_id,
+                        "deployment_id": published["deployment"]["deployment_id"],
+                    }
                 self.store.put("case", case_id, case, project_id)
                 self.update_cycle(
                     cycle_id,

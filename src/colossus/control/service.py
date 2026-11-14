@@ -6,9 +6,12 @@ import json
 import time
 
 from colossus.contracts.core import DomainError, content_hash, new_id, utcnow
-from colossus.contracts.models import Enrollment
+from colossus.contracts.models import Enrollment, GateResult, ProjectConfigAmendment
 from colossus.contracts.runtime import RuntimeConfig
+from colossus.verification.policy import validate_gates
 
+from .decisions import assess_campaign, reject_secrets
+from .promotion import publication, rollback_plan
 from .store import Store
 
 TERMINAL_CYCLES = {
@@ -324,6 +327,177 @@ class Controller:
                 "Formal claims are limited to declared properties and assumptions",
             ],
         )
+
+    def _done(self, receipt):
+        self.store.finish_operation(receipt["operation_id"], "succeeded")
+        return self.store.operation(receipt["operation_id"])
+
+    def configure(self, project_id: str, amendment: ProjectConfigAmendment, key: str, actor: str):
+        reject_secrets(amendment.model_dump())
+        if amendment.requirement_ids:
+            raise DomainError(
+                "unapproved_requirement", "No approved requirement profile is installed yet", 422
+            )
+
+        def action(db, operation_id):
+            del operation_id
+            project = self._project(db, project_id)
+            if project["revision"] != amendment.expected_revision:
+                raise DomainError("stale_revision", "Project revision changed", 409)
+            updated = project | {
+                "requested_ref": amendment.requested_ref,
+                "subdir": amendment.subdir,
+                "owner_policy_id": amendment.owner_policy_id,
+                "deployment_profile_id": amendment.deployment_profile_id,
+                "assurance_profile": amendment.assurance_profile,
+                "requirement_ids": [],
+            }
+            self.store._put(db, "project", project_id, updated, project_id, project["revision"])
+            return {"project_id": project_id}
+
+        return self._done(
+            self.store.mutate(actor, key, "configure", amendment.model_dump(), action)
+        )
+
+    def approve(self, manifest_hash: str, destination_id: str, key: str, actor: str):
+        def action(db, operation_id):
+            del operation_id
+            rows = db.execute("SELECT data FROM records WHERE kind='case'").fetchall()
+            matches = [
+                json.loads(row[0])
+                for row in rows
+                if json.loads(row[0]).get("evidence_manifest_hash") == manifest_hash
+            ]
+            if not matches:
+                raise DomainError("not_found", "No case is bound to that evidence manifest", 404)
+            if len(matches) != 1:
+                raise DomainError(
+                    "ambiguous_manifest", "Evidence manifest matches more than one case", 409
+                )
+            case = matches[0]
+            if case.get("destination_id") != destination_id:
+                raise DomainError("destination_mismatch", "Destination does not match the case", 409)
+            if case.get("status") not in {"REVIEW_READY", "NEEDS_REVIEW"}:
+                raise DomainError("not_reviewable", "Case is not waiting for a decision", 409)
+            gates = [GateResult.model_validate(item) for item in case.get("gate_results", [])]
+            validate_gates(gates, case["candidate_hash"], case.get("assurance_profile", "tested"))
+            project = self._project(db, case["project_id"])
+            published = publication(project, case | {"destination_id": destination_id})
+            granted = published["authorization"]
+            deployed = published["deployment"]
+            if granted is not None:
+                self.store._put(
+                    db,
+                    "authorization",
+                    granted.authorization_id,
+                    granted.model_dump(),
+                    case["project_id"],
+                )
+                self.store._put(
+                    db, "deployment", deployed["deployment_id"], deployed, case["project_id"]
+                )
+            self.store._put(
+                db,
+                "project",
+                case["project_id"],
+                project | published["project_changes"],
+                case["project_id"],
+                project["revision"],
+            )
+            self.store._put(
+                db,
+                "case",
+                case["case_id"],
+                case
+                | {
+                    "status": "DEPLOYED",
+                    "destination_id": destination_id,
+                    "deployment_id": deployed["deployment_id"],
+                    "authorization_id": None if granted is None else granted.authorization_id,
+                },
+                case["project_id"],
+                case["revision"],
+            )
+            return {
+                "project_id": case["project_id"],
+                "authorization_id": deployed.get("authorization_id") or "",
+                "deployment_id": deployed["deployment_id"],
+                "promotion": "recorded",
+            }
+
+        receipt = self._done(
+            self.store.mutate(
+                actor,
+                key,
+                "approve",
+                {"evidence_manifest_hash": manifest_hash, "destination_id": destination_id},
+                action,
+            )
+        )
+        return receipt | {"promotion": "recorded"}
+
+    def rollback(self, deployment_id: str, expected_generation: int, key: str, actor: str):
+        def action(db, operation_id):
+            del operation_id
+            row = db.execute(
+                "SELECT data FROM records WHERE kind='deployment' AND id=?", (deployment_id,)
+            ).fetchone()
+            if row is None:
+                raise DomainError("not_found", "Deployment not found", 404)
+            deployment = json.loads(row[0])
+            project = self._project(db, deployment["project_id"])
+            planned = rollback_plan(project, deployment, expected_generation)
+            updated = planned["deployment"]
+            self.store._put(
+                db,
+                "deployment",
+                deployment_id,
+                updated,
+                deployment["project_id"],
+                deployment["revision"],
+            )
+            self.store._put(
+                db,
+                "project",
+                deployment["project_id"],
+                project | planned["project_changes"],
+                deployment["project_id"],
+                project["revision"],
+            )
+            return {
+                "project_id": deployment["project_id"],
+                "deployment_id": deployment_id,
+                "status": updated["status"],
+                "claimed_rollback": "true" if planned["claimed_rollback"] else "false",
+            }
+
+        return self._done(
+            self.store.mutate(
+                actor,
+                key,
+                "rollback",
+                {"deployment_id": deployment_id, "expected_generation": expected_generation},
+                action,
+            )
+        )
+
+    def evaluate(self, manifest: dict, key: str, actor: str):
+        report = assess_campaign(manifest)
+
+        def action(db, operation_id):
+            del operation_id
+            evaluation_id = new_id()
+            self.store._put(
+                db,
+                "evaluation",
+                evaluation_id,
+                report | {"evaluation_id": evaluation_id},
+                None,
+            )
+            return {"evaluation_id": evaluation_id, "executed": "false"}
+
+        receipt = self._done(self.store.mutate(actor, key, "evaluate", manifest, action))
+        return receipt | {"report": report}
 
     def snapshot_etag(self, snapshot):
         body = {key: value for key, value in snapshot.items() if key != "observed_at"}
