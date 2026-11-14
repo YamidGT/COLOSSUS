@@ -12,7 +12,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import Field
 
 from colossus.contracts.core import Contract, DomainError, content_hash
-from colossus.contracts.models import Enrollment
+from colossus.contracts.models import Enrollment, ProjectConfigAmendment
 from colossus.control.artifacts import ArtifactStore
 from colossus.control.auth import COOKIE, OperatorAuth
 from colossus.control.config import Settings
@@ -29,6 +29,15 @@ class RunRequest(Contract):
 
 class LoginRequest(Contract):
     code: str = Field(min_length=1, max_length=100)
+
+
+class ApprovalBody(Contract):
+    evidence_manifest_hash: str = Field(pattern=r"^[a-f0-9]{64}$")
+    destination_id: str = Field(min_length=1, max_length=200)
+
+
+class RollbackBody(Contract):
+    expected_generation: int = Field(ge=0)
 
 
 def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) -> FastAPI:
@@ -314,6 +323,30 @@ def create_app(settings: Settings | None = None, *, execute_tasks: bool = True) 
     @app.get("/api/v1/reports/{run_id}")
     def report(run_id: str):
         return controller.report(run_id)
+
+    @app.post("/api/v1/projects/{project_id}/configuration")
+    def configure(project_id: str, body: ProjectConfigAmendment, request: Request):
+        return controller.configure(project_id, body, key(request), request.state.actor)
+
+    @app.post("/api/v1/authorizations", status_code=202)
+    def approve(body: ApprovalBody, request: Request):
+        return controller.approve(
+            body.evidence_manifest_hash, body.destination_id, key(request), request.state.actor
+        )
+
+    @app.post("/api/v1/deployments/{deployment_id}/rollback", status_code=202)
+    def rollback(deployment_id: str, body: RollbackBody, request: Request):
+        return controller.rollback(
+            deployment_id, body.expected_generation, key(request), request.state.actor
+        )
+
+    @app.post("/api/v1/evaluations", status_code=202)
+    async def evaluate(request: Request):
+        try:
+            body = await request.json()
+        except ValueError:
+            raise DomainError("campaign_shape", "Campaign manifest must be JSON", 422) from None
+        return controller.evaluate(body, key(request), request.state.actor)
 
     @app.get("/api/v1/artifacts/{artifact_id}/download")
     def artifact(artifact_id: str, project_id: str):
