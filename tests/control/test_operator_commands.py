@@ -127,6 +127,8 @@ def test_approve_records_authorization_without_promotion_and_failed_gates_do_not
             "project_id": project_id,
             "status": "REVIEW_READY",
             "candidate_hash": CANDIDATE,
+            "candidate_digest": "sha256:" + "a" * 64,
+            "source_candidate_id": "e" * 64,
             "assurance_profile": "tested",
             "evidence_manifest_hash": EVIDENCE,
             "destination_id": "local-web-v1",
@@ -143,9 +145,14 @@ def test_approve_records_authorization_without_promotion_and_failed_gates_do_not
         "/api/v1/authorizations", json=body, headers=headers | {"Idempotency-Key": "approve"}
     )
     assert approved.status_code == 202
-    assert approved.json()["promotion"] == "not_executed"
-    assert approved.json()["resource_ids"]["promotion"] == "not_executed"
-    assert app.state.store.get("case", case_id)["status"] == "AUTHORIZED"
+    assert approved.json()["promotion"] == "recorded"
+    assert approved.json()["resource_ids"]["promotion"] == "recorded"
+    saved = app.state.store.get("case", case_id)
+    assert saved["status"] == "DEPLOYED"
+    project = app.state.store.get("project", project_id)
+    assert project["deployment"]["status"] == "READY"
+    assert project["deployment"]["digest"] == "sha256:" + "a" * 64
+    assert project["active_cycle_id"] is None
 
     bad_id, bad_rows = gates(status="fail")
     app.state.store.put(
@@ -205,7 +212,7 @@ def test_rollback_without_a_prior_artifact_does_not_claim_recovery(api):
     assert response.status_code == 202
     saved = app.state.store.get("deployment", deployment_id)
     assert saved["status"] == "UNAVAILABLE"
-    assert saved["actuator"] == "record_only"
+    assert saved["actuator"] == "verified_artifact"
     assert response.json()["resource_ids"]["claimed_rollback"] == "false"
 
 

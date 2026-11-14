@@ -139,14 +139,14 @@ def doctor(ctx: typer.Context, profile: str = "standard", check_model: bool = Fa
         "runtime_preflight": overall(found),
         "profile": profile,
         "model_capability": "not_checked",
-        "pipeline": "under_construction",
+        "pipeline": "dsvw-lab",
         "checks": as_dicts(found),
     }
     if check_model:
         checks["model_capability"] = "gateway_not_connected"
     emit(ctx, checks)
-    # Exit 3 while any check blocks or the pipeline is still under construction.
-    raise typer.Exit(3)
+    if checks["runtime_preflight"] == "blocked":
+        raise typer.Exit(3)
 
 
 @app.command()
@@ -286,7 +286,7 @@ def approve(
     destination: str = typer.Option(..., "--destination"),
     yes: bool = False,
 ):
-    """Authorize one evidence manifest. This does not override gates or start promotion."""
+    """Authorize one verified artifact and record it as the lab deployment."""
     require_confirmation(
         yes, f"Authorize evidence {manifest_hash} for destination {destination}?"
     )

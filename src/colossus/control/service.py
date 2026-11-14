@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import json
 import time
-from datetime import UTC, datetime, timedelta
 
 from colossus.contracts.core import DomainError, content_hash, new_id, utcnow
-from colossus.contracts.models import Authorization, Enrollment, GateResult, ProjectConfigAmendment
+from colossus.contracts.models import Enrollment, GateResult, ProjectConfigAmendment
 from colossus.contracts.runtime import RuntimeConfig
 from colossus.verification.policy import validate_gates
 
 from .decisions import assess_campaign, reject_secrets
+from .promotion import publication, rollback_plan
 from .store import Store
 
 TERMINAL_CYCLES = {
@@ -381,38 +381,48 @@ class Controller:
                 raise DomainError("not_reviewable", "Case is not waiting for a decision", 409)
             gates = [GateResult.model_validate(item) for item in case.get("gate_results", [])]
             validate_gates(gates, case["candidate_hash"], case.get("assurance_profile", "tested"))
-            issued = utcnow()
-            expires = (datetime.now(UTC) + timedelta(minutes=15)).isoformat().replace("+00:00", "Z")
-            authorization = Authorization(
-                authorization_id=new_id(),
-                project_id=case["project_id"],
-                evidence_manifest_hash=manifest_hash,
-                destination_id=destination_id,
-                expected_deployment_generation=case["expected_deployment_generation"],
-                mode="owner_approval",
-                actor_or_policy_id=actor,
-                issued_at=issued,
-                expires_at=expires,
-            )
+            project = self._project(db, case["project_id"])
+            published = publication(project, case | {"destination_id": destination_id})
+            granted = published["authorization"]
+            deployed = published["deployment"]
+            if granted is not None:
+                self.store._put(
+                    db,
+                    "authorization",
+                    granted.authorization_id,
+                    granted.model_dump(),
+                    case["project_id"],
+                )
+                self.store._put(
+                    db, "deployment", deployed["deployment_id"], deployed, case["project_id"]
+                )
             self.store._put(
                 db,
-                "authorization",
-                authorization.authorization_id,
-                authorization.model_dump(),
+                "project",
                 case["project_id"],
+                project | published["project_changes"],
+                case["project_id"],
+                project["revision"],
             )
             self.store._put(
                 db,
                 "case",
                 case["case_id"],
-                case | {"status": "AUTHORIZED", "authorization_id": authorization.authorization_id},
+                case
+                | {
+                    "status": "DEPLOYED",
+                    "destination_id": destination_id,
+                    "deployment_id": deployed["deployment_id"],
+                    "authorization_id": None if granted is None else granted.authorization_id,
+                },
                 case["project_id"],
                 case["revision"],
             )
             return {
                 "project_id": case["project_id"],
-                "authorization_id": authorization.authorization_id,
-                "promotion": "not_executed",
+                "authorization_id": deployed.get("authorization_id") or "",
+                "deployment_id": deployed["deployment_id"],
+                "promotion": "recorded",
             }
 
         receipt = self._done(
@@ -424,7 +434,7 @@ class Controller:
                 action,
             )
         )
-        return receipt | {"promotion": "not_executed"}
+        return receipt | {"promotion": "recorded"}
 
     def rollback(self, deployment_id: str, expected_generation: int, key: str, actor: str):
         def action(db, operation_id):
@@ -435,35 +445,30 @@ class Controller:
             if row is None:
                 raise DomainError("not_found", "Deployment not found", 404)
             deployment = json.loads(row[0])
-            if deployment.get("generation") != expected_generation:
-                raise DomainError("stale_generation", "Deployment generation changed", 409)
-            project_id = deployment["project_id"]
-            if not deployment.get("previous_digest"):
-                updated = deployment | {
-                    "digest": None,
-                    "previous_digest": None,
-                    "generation": deployment["generation"] + 1,
-                    "status": "UNAVAILABLE",
-                    "actuator": "record_only",
-                }
-                claimed = "false"
-            else:
-                updated = deployment | {
-                    "digest": deployment["previous_digest"],
-                    "previous_digest": deployment.get("digest"),
-                    "generation": deployment["generation"] + 1,
-                    "status": "ROLLED_BACK",
-                    "actuator": "record_only",
-                }
-                claimed = "true"
+            project = self._project(db, deployment["project_id"])
+            planned = rollback_plan(project, deployment, expected_generation)
+            updated = planned["deployment"]
             self.store._put(
-                db, "deployment", deployment_id, updated, project_id, deployment["revision"]
+                db,
+                "deployment",
+                deployment_id,
+                updated,
+                deployment["project_id"],
+                deployment["revision"],
+            )
+            self.store._put(
+                db,
+                "project",
+                deployment["project_id"],
+                project | planned["project_changes"],
+                deployment["project_id"],
+                project["revision"],
             )
             return {
-                "project_id": project_id,
+                "project_id": deployment["project_id"],
                 "deployment_id": deployment_id,
                 "status": updated["status"],
-                "claimed_rollback": claimed,
+                "claimed_rollback": "true" if planned["claimed_rollback"] else "false",
             }
 
         return self._done(

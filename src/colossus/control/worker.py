@@ -116,7 +116,7 @@ class Worker:
             return result
         if task["kind"] == "cycle":
             result = await self.engine.run(payload["cycle_id"])
-            if result["status"] == "NO_CHANGE":
+            if result["status"] in {"NO_CHANGE", "COMPLETE"}:
                 self.onboarding.update(task["project_id"], active_cycle_id=None)
             return result
         raise DomainError("unsupported_task", "Task executor is not installed", 422)
