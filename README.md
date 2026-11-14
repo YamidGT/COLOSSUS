@@ -15,6 +15,10 @@ rejected first patch, corrected candidate, formal scope and all repository outco
 This public walkthrough displays completed evidence; it does not execute targets or
 call models. [Demo build and presentation guide](docs/public-demo.md).
 
+[Open the six-slide pitch](https://danidiaztech.github.io/colossus-presentation/):
+architecture, DSVW repair, formal verification and measured results, with fullscreen
+navigation and speaker notes. [Presentation source and publishing notes](presentation/README.md).
+
 ## Implementation handoff
 
 Read [the documentation map](docs/README.md), then [architecture](docs/architecture.md), [contracts](docs/contracts.md) and your [session brief](docs/sessions/README.md).
