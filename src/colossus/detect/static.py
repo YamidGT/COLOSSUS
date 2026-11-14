@@ -37,6 +37,17 @@ RULES = [
         re.compile(r"(os\.system|os\.popen|subprocess\.\w+)\(.*(\+|%|format|f[\"'])"),
     ),
     (
+        # A command held in a variable (e.g. produced by an LLM tool call) reaching a shell.
+        # Single-line match only: a call whose arguments span lines is not seen by this rule.
+        "shell-nonliteral",
+        "CWE-78",
+        "Non-literal command passed to a shell",
+        re.compile(
+            r"subprocess\.\w+\(\s*(?![\"'\[(])[A-Za-z_][\w.\[\]\"']*\s*,.*\bshell\s*=\s*True|"
+            r"\bos\.(system|popen)\(\s*(?![\"'])[A-Za-z_]"
+        ),
+    ),
+    (
         "yaml-load",
         "CWE-502",
         "yaml.load without safe loader",

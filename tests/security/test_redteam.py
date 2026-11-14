@@ -327,3 +327,22 @@ async def test_hypothesis_budget_goes_to_relevant_files_not_alphabetical_order()
     selected = diagnostics[0]["selected_files"]
     assert selected[0] == "pkg/users.py"
     assert "pkg/__init__.py" not in selected
+
+
+def test_shell_rule_flags_nonliteral_commands_only(tmp_path):
+    """A command variable reaching a shell is flagged; fixed commands and argv lists are not."""
+    (tmp_path / "tool.py").write_text(
+        "import os, subprocess\n"
+        "def a(command):\n"
+        "    return subprocess.run(command, shell=True, capture_output=True)\n"  # line 3: flag
+        "def b(cmd):\n"
+        "    os.system(cmd)\n"  # line 5: flag
+        "def c(path):\n"
+        "    subprocess.run(['ffmpeg', '-i', path])\n"  # argv list, no shell: no flag
+        "def d():\n"
+        "    subprocess.run('ls -la', shell=True)\n"  # fixed literal: no flag
+        "def e():\n"
+        "    os.system('clear')\n"  # fixed literal: no flag
+    )
+    hits = sorted(f.line for f in scan(tmp_path) if f.rule == "shell-nonliteral")
+    assert hits == [3, 5]
