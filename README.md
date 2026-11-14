@@ -2,12 +2,17 @@
 
 COLOSSUS is a recurring automated cyberdefence system. A public GitHub URL starts isolated setup, investigation, remediation, verification, policy-controlled deployment, recovery and mirror refresh. The next cycle uses the resulting deployed version.
 
-**Status:** implementation specification v1.1, 14 November 2026. Product code, target builds, proof runs and benchmark results are not implemented or validated yet. The documents define the complete system; they do not claim all public repositories can be built or formally verified.
+**Status:** implementation specification v1.2, 14 November 2026. Product code, target builds, proof runs and benchmark results are not implemented or validated yet. The documents define the complete system; they do not claim all public repositories can be built or formally verified.
 
 ## Implementation handoff
 
 Read [the documentation map](docs/README.md), then [architecture](docs/architecture.md), [contracts](docs/contracts.md) and your [session brief](docs/sessions/README.md).
 
+- [Operator workflows](docs/user-workflows.md)
+- [CLI specification](docs/cli.md)
+- [Repository action center](docs/frontend.md)
+- [Product brief](PRODUCT.md) and [visual design rules](DESIGN.md)
+- [Local secrets configuration](docs/secrets-configuration.md)
 - [Onboarding and sandbox execution](docs/onboarding-sandbox.md)
 - [Agents and vulnerability intelligence](docs/agents-intelligence.md)
 - [Formal verification and acceptance](docs/verification.md)

@@ -7,6 +7,8 @@ A public GitHub URL enrolls software in a managed lab. COLOSSUS discovers its st
 ## Logical topology
 
 ```text
+CLI or Tailwind action center -> authenticated operator API
+  |
 GitHub URL + optional owner requirements / deployment profile
   |
   v
@@ -90,3 +92,7 @@ Two assurance profiles are explicit: `tested` requires security/functional gates
 | Observability | Events -> trace/report/audit | Correlate, redact, retain, alert | Decision trace recoverable after crash |
 
 Detailed execution contracts and steps live in the linked component documents; do not implement from this diagram alone. The implementation and integration plans preserve every lifecycle stage.
+
+## Operator clients
+
+The planned Typer CLI and React/Tailwind action center share `/api/v1`, state projections, operation receipts and policy enforcement. The frontend is a static build served by the controller; it adds no target execution authority, model key or independent datastore. Every evaluated repository gets a persistent action-center route. [User workflows](user-workflows.md), [CLI](cli.md) and [frontend](frontend.md) define interactions and acceptance. Project pause is admission state, separate from cycle progress; cancellation has a pending request phase until launcher/recovery reconciliation finishes. Client polling does not create cycles.

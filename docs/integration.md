@@ -6,7 +6,7 @@ Daniel/session A owns the integration branch. This runbook defines how separatel
 
 Bootstrap must land first: initial Git commit, package scaffolding, contracts, config and fixtures. The documentation root commit is shared history, not the M0 implementation bootstrap. Land package scaffolding and shared contracts on top of it before parallel implementation worktrees; do not create divergent root histories. After bootstrap create one integration branch and four worktrees: `lane/a-control`, `lane/b-onboarding`, `lane/c-repair-deploy`, `lane/d-verification`. Each lane branches from the same bootstrap commit. Worktree commands are run by the implementers after that commit exists.
 
-A owns root lock/config/Compose, shared contracts, controller, gateway, launcher, telemetry plumbing and operator interface. B owns onboarding/intel/detect. C owns repair/deploy. D owns verify, evaluator and independent acceptance tests. No two lanes edit shared lockfiles or schema fields concurrently. Lane-specific dependency requests go to A and are incorporated into the shared lock.
+A owns root lock/config/Compose, shared contracts, controller, gateway, launcher, telemetry plumbing, Typer CLI and frontend/ (including its package/lockfile). B owns onboarding/intel/detect. C owns repair/deploy. D owns verify, evaluator and independent acceptance tests. No two lanes edit shared lockfiles or schema fields concurrently. Lane-specific dependency requests go to A and are incorporated into the shared lock.
 
 ## Contract-first exchange
 
@@ -22,12 +22,12 @@ Include base commit, branch/head commit, owned files, dependencies, public inter
 
 | Merge | Content | Required integration evidence |
 |---|---|---|
-| 0 | A bootstrap schemas/config/launcher facade | All lanes import contracts and exchange fixtures |
+| 0 | A bootstrap schemas/config/launcher facade, CLI/API/read models and frontend skeleton | All lanes import contracts and exchange fixtures |
 | 1 | A durable runner/gateway + B onboarding | Actual URL -> target -> manifest; restart and setup failure |
 | 2 | B detection/intelligence + C patch proposals | Baseline finding -> candidate on exact tree; unauthorized edits rejected |
 | 3 | D verification + C candidate build | Real good and bad candidates; source/proof/artifact binding |
 | 4 | C deploy/recovery + A policy + B refresh | Exact candidate promoted, rollback exercised, second cycle uses new mirror |
-| 5 | D campaign/report + observability/UI | All states visible, benchmark manifests frozen, reproducible report |
+| 5 | D campaign/report + A Tailwind action center/CLI parity and design audit | All states visible, benchmark manifests frozen, reproducible report |
 
 Lanes may develop later modules against fixtures before their merge slot. Integrator merges one slice at a time, runs the relevant boundary gate, records the integration commit and then admits the next slice. Run full lifecycle after merges 3 and 4; do not wait until all branches are “finished” to discover interface incompatibility.
 
@@ -58,6 +58,12 @@ I12 prompt injection requests external access -> effect denied; useful task outc
 I13 simultaneous broker requests near cap -> reservations never exceed project/campaign cap.
 I14 proof timeout/empty proof report/unsupported adapter -> no formal pass.
 I15 storage/audit failure -> no new authority-changing action, authorized recovery still attempted.
+
+I16 CLI and browser enrollment/run -> same receipts, project state and audit facts.
+I17 stale or duplicate approval/rollback -> conflict or same existing operation, never an extra side effect.
+I18 pause differs from cancellation; watcher/browser close leaves active work running.
+I19 malicious repo/finding text, cross-origin action and credential export attempts -> escaped or refused without a secret leak.
+I20 disconnected, unknown-proof and failed-recovery states remain visible; keyboard/mobile review can complete without clipped controls.
 
 ## Definition of integration complete
 

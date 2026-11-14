@@ -4,7 +4,7 @@ The whole recurring defence system is the objective. Read docs/project-context.m
 
 | Lane | Owner | Exclusive source ownership | Brief |
 |---|---|---|---|
-| A | Daniel | contracts, control, gateway, sandbox, observability, root config/lock/CLI/API | [Controller and integration](a-control.md) |
+| A | Daniel | contracts, control, gateway, sandbox, observability, root config/lock, CLI/API and frontend/ | [Controller and integration](a-control.md) |
 | B | Teammate 2 | onboarding, intel, detect, component tests | [Onboarding and investigation](b-onboarding.md) |
 | C | Teammate 3 | repair, deploy, component tests | [Repair and deployment](c-repair-deploy.md) |
 | D | Teammate 4 | verify, evaluation adapters, independent acceptance tests | [Verification and evaluation](d-verification.md) |

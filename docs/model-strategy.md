@@ -52,3 +52,5 @@ We have not measured refusal rates for these models on the actual workload. Eval
 6. Use offline error fixtures to test ledger races, uncertain timeout charges and failover. Verify that a refusal cannot become a success or trigger a more permissive model path.
 
 Example planning arithmetic: a GLM request with 32k input and 8k billed output is USD 0.0088 at this price snapshot; twenty such requests are USD 0.176. Real use may differ through repeated context, reasoning, retries and provider accounting. The USD 2 case limit remains a ceiling, not a target; host build/test/proof time may dominate even when tokens are inexpensive.
+
+Local provider credentials are configured separately in the ignored root `.env`; see [secret boundaries](secrets-configuration.md). A configured Groq credential does not change its disabled-by-default budget/task profile. Frontend/CLI never call model providers directly.

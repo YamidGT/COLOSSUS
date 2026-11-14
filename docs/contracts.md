@@ -12,7 +12,7 @@ Envelope: `schema_version, message_id, project_id, cycle_id?, case_id?, task_id?
 
 | Object | Required fields and semantics |
 |---|---|
-| Enrollment | repo_url, requested_ref nullable, subdir nullable, owner_policy_id, deployment_profile_id, assurance_profile, requirement_ids[] |
+| Enrollment | repo_url, requested_ref nullable, subdir nullable, owner_policy_id, deployment_profile_id, assurance_profile, requirement_ids[], start_cycle boolean(default false) |
 | TargetManifest | manifest_id, revision, project_id, repo_url, commit, tree_sha256, platform, target_kind(web/multiservice/library), recipe_id/hash, artifact_digest, services[], dependency_inventory_id/hash, test_profile_ids[], readiness_profile_id, data_seed_id, obligation_ids[], protected_paths[], allowed_patch_paths[], network_profile_id, deployment_profile_id, policy_hash, toolchain_manifest_id, setup_provenance[] |
 | ServiceSpec | service_id, artifact_digest, command_profile_id, internal_ports[], resource_profile_id, dependency_service_ids[], health_check_id, writable_paths[]; never host mounts/credentials |
 | IntelEvent | source, source_url, raw_content_id/hash, fetched_at, published_at nullable, modified_at nullable, advisory_id, aliases[], package/ecosystem/version, affected_status(affected/not_affected/unknown), fixed_versions[], severity_vector nullable, severity_source, kev_status nullable, replay boolean |
@@ -30,9 +30,38 @@ Envelope: `schema_version, message_id, project_id, cycle_id?, case_id?, task_id?
 
 ModelCall status is `reserved/in_flight/succeeded/failed/uncertain`; reason codes include `refused`, `provider_policy_block`, `rate_limited`, `unsupported_parameter`, `invalid_output`, `transport_error` and `timeout`. Missing provider usage stays null/uncertain, never silently zero. The gateway maps these outcomes to task state; no new success state bypasses gates. Model profiles and fallback eligibility are specified in [model strategy](model-strategy.md).
 
+## Operator read models and mutations
+
+These are projections of controller state; CLI and browser never maintain their own action or eligibility truth. Types are part of the initial schema v1 bootstrap, not independent frontend definitions.
+
+| Object | Fields and semantics |
+|---|---|
+| ProjectSnapshot | project_id, display_name, repo_url, revision, observed_at, setup_state, admission_state(active/paused), source_summary, mirror_summary, deployment_summary, active_cycle nullable, attention_count, cost_summary, feed_freshness[], allowed_actions[] |
+| ActionItem | action_id(stable from project/case/kind), project_id, case_id nullable, kind, priority, title, reason_code, reason, created_at, updated_at, evidence_refs[], allowed_actions[], disabled_reasons{}; derived from state, no arbitrary model-provided command |
+| AllowedAction | action enum, resource_id, expected_revision, eligible boolean, disabled_reason nullable, required_confirmation boolean; UI hint only, server rechecks |
+| CaseReview | case_id, project_id, revision, finding_refs[], candidate_id nullable, diff_ref nullable, gate_results[], assurance_summary, evidence_manifest_hash nullable, destination_id, expected_deployment_generation, allowed_actions[] |
+| OperationReceipt | operation_id, idempotency_key, request_hash, kind, resource_ids{}, status(accepted/running/succeeded/failed), reason_code nullable, created_at, updated_at, result_ref nullable |
+| ProjectConfigAmendment | expected_revision, requested_ref nullable, subdir nullable, owner_policy_id, deployment_profile_id, assurance_profile, requirement_ids[]; all profiles must exist and be allowed for this operator |
+| ReviewDecision | case_id, candidate_id, expected_revision, decision(reject), reason; approval still uses Authorization bound to exact evidence |
+
+Snapshot revisions monotonically advance with relevant committed changes. Hash/version checks remain mandatory for artifacts even if revision matches. Time/cost summaries carry their unit and uncertainty flags, and missing values remain null. Receipt success means the named operation completed, not that a repository is secure. Serving a read model cannot mutate target state.
+
 ## APIs and authority
 
-Operator API on loopback/SSH tunnel: POST `/projects`, POST `/projects/{id}/cycles`, GET `/cases/{id}`, GET `/projects/{id}/status`, POST `/cases/{id}/cancel`, POST `/authorizations`, POST `/deployments/{id}/rollback`, GET `/reports/{id}`. POSTs require `Idempotency-Key`; mismatched body for a reused key returns conflict. Operator authentication token stays outside target jobs.
+All operator routes below mount under `/api/v1` on loopback/SSH tunnel. Existing path examples are relative to that prefix. Core routes: POST `/projects`, POST `/projects/{id}/cycles`, GET `/cases/{id}`, GET `/projects/{id}/status`, POST `/cases/{id}/cancel`, POST `/authorizations`, POST `/deployments/{id}/rollback`, GET `/reports/{id}`. POSTs require `Idempotency-Key`; mismatched body for a reused key returns conflict. Operator authentication token stays outside target jobs. CLI uses bearer authentication; browser uses a server session and CSRF protection as specified in [frontend.md](frontend.md). Both resolve to the same local operator authority and audit identity.
+
+Additional operator routes:
+
+- GET `/projects` (cursor-paginated), `/projects/{id}/actions`, `/projects/{id}/cycles`, `/projects/{id}/findings`, `/cases/{id}/review`, `/cases/{id}/diff`, `/cycles/{id}`, `/deployments/{id}`, `/operations/{id}`, `/profiles`, `/system/readiness`.
+- POST `/projects/{id}/pause`, `/projects/{id}/resume`, `/projects/{id}/retry-setup`, `/projects/{id}/configuration`, `/cycles/{id}/cancel`, `/cases/{id}/decisions`, `/evaluations`.
+- GET `/artifacts/{id}/download` authorizes project scope, bounds bytes and serves redacted evidence; gold-only artifacts are not served by this operator endpoint. Report export uses the same policy.
+- POST `/sessions/codes` requires host CLI bearer authority; POST `/sessions/exchange` exchanges a bounded one-use code; DELETE `/session` logs out; GET `/session` returns current operator and session-bound CSRF token without provider credentials. No session establishment by GET query token.
+
+List endpoints use opaque cursors with `limit` default 25, maximum 100. Project status/review endpoints support ETag/If-None-Match and include observed_at/revision. Diff is a bounded text artifact, default maximum 200 KiB with truncation/download metadata. Clients cannot supply arbitrary filesystem paths to artifact endpoints. Scored evaluation submission validates the uploaded manifest and artifact IDs; it does not access a client-supplied server path or execute commands embedded in it.
+
+Mutations use durable OperationReceipt records and return 202 plus IDs when work is queued; immediate completed state changes can return 200 with their receipt. Same key/body returns the same receipt; key reuse with a changed body returns 409. Reject stale expected revision/generation with 409, unauthorized with 401/403, invalid schema with 422, ineligible state with 409 plus a reason. Auth/session bootstrap has a separate bounded replay/rate policy and does not use ordinary action receipts.
+
+Enrollment with start_cycle=true creates the deferred first-cycle intent in the same transaction as the project. Only READY releases it; retries cannot create multiple initial cycles. Repeated active-cycle requests return the existing cycle per project deduplication; a paused project rejects admission. Pause affects future work, cancel requests termination/recovery, and both are separately audited. Retry setup retains failed attempts; config changes increment revision and invalidate affected pending setup/evidence. No client override flag bypasses gates.
 
 Internal RPCs are typed over local Unix sockets with service-specific socket permissions. If split across machines, require mTLS before enabling network listeners. Controller calls:
 
@@ -42,11 +71,11 @@ Internal RPCs are typed over local Unix sockets with service-specific socket per
 
 Job profiles resolve to fixed executables/entrypoints and validated arguments. A setup recipe can contain build commands, but they execute only inside the builder. The host launcher never evaluates a shell string supplied by a worker. Worker-to-controller calls accept task-scoped capability tokens with expiry, maximum uses and artifact namespace; models never choose the token or access another task.
 
-Every lane also exposes a JSON stdin/stdout adapter with diagnostics on stderr for fixture integration. CLI plan: `colossus doctor`, `enroll URL`, `run PROJECT`, `status ID`, `approve MANIFEST`, `rollback DEPLOYMENT`, `evaluate MANIFEST`, `report RUN`. These commands are not installed yet.
+Every lane also exposes a JSON stdin/stdout adapter with diagnostics on stderr for fixture integration. CLI plan: `colossus doctor`, `enroll URL`, `run PROJECT`, `status ID`, `approve MANIFEST`, `rollback DEPLOYMENT`, `evaluate MANIFEST`, `report RUN`. The complete command/exit-code contract is in [cli.md](cli.md); these commands are not installed yet.
 
 ## State and transactions
 
-SQLite tables: projects, target_manifests, cycles, cases, tasks, task_attempts, findings, candidates, gate_results, evidence_manifests, authorizations, deployments, artifacts, model_calls, budget_reservations, audit_events, outbox, schema_migrations. Large content belongs in artifact files, not task rows. Only controller writes SQLite; workers submit results via RPC. WAL mode, busy timeout and backups are configured by A.
+SQLite tables: projects, target_manifests, cycles, cases, tasks, task_attempts, findings, candidates, gate_results, evidence_manifests, authorizations, deployments, artifacts, model_calls, budget_reservations, audit_events, outbox, schema_migrations, operator_sessions, login_codes, operation_receipts. Large content belongs in artifact files, not task rows. Only controller writes SQLite; workers submit results via RPC. WAL mode, busy timeout and backups are configured by A.
 
 Task claims atomically set lease_owner, lease_expires_at, attempt and state. Heartbeat every 10 seconds; lease 60 seconds. A timeout does not release resources until the launcher confirms termination. Persist state transition and outbox event in one transaction; replay dispatch after restart. Delivery is at least once; operations are idempotent, never claimed exactly-once.
 

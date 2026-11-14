@@ -12,3 +12,5 @@ Steps:
 7. Produce all denominators/failures/timings/costs and audit claims in the technical sheet.
 
 Acceptance: a useful correct patch can pass and known bad patches fail; unknown/unsupported cannot become proof; all candidate hashes match; benchmark truth remains private; no overall repo-security label; unsupported targets and manual hints remain in report; no ten-repo success claim until each attempted row is observed.
+
+Own independent CLI/UI parity and consequential-action tests with A: displayed proof scope matches evidence, failed required gates cannot be approved, stale/duplicate actions are rejected or reconciled, reports hide gold answers, and hostile finding text cannot execute in the operator page.

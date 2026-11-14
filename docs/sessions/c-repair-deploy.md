@@ -14,3 +14,5 @@ Steps:
 Acceptance: upstream and generated fixes actually run; protected/base mismatches reject; good/bad artifact test controls are meaningful; no model/deployer bypass of gates; forced rollout failure recovers correctly; promotion/restoration is idempotent. No real production credentials or external PR publication is required for the lab adapter.
 
 Coordinate the guided [VAmPI formal integration](../vampi-formal-plan.md) with D separately from ordinary repair cases. Frozen specs/recipes remain protected. Use [model strategy](../model-strategy.md); no fallback on a safety refusal and no model review can grant promotion authority.
+
+Provide A with real/reproducible deployment and review fixtures, permitted actions and disabled reasons, including stale approval, no prior rollback artifact and mirror-refresh failure. The UI never determines deploy eligibility itself.

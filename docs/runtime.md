@@ -86,3 +86,7 @@ Do not promise ten repos x repeated full cycles within an eight-hour event on on
 ## Calibration implementation
 
 Instrument every stage with queue/start/end times. Run DSVW, VAmPI and the guided VAmPI compiled-policy fixture; preserve Vulpy for heldout scoring and do not calibrate on its results; report cold and warm caches separately. Replace planning estimates with observed median/max once available and retain the original limits in results. Use deterministic fixture replay for fault tests; label it, and never count replay as fresh model latency or new repair success.
+
+## Operator client refresh
+
+Visible active-project UI and CLI watch poll every 2 seconds; idle/list views every 10 seconds. Hidden browser tabs pause polling; transient read failures back off to 30 seconds and show stale state. These are read refreshes, not new investigation cycles and incur no model calls. Server timestamps/deadlines remain authoritative. Small static frontend assets share the controller's existing process/resource reserve; no extra Node server runs in the deployed stack.

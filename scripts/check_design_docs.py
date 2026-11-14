@@ -5,7 +5,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 required = [
-    'README.md', 'AGENTS.md', 'docs/README.md', 'docs/architecture.md',
+    'README.md', 'AGENTS.md', 'PRODUCT.md', 'DESIGN.md',
+    'docs/user-workflows.md', 'docs/cli.md', 'docs/frontend.md', 'docs/secrets-configuration.md', 'docs/README.md', 'docs/architecture.md',
     'docs/contracts.md', 'docs/onboarding-sandbox.md', 'docs/agents-intelligence.md',
     'docs/verification.md', 'docs/deployment-observability.md', 'docs/runtime.md',
     'docs/implementation.md', 'docs/integration.md', 'docs/evaluation.md',
@@ -19,7 +20,7 @@ required = [
 errors=[]
 for name in required:
     if not (ROOT/name).is_file(): errors.append('Missing: '+name)
-for p in [ROOT/'README.md', ROOT/'AGENTS.md', *sorted((ROOT/'docs').rglob('*.md'))]:
+for p in [ROOT/'README.md', ROOT/'AGENTS.md', ROOT/'PRODUCT.md', ROOT/'DESIGN.md', *sorted((ROOT/'docs').rglob('*.md'))]:
     if not p.exists(): continue
     text=p.read_text()
     if text.count('```') % 2: errors.append('Unclosed code fence: '+str(p.relative_to(ROOT)))
@@ -47,6 +48,9 @@ assert r['heavy']['case_seconds']==180*60 and r['heavy']['cycle_seconds']==240*6
 assert r['standard']['max_candidates']==3
 b=r['budget']
 assert b['automatic_ceiling_micro_usd']+b['contingency_micro_usd']==b['total_credit_micro_usd']
+example=(ROOT/'.env.example').read_text()
+assert 'MISTRAL_API_KEY=\n' in example and 'GROQ_API_KEY=\n' in example
+assert all(not line.split('=',1)[1].strip() for line in example.splitlines() if line.startswith(('MISTRAL_API_KEY=','GROQ_API_KEY=')))
 if errors:
     raise SystemExit('\n'.join(errors))
 print(f'PASS: {len(required)} required handoff files, local links/code fences, JSON examples, 10 candidate records and runtime accounting.')

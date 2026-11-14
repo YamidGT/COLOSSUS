@@ -52,3 +52,7 @@ Before giving an agent a lane: provide AGENTS.md, docs/README.md and its brief, 
 - Python campaign uses Dafny/CrossHair first; CBMC remains an explicit extension with no fake success.
 - Two-page sheet, lane briefs, enrollment example, runtime calibration and benchmark language selection updated together.
 - Ready to begin implementation means the handoff is coherent. Host/runtime/model capability and target-oracle preflight remain M0/M1 work, not completed validation.
+
+## Revision 1.2 operator experience audit
+
+The earlier optional status-page plan is replaced by an explicit React/Tailwind action center and Typer CLI. Both use shared read/action contracts and durable operation receipts; all authority stays in the controller. New docs define real user journeys, minimal page structure, visual tokens, error/empty/stale states, auth/CSRF boundaries, CLI output and integration gates I16-I20. Provider keys live only in the ignored 0600 local .env; committed .env.example has blank values. This is an implementation plan, not a claim that the frontend, CLI or model credentials have been runtime-tested.

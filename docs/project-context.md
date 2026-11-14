@@ -1,6 +1,6 @@
 # COLOSSUS: project context and decision record
 
-Read this first when joining an implementation session. Owner: Daniel / session A. Updated 14 November 2026, documentation revision 1.1. This records the user's intent, evidence and design rationale; component documents own detailed contracts. It is a handoff, not evidence that the system has been built.
+Read this first when joining an implementation session. Owner: Daniel / session A. Updated 14 November 2026, documentation revision 1.2. This records the user's intent, evidence and design rationale; component documents own detailed contracts. It is a handoff, not evidence that the system has been built.
 
 ## What Daniel wants
 
@@ -67,3 +67,9 @@ Do not use the proposed pitch about a recent Microsoft zero-day causing a USD 10
 Daniel supplied prior model tests and pricing advice: GLM Flash through the Mistral key worked in a basic proof test, with reported 1M TPM account capacity; Groq GPT-OSS tests reportedly had 8k TPM limits. Use GLM Flash by default, keep Codestral/DeepSeek as calibrated alternatives, and Groq 20B/120B as optional separately funded comparators. These are not demonstrated quality rankings or measured refusal rates. The verified price snapshot, provider-policy sources, exact IDs, reasoning settings, fallback semantics and required calibration are in [model strategy](model-strategy.md). This replaces the earlier generic small/large-model plan while preserving T0/T1/T2 effort tiers.
 
 Current state: architecture and implementation handoff exist; product code, sandbox validation, target builds, formal proofs and benchmark scores do not. The PDF describes the design and planned evaluation. Open operational decisions are host architecture/runtime, compatible pinned tool/model versions, exact target snapshots/oracles and approval of the proposed VAmPI business policy. These have explicit implementation gates; no paid model calls or target execution were needed to prepare this documentation.
+
+## Operator experience added in revision 1.2
+
+Daniel requested documentation for real user interaction: a CLI and a beautiful minimal repository action center, using Tailwind and Impeccable/anti-slop guidance. The plan now fixes Typer for the CLI and React/TypeScript/Vite/Tailwind v4 for static frontend assets, both sharing the controller API. Read [operator workflows](user-workflows.md), [CLI](cli.md), [frontend](frontend.md), [PRODUCT](../PRODUCT.md) and [DESIGN](../DESIGN.md). No product frontend or CLI is implemented in this documentation revision.
+
+Daniel also supplied Mistral and Groq keys for a local `.env`. They were saved only in the ignored owner-readable file, not in Git or documentation. See [secret boundaries](secrets-configuration.md). No model calls were made to validate them. Groq remains optional and budget-disabled by default; possession of a key does not change that policy.

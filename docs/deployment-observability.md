@@ -34,7 +34,7 @@ Instrument onboarding, builds, tool calls, model calls, verification, authority 
 
 SQLite audit_events and the outbox are the unsampled decision record. OTel traces may be sampled; sampling must never discard required audit evidence. Audit events include actor/capability, request hash, policy version, decision, reason and evidence IDs. Redact credentials/prompts as appropriate; retain raw bounded tool evidence separately with access controls. Source responses and logs are escaped, truncated and treated as hostile content. A local hash chain helps integrity checks only relative to a separately retained checkpoint; it is not immutable against host compromise.
 
-Required operator UI can be server-rendered status/report pages plus JSON CLI output: project setup state, current/mirror version, active case/stage/deadline, findings and confidence, diff, gate/proof scope, authorization controls, cost, stale feeds and recovery events. No separate SPA or full Prometheus/Grafana/Loki stack is required. Export OTel to a collector and bounded local storage; add external backends through configuration.
+Required operator clients are the [CLI](cli.md) and [React/Tailwind repository action center](frontend.md), with shared controller read models and actions. Show setup state, current/mirror version, active stage/deadline, evidence-backed findings, diff, gate/proof scope, decisions, cost, stale feeds and recovery. The static frontend adds no server process; a full Prometheus/Grafana/Loki stack is unnecessary. Export OTel to a collector and bounded local storage; add external backends through configuration.
 
 Storage defaults: 100 MiB evidence per case, 1 GiB total task scratch per standard job (overridden for builds by resource profile), stop admitting new work below 10 GiB disk free. Keep all benchmark evidence through report completion and export; ordinary lab artifacts retain 7 days plus the current and prior deployment artifacts. Retention deletes only unreferenced case-owned artifacts after digest/index checks. Export evidence before target teardown.
 
@@ -44,5 +44,5 @@ Storage defaults: 100 MiB evidence per case, 1 GiB total task scratch per standa
 2. Implement local slots/consumer pointer with generation CAS and durable intents.
 3. Implement readiness, positive/security smoke, synthetic traffic and observation windows.
 4. Implement rollback and restart reconciliation, then mirror refresh.
-5. Instrument traces/events and minimal status/report UI.
+5. Instrument traces/events and expose project/action/review projections to the CLI and Tailwind action center; never mix sampled telemetry with authoritative action state.
 6. Test health failure, stale generation, tampered artifact, process crash during swap, authorization expiry, lost audit writer, rollback failure, refresh failure and successful second cycle. No false COMPLETE status is allowed.

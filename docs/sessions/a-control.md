@@ -1,6 +1,6 @@
 # Lane A Daniel controller and integration
 
-Own `src/colossus/{contracts,control,gateway,sandbox,observability}`, root config/lock/Compose, CLI/operator API and migrations. Implement contracts.md, runtime.md, architecture.md and the host execution boundary in onboarding-sandbox.md. Own root package/version pinning and lane dependency requests.
+Own `src/colossus/{contracts,control,gateway,sandbox,observability}`, root config/lock/Compose, CLI/operator API, `frontend/` and migrations. Read user-workflows.md, cli.md, frontend.md, PRODUCT.md and DESIGN.md; apply the Impeccable-guided design review during implementation. Implement contracts.md, runtime.md, architecture.md and the host execution boundary in onboarding-sandbox.md. Own root package/version pinning and lane dependency requests.
 
 Steps:
 1. Bootstrap shared Pydantic models, JSON fixtures, typed errors, RuntimeConfig and package entrypoints; commit common base before worktrees branch.
@@ -8,7 +8,7 @@ Steps:
 3. Build source/feed gateway and Mistral broker with capability checks, atomic budget reservations and price/model records.
 4. Build fixed-profile launcher with quotas, denial tests, output import, termination and case-scoped teardown.
 5. Integrate scheduler, state/policy decisions and operator authorization endpoint with C's deployer.
-6. Instrument unsampled audit and OTel; expose status/report/diff/approval UI.
+6. Instrument unsampled audit/OTel and implement the Typer CLI plus Tailwind action center against shared projections. Deliver enrollment/status first, then case review/decisions/recovery. Own frontend package/lock, generated API types, authentication and accessibility.
 7. Merge lane slices using integration.md and record their evidence.
 
 Acceptance: schema exchange works across every lane; duplicate/expired tasks cannot corrupt state; concurrent calls cannot overspend; target jobs cannot reach credentials/control/another project; stale/artifact-mismatched authorizations fail; complete lifecycle resumes safely after a controller kill. Coordinate a real isolated build backend early; never assume Docker build inherits runsc isolation automatically.

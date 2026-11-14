@@ -2,7 +2,7 @@
 
 ## Recurring automated cyberdefence from a GitHub repository
 
-Track 3 | Daniel and three collaborators | Design specification v1.1 | 14 November 2026
+Track 3 | Daniel and three collaborators | Design specification v1.2 | 14 November 2026
 
 Status: implementation handoff prepared. Product execution, repository preflight and empirical results are pending. The system described below is the intended implementation, not a claim of measured performance.
 
@@ -20,7 +20,7 @@ Source changes, scheduled reviews and relevant advisories trigger a deterministi
 
 ## Architecture and authority
 
-The Python control plane uses strict shared contracts, SQLite durable tasks/events and a content-addressed evidence store. A gateway alone holds the Mistral key; a sandbox launcher alone controls runtime actions; a deployment service alone holds destination credentials. Target workers cannot reach management networks or other projects. Code, build hooks and proof tools execute only in isolated environments. Resource quotas, deadlines, capability checks and protected test/specification paths constrain effects independently of model compliance.
+Operators use a Typer CLI or a minimal React/Tailwind repository action center for setup, patch review, proof scope, approvals and recovery. Both share the Python API, SQLite durable tasks/events and content-addressed evidence. A gateway alone holds the Mistral key; a sandbox launcher alone controls runtime actions; a deployment service alone holds destination credentials. Target workers cannot reach management networks or other projects. Code, build hooks and proof tools execute only in isolated environments. Resource quotas, deadlines, capability checks and protected test/specification paths constrain effects independently of model compliance.
 
 ## Formal methods and assurance
 
@@ -49,7 +49,7 @@ Report onboarding completion, labelled precision/recall, correct repair and heal
 
 Resources: 4 CPU, 24 GB Oracle host, local workers and USD 150 Mistral credit. Default model: zai-glm-5-3-flash; published input/output rates USD 0.15/0.50 per million tokens. Account throughput is user-reported, not measured here. One heavy worker; USD 120 automated ceiling plus USD 30 reserve. Planning estimates: 15-40 minutes for a small warm cycle; 25-60 minutes for first URL setup and cycle. Standard active case cap: 90 minutes. These estimates require calibration. A repeated ten-repository campaign with second cycles may require 32-76 serial host-hours before additional baselines/benchmarks.
 
-Four lanes implement shared contracts first: A/Daniel owns control, gateway, sandbox and integration; B owns onboarding, intelligence and investigation; C owns repairs, deployment and recovery; D owns verification and evaluation. Integration proceeds through a real URL-to-target path, candidate checks, promotion/rollback and a second cycle. The merging runbook requires ownership boundaries, versioned interfaces, restart tests and evidence at each milestone.
+Four lanes implement shared contracts first: A/Daniel owns control, gateway, sandbox and integration; B owns onboarding, intelligence and investigation; C owns repairs, deployment and recovery; D owns verification and evaluation. Integration proceeds through a real URL-to-target path, candidate checks, promotion/rollback and a second cycle. The merging runbook requires ownership boundaries, versioned interfaces, CLI/UI parity, restart tests and evidence. Product/design briefs define Impeccable-guided visual and accessibility review.
 
 ## Limits and research basis
 

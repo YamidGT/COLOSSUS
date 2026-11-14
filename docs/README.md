@@ -1,6 +1,6 @@
 # Documentation map and decision ownership
 
-Version 1.1 is the implementer handoff. All implementation and duration statements are proposed until measured. The full product is URL onboarding -> recurring discovery -> repair -> verification -> controlled deployment -> recovery -> updated mirror.
+Version 1.2 is the implementer handoff. All implementation and duration statements are proposed until measured. The full product is URL onboarding -> recurring discovery -> repair -> verification -> controlled deployment -> recovery -> updated mirror.
 
 | Document | Decision it owns | Implementer |
 |---|---|---|
@@ -8,6 +8,11 @@ Version 1.1 is the implementer handoff. All implementation and duration statemen
 | model-strategy.md | Exact model choices, price sources, capability/fallback and provider constraints | A with B/C/D |
 | repository-catalog.md | Complete user-supplied 24-repository inventory and evidence status | D |
 | vampi-formal-plan.md | Proposed REQ-1..4 and actual compiled-code integration | C/D |
+| user-workflows.md | Real operator journeys, actions and failure recovery | A |
+| cli.md | CLI commands, output, exit codes and API parity | A |
+| frontend.md | Tailwind action center, routes, state/auth and UI acceptance | A with C/D evidence |
+| ../PRODUCT.md / ../DESIGN.md | Product intent, visual tokens and design review rules | A |
+| secrets-configuration.md | Local provider credentials and environment boundaries | A |
 | architecture.md | Components, topology, lifecycle and trust boundaries | All; A integrates |
 | contracts.md | Object fields, statuses, API semantics, persistence | A |
 | onboarding-sandbox.md | URL intake, recipes, target environments and isolation | B with A runtime support |
@@ -28,7 +33,7 @@ Normative order: explicit user instructions > contracts and runtime policy > com
 
 ## Fixed technology decisions
 
-Python 3.12 control plane, Pydantic v2 contracts, FastAPI operator API, httpx Mistral client, SQLite WAL task/event store with a single controller writer, content-addressed filesystem evidence, Docker/Compose managed by a dedicated launcher, OpenTelemetry instrumentation. Pin concrete compatible package versions during bootstrap and retain the lockfile. No Redis/PostgreSQL requirement in v1. Adapter interfaces preserve future replacement without introducing two competing implementations now.
+Python 3.12 control plane, Pydantic v2 contracts, FastAPI operator API, httpx Mistral client, SQLite WAL task/event store with a single controller writer, content-addressed filesystem evidence, Docker/Compose managed by a dedicated launcher, OpenTelemetry instrumentation. Pin concrete compatible package versions during bootstrap and retain the lockfile. Operator clients: Typer CLI and React/TypeScript/Vite/Tailwind CSS v4 frontend, built to static assets served by the same API process. No Redis/PostgreSQL requirement in v1. Adapter interfaces preserve future replacement without introducing two competing implementations now.
 
 Three persistent trusted processes: controller, gateway and sandbox launcher. Deployment is a credential-separated service started when a target is enrolled for promotion; telemetry collector is a separate process. Agents and target tools run as bounded jobs. Local Docker promotion is the required deployment adapter; real production integration is configured separately. The model broker is part of the gateway and the gateway also fetches fixed feed origins, under distinct capabilities.
 
