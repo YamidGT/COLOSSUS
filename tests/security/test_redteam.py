@@ -299,3 +299,31 @@ async def test_hypothesis_input_cap_and_invalid_json_do_not_erase_findings():
     assert broker.calls == 4
     assert diagnostics[0]["eligible_files"] == 6
     assert sum(d.get("reason") == "invalid_output" for d in diagnostics) == 4
+
+
+@pytest.mark.asyncio
+async def test_hypothesis_budget_goes_to_relevant_files_not_alphabetical_order():
+    """Regression: an alphabetical 4-file cap spent a slot on an empty __init__.py and never
+    reviewed the module that held the request handlers."""
+    from types import SimpleNamespace
+
+    from colossus.detect.redteam import hypothesize
+
+    files = {
+        "pkg/__init__.py": b"",
+        "pkg/a_constants.py": b"X = 1\nY = 2\nZ = 3\nW = 4  # padding to pass min size\n",
+        "pkg/b_schema.py": b"SCHEMA = {'type': 'object'}  # no handlers here at all\n",
+        "pkg/c_misc.py": b"def helper():\n    return 'nothing interesting here'\n",
+        "pkg/d_misc.py": b"def other():\n    return 'nothing interesting here either'\n",
+        "pkg/users.py": b"@app.route('/u')\ndef get_user():\n    return db.execute(request.args['q'])\n",
+    }
+
+    class Broker:
+        async def complete(self, *args, **kwargs):
+            return "call", SimpleNamespace(status="succeeded", content='{"issues": []}')
+
+    diagnostics = []
+    await hypothesize(Broker(), "p", "c", files, [], diagnostics)
+    selected = diagnostics[0]["selected_files"]
+    assert selected[0] == "pkg/users.py"
+    assert "pkg/__init__.py" not in selected
