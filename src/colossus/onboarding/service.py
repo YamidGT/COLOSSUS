@@ -8,6 +8,7 @@ from colossus.contracts.core import DomainError, canonical_json, content_hash, n
 from colossus.contracts.models import Enrollment, TargetManifest
 from colossus.gateway.source import tree_hash
 from colossus.onboarding.discovery import discover
+from colossus.onboarding.plans import gate_untrusted_plans
 
 
 class Onboarding:
@@ -52,6 +53,7 @@ class Onboarding:
             raise DomainError(
                 "source_hash_mismatch", "Source gateway returned inconsistent bytes", 503
             )
+        gate_untrusted_plans(files)
         source_id = self.evidence(project_id, source)
         self.update(project_id, setup_state="DISCOVERING")
         recipe = discover(files)
