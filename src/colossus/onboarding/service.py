@@ -3,10 +3,12 @@
 import asyncio
 import base64
 import time
+from importlib.resources import files as resources
 
 from colossus.contracts.core import DomainError, canonical_json, content_hash, new_id
 from colossus.contracts.models import Enrollment, TargetManifest
 from colossus.gateway.source import tree_hash
+from colossus.onboarding.bundle import assembled_files
 from colossus.onboarding.discovery import discover
 
 
@@ -56,10 +58,57 @@ class Onboarding:
         self.update(project_id, setup_state="DISCOVERING")
         recipe = discover(files)
         self.update(project_id, setup_state="BUILDING")
+        runtime = {}
+        dependencies = {
+            "inventory": {
+                "packages": [],
+                "scope": "stdlib-only runtime",
+                "omitted_optional_dependencies": ["lxml"]
+                if recipe.recipe_id == "dsvw-python-v1"
+                else [],
+            }
+        }
+        if recipe.requirements:
+            if any(p == "vendor" or p.startswith("vendor/") for p in files):
+                raise DomainError(
+                    "runtime_bundle_collision",
+                    "Repository vendor directory requires an explicit dependency layout",
+                    422,
+                )
+            dependencies = await self.launcher.call(
+                "/dependencies", {"project_id": project_id, "requirements": recipe.requirements}
+            )
+            runtime = {
+                path: base64.b64decode(data, validate=True)
+                for path, data in dependencies.pop("files").items()
+            }
+        if recipe.runtime_mode != "direct":
+            runtime["_colossus_runtime/start.py"] = (
+                resources("colossus.onboarding").joinpath("runtime_start.py").read_bytes()
+            )
+        dependencies_id = self.evidence(project_id, dependencies)
+        inventory_hash = self.evidence(project_id, dependencies["inventory"])
+        intake_source_id = source_id
+        source = source | {
+            "runtime_files": {
+                path: base64.b64encode(data).decode() for path, data in runtime.items()
+            },
+            "runtime_tree_sha256": tree_hash(runtime),
+            "dependency_inventory_hash": inventory_hash,
+            "dependency_evidence_id": dependencies_id,
+        }
+        source_id = self.evidence(project_id, source)
+        package_files = assembled_files(files, runtime)
         image = await self.launcher.call(
-            "/package", {"files": source["files"], "argv": recipe.command}
+            "/package",
+            {
+                "files": {
+                    path: base64.b64encode(data).decode() for path, data in package_files.items()
+                },
+                "argv": recipe.command,
+            },
         )
-        if image["tree_sha256"] != source["tree_sha256"]:
+        if image["tree_sha256"] != tree_hash(package_files):
             raise DomainError(
                 "package_hash_mismatch", "Packaged source differs from the resolved snapshot", 503
             )
@@ -94,16 +143,6 @@ class Onboarding:
             evidence_id = self.evidence(
                 project_id, {"health": health, "recipe": recipe.model_dump(), "image": image}
             )
-            inventory_hash = self.evidence(
-                project_id,
-                {
-                    "packages": [],
-                    "scope": "stdlib-only runtime",
-                    "omitted_optional_dependencies": ["lxml"]
-                    if recipe.recipe_id == "dsvw-python-v1"
-                    else [],
-                },
-            )
             tool_hash = self.evidence(
                 project_id,
                 {"base": image["base_digest"], "launcher": await self.launcher.call("/health")},
@@ -134,7 +173,7 @@ class Onboarding:
                 test_profile_ids=recipe.test_profile_ids,
                 readiness_profile_id=recipe.recipe_id + ":health",
                 data_seed_id="repository-default-v1",
-                protected_paths=["colossus-app.json"],
+                protected_paths=["colossus-app.json", *recipe.dependency_inputs],
                 allowed_patch_paths=[p for p in files if p.endswith(".py")],
                 deployment_profile_id=project["deployment_profile_id"],
                 policy_hash=content_hash({"policy_id": project["owner_policy_id"]}),
@@ -142,6 +181,9 @@ class Onboarding:
                 setup_provenance=[
                     {
                         "source_id": source_id,
+                        "intake_source_id": intake_source_id,
+                        "dependency_evidence_id": dependencies_id,
+                        "runtime_tree_sha256": source["runtime_tree_sha256"],
                         "readiness_evidence_id": evidence_id,
                         "limitations": recipe.limitations,
                     }

@@ -8,6 +8,7 @@ from colossus.contracts.core import DomainError, new_id, utcnow
 from colossus.contracts.models import Authorization, EvidenceManifest, GateResult, TargetManifest
 from colossus.detection.service import dsvw_checks
 from colossus.gateway.source import tree_hash
+from colossus.onboarding.bundle import runtime_files
 
 
 class DeploymentCoordinator:
@@ -52,6 +53,7 @@ class DeploymentCoordinator:
         self.onboarding.update(project_id, mirror=old_mirror | {"state": "STALE"})
         source = json.loads(self.artifacts.get(slot["source_id"]))
         files = {p: base64.b64decode(v, validate=True) for p, v in source["files"].items()}
+        runtime_files(source)
         source_hash = tree_hash(files)
         manifest = TargetManifest.model_validate(slot.get("base_manifest") or slot["manifest"])
         if source_hash != slot.get("candidate_tree_hash", manifest.tree_sha256):

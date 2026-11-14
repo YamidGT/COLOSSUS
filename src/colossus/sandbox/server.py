@@ -36,6 +36,12 @@ class FormalPolicyJob(Contract):
     timeout: int = Field(default=90, ge=1, le=480)
 
 
+class DependencyJob(Contract):
+    project_id: Identifier
+    requirements: list[str] = Field(max_length=100)
+    timeout: int = Field(default=600, ge=1, le=1200)
+
+
 class StartTarget(Contract):
     project_id: Identifier
     artifact_digest: str
@@ -131,6 +137,16 @@ def create_launcher(
     @app.post("/package")
     def package(body: PackageJob):
         return launcher.package(decode_files(body.files), body.argv)
+
+    @app.post("/dependencies")
+    def dependencies(body: DependencyJob):
+        from colossus.sandbox.dependency_builder import build_dependencies
+
+        result = build_dependencies(launcher, body.project_id, body.requirements, body.timeout)
+        result["files"] = {
+            path: base64.b64encode(data).decode() for path, data in result["files"].items()
+        }
+        return result
 
     @app.post("/formal/policy")
     def formal_policy(body: FormalPolicyJob):

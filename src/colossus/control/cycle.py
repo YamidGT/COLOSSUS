@@ -7,9 +7,11 @@ from importlib.resources import files as resources
 
 from colossus.contracts.core import DomainError, content_hash, new_id, utcnow
 from colossus.contracts.models import Candidate, EvidenceManifest, GateResult, PatchProposal
+from colossus.detect.probes import ProbeRunner
 from colossus.detect.redteam import investigate
 from colossus.detection.service import dsvw_checks, finding_from_signal, static_scan
 from colossus.gateway.source import tree_hash
+from colossus.onboarding.bundle import assembled_files, runtime_files
 from colossus.repair.patch import apply_proposal
 from colossus.repair.service import propose
 from colossus.verification.policy import REQUIRED_CHECKS, validate_gates
@@ -40,19 +42,69 @@ class CycleEngine:
         if time.time() >= cycle["deadline"]:
             raise DomainError("cycle_timeout", "Cycle deadline reached", 409)
 
+    async def observe(self, cycle, project, manifest):
+        """Run discovery even when a protected repair oracle is not installed."""
+        cycle_id, project_id = cycle["cycle_id"], project["project_id"]
+        self.check_cancel(cycle_id)
+        source = json.loads(self.artifacts.get(project["source"]["source_id"]))
+        runtime_files(source)
+        mirror = project["mirror"]
+
+        def evidence(value):
+            return self.onboarding.evidence(project_id, value, visibility="operator")
+
+        result = await investigate(
+            project_id=project_id,
+            case_id=cycle_id,
+            encoded_files=source["files"],
+            manifest_hash=project["source"]["manifest_hash"],
+            launcher=self.launcher,
+            evidence=evidence,
+            broker=self.broker,
+            runner=ProbeRunner(self.launcher, project_id, mirror["environment_id"], mirror["port"]),
+            tier=cycle.get("tier", "T0"),
+        )
+        self.check_cancel(cycle_id)
+        for finding in result["findings"]:
+            self.store.put(
+                "finding",
+                finding.finding_id,
+                finding.model_dump() | {"cycle_id": cycle_id},
+                project_id,
+            )
+        coverage = {
+            "recipe_id": manifest["recipe_id"],
+            "discovery": "completed",
+            "repair": "UNSUPPORTED",
+            "formal": "UNSUPPORTED",
+            "reason": "No approved protected repair oracle is registered for this application",
+            "raw_count": result["raw_count"],
+            "findings": len(result["findings"]),
+            "requests_sent": result["requests_sent"],
+            "model_diagnostics": result["model_diagnostics"],
+            "excluded_tools": result["excluded_tools"],
+        }
+        evidence_id = evidence(coverage)
+        self.update_cycle(
+            cycle_id,
+            status="NO_CHANGE",
+            finished_at=utcnow(),
+            reason="Investigation completed; repair and formal verification are unsupported for this profile",
+            coverage=coverage,
+            evidence_id=evidence_id,
+        )
+        return {"status": "NO_CHANGE", "coverage": coverage, "evidence_id": evidence_id}
+
     async def run(self, cycle_id, replay_proposal: PatchProposal | None = None):
         cycle = self.update_cycle(cycle_id, status="INVESTIGATING", started_at=utcnow())
         project_id = cycle["project_id"]
         project = self.store.get("project", project_id)
         manifest = json.loads(self.artifacts.get(project["source"]["manifest_hash"]))
         if manifest["recipe_id"] != "dsvw-python-v1":
-            raise DomainError(
-                "unsupported_probe_profile",
-                "No protected functional/security oracle installed for this runtime",
-                422,
-            )
+            return await self.observe(cycle, project, manifest)
         source = json.loads(self.artifacts.get(project["source"]["source_id"]))
         files = {p: base64.b64decode(v) for p, v in source["files"].items()}
+        runtime_inputs = runtime_files(source)
         recipe = project["mirror"]["recipe"]
         case_id = new_id()
         self.update_cycle(cycle_id, case_ids=[case_id])
@@ -219,7 +271,14 @@ class CycleEngine:
                 self.update_cycle(cycle_id, status="VERIFYING")
                 build_started = utcnow()
                 image = await self.launcher.call(
-                    "/package", {"files": encoded, "argv": recipe["command"]}
+                    "/package",
+                    {
+                        "files": {
+                            path: base64.b64encode(data).decode()
+                            for path, data in assembled_files(patched, runtime_inputs).items()
+                        },
+                        "argv": recipe["command"],
+                    },
                 )
                 target = await self.launcher.call(
                     "/targets",
@@ -286,7 +345,7 @@ class CycleEngine:
                     (
                         "artifact-binding-v1",
                         "policy",
-                        image["tree_sha256"] == candidate_hash,
+                        image["tree_sha256"] == tree_hash(assembled_files(patched, runtime_inputs)),
                         [evidence(image)],
                     ),
                 ]:
