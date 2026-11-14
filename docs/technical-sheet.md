@@ -4,7 +4,7 @@
 
 Track 3 | Daniel and three collaborators | Design specification v1.2 | 14 November 2026
 
-Status: implementation handoff prepared. Product execution, repository preflight and empirical results are pending. The system described below is the intended implementation, not a claim of measured performance.
+Status: M0 bootstrap in progress. Shared contracts, a hardened Docker launcher and doctor checks exist with tests. On the development host gVisor is not installed, so untrusted repository jobs are refused. Repository preflight, repairs, proofs and empirical results are pending. The system described below is the intended implementation, not a claim of measured performance.
 
 ## Objective and risk
 

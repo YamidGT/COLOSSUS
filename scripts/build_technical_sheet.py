@@ -10,7 +10,7 @@ pages=[[
 ('title','COLOSSUS'),
 ('subtitle','Recurring automated cyberdefence from a GitHub repository'),
 ('small','Track 3 | Daniel and three collaborators | Design specification v1.2 | 14 November 2026'),
-('body','Status: implementation handoff prepared. Product execution, repository preflight and empirical results are pending. The system described below is the intended implementation, not a claim of measured performance.'),
+('body','Status: M0 bootstrap in progress. Shared contracts, a hardened Docker launcher and doctor checks exist with tests. On the development host gVisor is not installed, so untrusted repository jobs are refused. Repository preflight, repairs, proofs and empirical results are pending. The system described below is the intended implementation, not a claim of measured performance.'),
 ('heading','Objective and risk'),
 ('body','COLOSSUS is designed to reduce the interval between a software exposure and a healthy remediated deployment. It combines recurring threat intelligence and security investigation with patch generation, explicit verification, controlled promotion and recovery. It also constrains the risk that a defensive agent follows hostile repository content, changes its own acceptance criteria or deploys a faulty repair.'),
 ('heading','Plug and play onboarding'),

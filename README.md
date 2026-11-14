@@ -2,7 +2,7 @@
 
 COLOSSUS is a recurring automated cyberdefence system. A public GitHub URL starts isolated setup, investigation, remediation, verification, policy-controlled deployment, recovery and mirror refresh. The next cycle uses the resulting deployed version.
 
-**Status:** implementation specification v1.2, 14 November 2026. Product code, target builds, proof runs and benchmark results are not implemented or validated yet. The documents define the complete system; they do not claim all public repositories can be built or formally verified.
+**Status:** implementation specification v1.2, 14 November 2026. M0 bootstrap is in progress on branch `kiro/integracion`: shared contracts, sandbox launcher and `colossus doctor` exist with tests (see [lane A handoff](docs/handoffs/kiro-lane-a.md)). Target builds, repairs, proof runs and benchmark results are not implemented or validated yet. The documents define the complete system; they do not claim all public repositories can be built or formally verified.
 
 ## Implementation handoff
 
