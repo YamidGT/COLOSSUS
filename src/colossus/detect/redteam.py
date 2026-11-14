@@ -56,10 +56,10 @@ async def rule_scan(launcher, project_id, encoded_files):
 async def hypothesize(broker, project_id, case_id, files, known, diagnostics):
     """Adapt lane B's T2 pass to bounded input and the shared budget authority."""
     selected = [p for p in sorted(files) if p.endswith(".py") and not set(p.split("/")) & SKIP_DIRS]
-    # The cap is bounded, so spend it on files most likely to hold flaws: skip near-empty files
+    # The cap is bounded, so spend it on files most likely to hold flaws: skip empty files
     # (e.g. __init__.py) and rank by request-handling surface plus static signals, not by name.
     selected = sorted(
-        (p for p in selected if len(files[p].strip()) >= 20),
+        (p for p in selected if files[p].strip()),
         key=lambda p: (
             -min(len(re.findall(rb"route\(|@\w+\.|def (?:get|post|put|delete)_|request\.|execute\(",
                                 files[p])), 40)
