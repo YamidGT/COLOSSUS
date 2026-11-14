@@ -192,9 +192,9 @@
         "failed": 3,
         "ready": 2
       },
-      "runtime_attempt_scope": "Catalog runner only; separate fresh DSVW lifecycle is additional and source intake is not execution",
+      "runtime_attempt_scope": "Catalog runner only; two separately measured fresh DSVW lifecycles are additional and source intake is not execution",
       "python_rule_covered_repositories": 11,
-      "scope": "24 intake records; five catalog runtime attempts plus one separate fresh DSVW full cycle. Not 24 repairs.",
+      "scope": "24 intake records; five catalog runtime attempts plus two separately measured fresh DSVW full cycles. Not 24 repairs.",
       "assisted_runtime_checks": {
         "VAmPI": {
           "scope": "GLM-advised MarkupSafe2.1.2->2.1.5 compatibility variant; original failure retained",
