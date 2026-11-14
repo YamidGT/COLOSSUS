@@ -1,5 +1,7 @@
 """Controller-side model admission and reconciliation across the gateway boundary."""
 
+import asyncio
+
 from colossus.contracts.core import content_hash, new_id, utcnow
 from colossus.contracts.runtime import RuntimeConfig
 from colossus.control.artifacts import ArtifactStore
@@ -68,12 +70,18 @@ class Broker:
                 ),
             )
             result = Completion(**raw)
-        except Exception:
+        except (Exception, asyncio.CancelledError) as exc:
             self.store.reconcile(call_id, None)
             self.store.put(
                 "model_call",
                 call_id,
-                record | {"status": "uncertain", "reason_code": "gateway_error"},
+                record
+                | {
+                    "status": "uncertain",
+                    "reason_code": "cancelled_in_flight"
+                    if isinstance(exc, asyncio.CancelledError)
+                    else "gateway_error",
+                },
                 project_id,
             )
             raise
