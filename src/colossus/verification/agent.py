@@ -11,7 +11,7 @@ from colossus.verification.dafny import POLICY_CALIBRATION
 
 TEST_INSTRUCTIONS = [
     "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
-    "Reproduce the reported defect on the baseline; require its protected regression check to fail on the patched candidate.",
+    "Reproduce the reported defect on the baseline; require the exploit attempt to fail on the patched candidate and the protected security regression test to pass.",
     "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
     "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
     "Under tested policy, report the formal limitation; formal_required still blocks without linked proof.",

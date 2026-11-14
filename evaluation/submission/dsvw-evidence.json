@@ -1,0 +1,405 @@
+{
+  "schema_version": "1.0",
+  "kind": "fresh_dsvw_case_evidence",
+  "case": {
+    "allowed_actions": [],
+    "assurance_summary": {
+      "formal": "UNSUPPORTED",
+      "profile": "tested"
+    },
+    "authorization_id": "138ac20f-0798-48fa-8c33-3729cebd2359",
+    "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+    "candidate_source_id": "1cc13c5bd294c8bb31e442a48be07049c67e8f70fe4eb9654cac3ecd93dd3964",
+    "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+    "created_at": "2026-11-14T21:34:32.831269Z",
+    "cycle_id": "98bb4785-cf65-4cf5-9b8e-a81d6d04ede5",
+    "deployment_evidence_id": "5aac19b8d1513d98142089afb19251c449bd19c2ae7a94845d767c0e2a68a313",
+    "destination_id": "local-web-v1",
+    "diff_ref": "5fa914409492c06972605d6d0fa2af7451b4fcbc6e8121f879f90f0b65816816",
+    "evidence_manifest_hash": "9e4bf85bf70e61c42339f3eb8656c5f2d5e96ab52ac8d561eded1cb05107fd16",
+    "expected_deployment_generation": 0,
+    "finding_refs": [
+      "5494ba1c-28e1-4b93-a501-dbb514621550"
+    ],
+    "gate_results": [
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "policy",
+        "check_profile_id": "scope-base-v1",
+        "command_profile_hash": "288041d379528beb1c51ec4922a07161485e1eb02d9d5b8750e16a99a3d534f3",
+        "evidence_ids": [
+          "d0bfc7fdfbe67f56335ef0a575c1767168c9d17c8df1a7d37477ae406ca328fb"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:40.094951Z",
+        "gate_id": "f435f5a1-172f-41ab-91a7-ab914c4960ff",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:34:40.094614Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "security",
+        "check_profile_id": "baseline-reproduction-v1",
+        "command_profile_hash": "6345b60de1a6849e58572d59c69e7e75270e8fc3c149641ec3ae718fdfbb6e55",
+        "evidence_ids": [
+          "98a76eccb3d521f2e673242018b2fc9a987210b8ab5232debfcc2fcf80240632"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:37.958039Z",
+        "gate_id": "cb24d374-88a9-444b-b045-f23997a97c78",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:34:34.163990Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "build",
+        "check_profile_id": "build-readiness-v1",
+        "command_profile_hash": "f73aa2614da726966004165e2413c3cbccc48c3ad53eb18357f6e67b4d7cb0f9",
+        "evidence_ids": [
+          "33820fccbdf7bd303f5bc541c3ed8b7c15a4e4f960ee519ad740a5722da559d0"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:44.579491Z",
+        "gate_id": "60111b3c-7739-4995-9390-8e0606aed91e",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:34:40.095250Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "security",
+        "check_profile_id": "dsvw-security-v1",
+        "command_profile_hash": "1eed84dd0d4cf34affc7bdb6b7253ba123494b4fbf640382eccea41afe2002da",
+        "evidence_ids": [
+          "33820fccbdf7bd303f5bc541c3ed8b7c15a4e4f960ee519ad740a5722da559d0"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:44.579491Z",
+        "gate_id": "aba33dfe-a662-470e-bb5d-ab5ae8336016",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:34:40.912905Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "functional",
+        "check_profile_id": "dsvw-functional-v1",
+        "command_profile_hash": "73c37eeb3b77aefcf4998d9f4c4bedf8c1b9e2619cedb05bb9226afaad579ffa",
+        "evidence_ids": [
+          "33820fccbdf7bd303f5bc541c3ed8b7c15a4e4f960ee519ad740a5722da559d0"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:44.579491Z",
+        "gate_id": "cce7bbcf-51a0-4677-90ae-e5c18e5d9c75",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:34:40.912905Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "static",
+        "check_profile_id": "static-regression-v1",
+        "command_profile_hash": "2c5db55fa024e0c358320e87fefce0d0ac3b1810a51a4fab9e42417f586e0652",
+        "evidence_ids": [
+          "655cb571ae05d4b0f1d38e211afa68446bb4a9c53aa5dbfa5643775a2c2e74f8"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:45.192151Z",
+        "gate_id": "0bd48403-5141-41cc-adc3-e548f633b41e",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:34:44.580310Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "policy",
+        "check_profile_id": "artifact-binding-v1",
+        "command_profile_hash": "763b7e49919b4d6aa71d696871f51013beb83306768bd0bc3a0e2e4905ae8e80",
+        "evidence_ids": [
+          "ae17fe4338d4b3f32d416a9b5f71064c02c3e396487ac28a17bdb0fc60a54608"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:45.194208Z",
+        "gate_id": "14b809b2-3281-4dd8-8b1b-911911c195c0",
+        "proof_outcome": null,
+        "reason": "Protected check passed",
+        "scope": [
+          "DSVW id-query repair"
+        ],
+        "started_at": "2026-11-14T21:34:45.194208Z",
+        "status": "pass",
+        "tool_version": "colossus-v1"
+      },
+      {
+        "assumptions": [
+          "No approved linked proof obligation for this component"
+        ],
+        "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+        "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+        "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+        "category": "formal",
+        "check_profile_id": "formal-coverage-v1",
+        "command_profile_hash": "36ef83f0add08ea589b324b44c67184c2a46b573b13ed5a2aec74a8d586021fd",
+        "evidence_ids": [
+          "1ece009efc903629816ed96ce716488209aeaffbc0c793cfe58e14ea35be7127"
+        ],
+        "exit_code": null,
+        "finished_at": "2026-11-14T21:34:45.194208Z",
+        "gate_id": "2f46dfaa-aab7-48d4-94a8-17b4e3013fb9",
+        "proof_outcome": "UNSUPPORTED",
+        "reason": "No approved linked proof template matches this candidate component",
+        "scope": [
+          "Ordinary Python SQL adapter"
+        ],
+        "started_at": "2026-11-14T21:34:45.194208Z",
+        "status": "not_applicable",
+        "tool_version": "colossus-v1"
+      }
+    ],
+    "generation_mode": "fresh_inference",
+    "project_id": "20803760-3020-4143-9b94-641698f17417",
+    "reason": "All required tested-profile gates passed; no formal proof claimed",
+    "refreshed_manifest_hash": "beef48742ebb91a125e43317c431bcaa5f541be9ef656906028c9cb778f68f1f",
+    "revision": 6,
+    "status": "COMPLETE",
+    "title": "SQL query construction repair",
+    "updated_at": "2026-11-14T21:39:58.266714Z"
+  },
+  "candidate": {
+    "artifact_digest": "sha256:6336a766f02f0099bb944301189011978b5ae096337267580d9f1d1727c062f6",
+    "build_evidence_ids": [
+      "ae17fe4338d4b3f32d416a9b5f71064c02c3e396487ac28a17bdb0fc60a54608",
+      "33820fccbdf7bd303f5bc541c3ed8b7c15a4e4f960ee519ad740a5722da559d0"
+    ],
+    "candidate_id": "f54869c0-e374-4748-b332-38d69694be52",
+    "diff_hash": "5fa914409492c06972605d6d0fa2af7451b4fcbc6e8121f879f90f0b65816816",
+    "generated_code_hash": null,
+    "manifest_hash": "3efed8fc481a60737299768236e700a654670c4b50722aaa00d4029f880b5c65",
+    "proposal_id": "dc3972dc-524c-4ded-8011-9d0adae8473f",
+    "revision": 1,
+    "source_tree_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda"
+  },
+  "certificate": {
+    "artifact_digest": "sha256:6336a766f02f0099bb944301189011978b5ae096337267580d9f1d1727c062f6",
+    "assurance_profile": "tested",
+    "baseline_hash": "da51a22aea8a66c3edafe11a0411fc8e119089104f618ee971cf4d7e8b0426f3",
+    "candidate_hash": "18391d2042b397d73cbd88f6b20e0ac3dfe92b8db1ac8cadf47cbf7107b10bda",
+    "case_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+    "content_hash": "43a2fba72895fce2fc19f409f5dc1620d71e57afffc039e39958c2c35bf212dc",
+    "diff_hash": "5fa914409492c06972605d6d0fa2af7451b4fcbc6e8121f879f90f0b65816816",
+    "exclusions": [
+      "No whole-repository security proof",
+      "Optional lxml is absent: XML/XPath routes are excluded from this runtime profile",
+      "Static coverage uses three AST rules; Semgrep/Bandit adapters are not installed",
+      "Other findings remain unresolved",
+      "Fresh inference used for this case"
+    ],
+    "gate_result_ids": [
+      "f435f5a1-172f-41ab-91a7-ab914c4960ff",
+      "cb24d374-88a9-444b-b045-f23997a97c78",
+      "60111b3c-7739-4995-9390-8e0606aed91e",
+      "aba33dfe-a662-470e-bb5d-ab5ae8336016",
+      "cce7bbcf-51a0-4677-90ae-e5c18e5d9c75",
+      "0bd48403-5141-41cc-adc3-e548f633b41e",
+      "14b809b2-3281-4dd8-8b1b-911911c195c0",
+      "2f46dfaa-aab7-48d4-94a8-17b4e3013fb9"
+    ],
+    "harness_hashes": [
+      "a7c4d8af94e5ed32dd45a18b8481f6a649f32eef8a214f5593568f381301992c"
+    ],
+    "issued_at": "2026-11-14T21:34:45.198544Z",
+    "manifest_id": "fcc8f304-4e59-417f-8e53-d4a0fada83d4",
+    "model_call_ids": [
+      "c8355528-d995-4d4c-9acb-d144f34ea389"
+    ],
+    "policy_hash": "63ba2ec063bb64a32f4365c2af75d20c3fc2213aa327d2f6775845c92e39f2b6",
+    "proof_summary": [
+      {
+        "outcome": "UNSUPPORTED",
+        "required": false,
+        "scope": "Python SQL adapter"
+      }
+    ],
+    "required_gate_ids": [
+      "f435f5a1-172f-41ab-91a7-ab914c4960ff",
+      "cb24d374-88a9-444b-b045-f23997a97c78",
+      "60111b3c-7739-4995-9390-8e0606aed91e",
+      "aba33dfe-a662-470e-bb5d-ab5ae8336016",
+      "cce7bbcf-51a0-4677-90ae-e5c18e5d9c75",
+      "0bd48403-5141-41cc-adc3-e548f633b41e",
+      "14b809b2-3281-4dd8-8b1b-911911c195c0"
+    ],
+    "spec_hashes": [],
+    "target_manifest_hash": "3efed8fc481a60737299768236e700a654670c4b50722aaa00d4029f880b5c65",
+    "test_hashes": [
+      "b5e131ab2ed36aaae0c39cc839e3002c06f4ce802f039570bbdca30b4a1c6a27"
+    ],
+    "total_cost_micro_usd": 1287
+  },
+  "target_manifest": {
+    "allowed_patch_paths": [
+      "dsvw.py",
+      "tests/fixture.py",
+      "tests/harness.py",
+      "tests/test_cases.py",
+      "tests/test_exploitability.py",
+      "tests/test_regressions.py"
+    ],
+    "artifact_digest": "sha256:2fba9daf396fe2e294246873f262b1df39d343a67bd3dc992ab59d7859163917",
+    "commit": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+    "data_seed_id": "repository-default-v1",
+    "dependency_inventory_hash": "91f61c7f62e64e13556f9328b691c8457a09c80580aff009324ec57d0d10515a",
+    "dependency_inventory_id": "91f61c7f62e64e13556f9328b691c8457a09c80580aff009324ec57d0d10515a",
+    "deployment_profile_id": "local-web-v1",
+    "manifest_id": "3b5ac894-a501-4b47-8923-83b478dd5ed3",
+    "network_profile_id": "isolated-case-v1",
+    "obligation_ids": [],
+    "platform": "linux/arm64",
+    "policy_hash": "63ba2ec063bb64a32f4365c2af75d20c3fc2213aa327d2f6775845c92e39f2b6",
+    "project_id": "20803760-3020-4143-9b94-641698f17417",
+    "protected_paths": [
+      "colossus-app.json"
+    ],
+    "readiness_profile_id": "dsvw-python-v1:health",
+    "recipe_hash": "3af1e4a3ebb2e68ecdc7769c29594ebf6c42b9bb443d119e0b739e143f3ba8e0",
+    "recipe_id": "dsvw-python-v1",
+    "repo_url": "https://github.com/stamparm/DSVW",
+    "revision": 1,
+    "services": [
+      {
+        "artifact_digest": "sha256:2fba9daf396fe2e294246873f262b1df39d343a67bd3dc992ab59d7859163917",
+        "command_profile_id": "dsvw-python-v1",
+        "dependency_service_ids": [],
+        "health_check_id": "dsvw-python-v1:health",
+        "internal_ports": [
+          65412
+        ],
+        "resource_profile_id": "standard",
+        "service_id": "app",
+        "writable_paths": []
+      }
+    ],
+    "setup_provenance": [
+      {
+        "dependency_evidence_id": "dfe003553eda398f030917b07eab33e1d7049845628e2e7f09a2c8aede324583",
+        "intake_source_id": "5f71e4fb16488d3bce9ed89db5e638bde0325429b8c0a44a69091c1adb76d2e0",
+        "limitations": [
+          "Optional lxml is absent: XML/XPath routes are excluded from this runtime profile"
+        ],
+        "readiness_evidence_id": "73fa30c767534791abf796ca15649cfc6c36a927ec96ba12026db5d7bf6b8570",
+        "runtime_tree_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "source_id": "dd6fdadab06392c0865e1e8e0b283ee002b0b71a23f0d0c738177822cc20f22b"
+      }
+    ],
+    "target_kind": "web",
+    "test_profile_ids": [
+      "dsvw-functional-v1",
+      "dsvw-security-v1"
+    ],
+    "toolchain_manifest_id": "78d720782810c3e21dc4d5447e4450fd7d5189dd64b205920773b75146fb5e54",
+    "tree_sha256": "da51a22aea8a66c3edafe11a0411fc8e119089104f618ee971cf4d7e8b0426f3"
+  },
+  "model_calls": [
+    {
+      "actual_cost_micro_usd": 1287,
+      "billing_usage": {
+        "completion_tokens": 110,
+        "completion_tokens_details": {
+          "reasoning_tokens": 9
+        },
+        "prompt_tokens": 8213,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "response_shape": {
+          "chunk_types": [
+            "thinking",
+            "text"
+          ],
+          "content_type": "list"
+        },
+        "total_tokens": 8323
+      },
+      "call_id": "c8355528-d995-4d4c-9acb-d144f34ea389",
+      "created_at": "2026-11-14T21:34:37.959381Z",
+      "elapsed_seconds": 2.1309140420053154,
+      "endpoint_profile_id": "mistral-chat-v1",
+      "input_tokens": 8213,
+      "model_profile_hash": "1e423ea81e6b3aa7431bdcda0a000cdde99d483fe2caa8e155a658378227ffeb",
+      "model_requested": "zai-glm-5-3-flash",
+      "model_returned": "zai-glm-5-3-flash",
+      "output_tokens": 110,
+      "price_snapshot_id": "2026-11-14",
+      "provider": "mistral",
+      "provider_request_id": null,
+      "reason_code": null,
+      "reasoning_effort": "low",
+      "request_hash": "4224806d9db41ffc66f7a776ee206fe0f20292314adcb6e4d5224ac703db14bc",
+      "reserved_cost_micro_usd": 6214,
+      "response_content_id": "486116445dfd21004d67d5b419d387ee15abf0baae13a2dc9966c5337be9c001",
+      "revision": 2,
+      "status": "succeeded",
+      "task_id": "76c721ef-e634-4373-a5be-1956b8146d95",
+      "template_version": "1"
+    }
+  ],
+  "audit_chain_valid_at_export": true,
+  "notes": [
+    "Runtime retired after successful calibration",
+    "No provider credentials, source archive or model response body included",
+    "Formal outcome is UNSUPPORTED for the DSVW SQL adapter"
+  ]
+}
