@@ -10,6 +10,11 @@ supported setup/repair profiles remain limited. See the [submission report](docs
 for measured results and the [completion ledger](docs/implementation-status.md)
 for remaining broader capabilities.
 
+[Explore the recorded demo](https://colossus-defence-demo.netlify.app): inspect the
+rejected first patch, corrected candidate, formal scope and all repository outcomes.
+This public walkthrough displays completed evidence; it does not execute targets or
+call models. [Demo build and presentation guide](docs/public-demo.md).
+
 ## Implementation handoff
 
 Read [the documentation map](docs/README.md), then [architecture](docs/architecture.md), [contracts](docs/contracts.md) and your [session brief](docs/sessions/README.md).
