@@ -1,0 +1,139 @@
+{
+  "proof_outcome": "PROVED",
+  "target_proof_outcome": "UNSUPPORTED",
+  "reason": "Named component proved and compiled; target linkage requires separate checks",
+  "scope": [
+    "Policy.MayChangePassword",
+    "Policy.MayReadBookSecret",
+    "Policy.PublicUserProjection",
+    "Policy.RegistrationRole"
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_call_id": "a2b9e907-fd78-4364-98c6-ebaf736184bd",
+      "status": "PROVED",
+      "expressions_hash": "0c8b4d56161879acc39bae9425522f80eeb8f0ff19d504f9ddd73a62123aad9d",
+      "source_hash": "f257561d50910a486b4e5da03e07dc43062802ffd0551483cf0afb610ae35dbe",
+      "diagnostics": {
+        "verify": {
+          "exit_code": 0,
+          "stdout": "\nDafny program verifier finished with 4 verified, 0 errors\nResults File: /work/results/verify.csv\n",
+          "stderr": "",
+          "timed_out": false,
+          "duration_seconds": 1.001204957952723,
+          "truncated": false
+        },
+        "compile": {
+          "exit_code": 0,
+          "stdout": "\nDafny program verifier finished with 4 verified, 0 errors\n",
+          "stderr": "",
+          "timed_out": false,
+          "duration_seconds": 1.3090211669914424,
+          "truncated": false
+        }
+      }
+    }
+  ],
+  "model_call_ids": [
+    "a2b9e907-fd78-4364-98c6-ebaf736184bd"
+  ],
+  "compiled": true,
+  "mandatory_tests": [
+    "Run the application's registered positive functionality tests in the isolated candidate sandbox.",
+    "Reproduce the reported defect on the baseline; require its protected regression check to fail on the patched candidate.",
+    "Run build/readiness and static regression checks; keep failures and timeouts as failures.",
+    "If no protected functional/security test profile exists, report unsupported repair and do not promote.",
+    "Under tested policy, report the formal limitation; formal_required still blocks without linked proof."
+  ],
+  "linkage": "compiled_component_only; target integration requires separate wrapper and artifact gates",
+  "spec_hash": "90bb80b140a04fe0d8166cea2f8cbb92286d7aed68c0de1876c975fafcbff41c",
+  "profile_id": "authorization-policy-calibration-v1",
+  "component_hash": "0905ec9718bb75ee21815c967a715c8697ee2df5935a314fc375be4c60304e40",
+  "assumptions": [
+    "Dafny compiler and Z3 solver correctness",
+    "Wrapper binds authenticated identity and resource ownership correctly",
+    "Calibration policy is not approval of a target's business requirements"
+  ],
+  "verification": {
+    "proof_outcome": "PROVED",
+    "compiled": true,
+    "profile_id": "authorization-policy-calibration-v1",
+    "spec_hash": "90bb80b140a04fe0d8166cea2f8cbb92286d7aed68c0de1876c975fafcbff41c",
+    "source_hash": "f257561d50910a486b4e5da03e07dc43062802ffd0551483cf0afb610ae35dbe",
+    "toolchain_digest": "sha256:7718ff0ee631dbecb4571972bcdfd0742dbe1369e555e5468643839e67afc189",
+    "verify": {
+      "exit_code": 0,
+      "stdout": "\nDafny program verifier finished with 4 verified, 0 errors\nResults File: /work/results/verify.csv\n",
+      "stderr": "",
+      "timed_out": false,
+      "duration_seconds": 1.001204957952723,
+      "truncated": false
+    },
+    "compile": {
+      "exit_code": 0,
+      "stdout": "\nDafny program verifier finished with 4 verified, 0 errors\n",
+      "stderr": "",
+      "timed_out": false,
+      "duration_seconds": 1.3090211669914424,
+      "truncated": false
+    },
+    "assumptions": [
+      "Dafny compiler and Z3 solver correctness",
+      "Wrapper binds authenticated identity and resource ownership correctly",
+      "Calibration policy is not approval of a target's business requirements"
+    ],
+    "scope": [
+      "Policy.MayChangePassword",
+      "Policy.MayReadBookSecret",
+      "Policy.PublicUserProjection",
+      "Policy.RegistrationRole"
+    ],
+    "linkage": "compiled_component_only; target integration requires separate wrapper and artifact gates"
+  },
+  "elapsed_seconds": 5.496,
+  "kind": "fresh_model_owned_formal_fixture",
+  "project_id": "6cdd2de1-66ab-4c13-a7c5-5bbd30037b01",
+  "case_id": "02da33b6-2ff0-4072-ae42-6b48924aad3d",
+  "target_repositories_run": [],
+  "cost": {
+    "committed_micro_usd": 78,
+    "settled_micro_usd": 78,
+    "calls": 1,
+    "uncertain_micro_usd": 0
+  },
+  "wrapper_checks": {
+    "valid": {
+      "exit_code": 0,
+      "stdout": "{\"checks\": 39, \"result\": \"pass\", \"scope\": \"owned compiled-policy wrapper fixture\"}\n",
+      "stderr": "",
+      "timed_out": false,
+      "duration_seconds": 0.24071545898914337,
+      "truncated": false
+    },
+    "bypass_decision": {
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/app/check_wrapper.py\", line 22, in <module>\n    assert expected\n           ^^^^^^^^\nAssertionError\n",
+      "timed_out": false,
+      "duration_seconds": 0.16928341705352068,
+      "truncated": false
+    }
+  },
+  "generated_hashes": {
+    "policy-py/__main__.py": "a0d26ef17f9959225736d8e753549c602b4f195e2d60b1a274b24444012b1970",
+    "policy-py/policy-py.dtr": "0e3c300382c6a7971ba72da1d61e83c8e7e2fb42c90ded59e6c6c840d2274708",
+    "policy-py/System_/__init__.py": "96b6e33c036bc3aeab6d1810c7aef085184d09c407bdec032ea89d7a98843edf",
+    "policy-py/System_/__pycache__/__init__.cpython-311.pyc": "c0e0e3a0310c15b0319b556f19ab52791fab68fc2a078f1d62dfd8f21194a445",
+    "policy-py/_dafny/__init__.py": "18d39decdedad0e188456e15d17f1dcd5113c4abc258ad6cb718e39534555e7a",
+    "policy-py/_dafny/__pycache__/__init__.cpython-311.pyc": "5c5f5a46cc1be611a13cdccdd8cf55bde3817ecae6d9feb21fea11c521bb9230",
+    "policy-py/Policy.py": "5b2dbc6ac13f4c02be1660743d8776838e104dfbdec5fe87eb784427a364dff3",
+    "policy-py/module_.py": "615d34a93b71bf2335b2462fcd7be186811e9f8a59e6a931ec6c0df7e437bbf2",
+    "policy-py/__pycache__/Policy.cpython-311.pyc": "86518930e5f1d052014a6412b4896218ea295333dbbd8c826d20538687c63c03",
+    "policy-py/__pycache__/__main__.cpython-311.pyc": "3abc177be80885312adda8f7c36fbc0cb9e2a983cca27e7081e0e50f496f8380",
+    "policy-py/__pycache__/module_.cpython-311.pyc": "3909a34ef4d634caf96351a85d420fd751332b91d2d9085ddbb09b669fa586a0"
+  },
+  "generated_file_substitution_rejected": true,
+  "fixture_runtime_linkage": true,
+  "audit_valid": true
+}
